@@ -8,7 +8,8 @@ import {
 // IMPORTACION DE VISTAS 
 import Venue from "./views/venues/venue";
 import VenueEdit from "./views/venues/venueEdit";
-
+import Eventos from "./views/eventos/Eventos";
+import Evento from "./views/eventos/Evento";
 // IMPORTACION DE LAS VIEW PARA LAS RUTAS
  
 function App() {
@@ -17,6 +18,8 @@ function App() {
       <Routes>
         <Route path="/venues" element={<Venue />} />
         <Route path="/venues/:id" element={<VenueEdit />} />
+        <Route path="/eventos" element={<Eventos />} />
+        <Route path="/evento/:id" element={<Evento />} />
 
       </Routes>
     
