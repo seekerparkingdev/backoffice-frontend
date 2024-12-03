@@ -1,5 +1,6 @@
 import React from "react";
 import DataTable from "react-data-table-component";
+import { NavLink } from "react-router-dom";
 import { Titulo } from "../../components/Titulo";
 // Configuración de columnas
 import { Configtable } from "../../components/venues/Configtable";
@@ -11,9 +12,12 @@ const TablaVenuePage = () => {
       <div className="w-full max-w-4xl bg-white shadow-md p-4">
         <div className="flex justify-between items-center mb-4">
           <Titulo titulo="Venues" />
+          <NavLink to="/venues/new">
+
           <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             Nuevo
           </button>
+          </NavLink>
         </div>
 
         <DataTable
