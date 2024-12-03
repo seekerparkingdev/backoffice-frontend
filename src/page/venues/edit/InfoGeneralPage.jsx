@@ -4,13 +4,19 @@ import { InfoForm } from "../../../components/venues/edit/InfoForm";
 import { TituloParrafo } from "../../../components/venues/edit/TituloParrafo";
 import { BiSolidArrowToBottom } from "react-icons/bi";
 import { BiSolidArrowToTop } from "react-icons/bi";
+import { Redes } from "../../../components/venues/edit/Redes";
 
 const InfoGeneralPage = ({ id }) => {
   const [isInfoFormVisible, setIsInfoFormVisible] = useState(false);
+  const [isRedesVisible, setIsRedesVisible] = useState(false);
 
-  const handleToggleClick = (event) => {
+  const handleToggleClickInfo = (event) => {
     event.preventDefault();
     setIsInfoFormVisible((prevState) => !prevState);
+  };
+  const handleToggleClickRedes = (event) => {
+    event.preventDefault();
+    setIsRedesVisible((prevState) => !prevState);
   };
 
   return (
@@ -26,7 +32,7 @@ const InfoGeneralPage = ({ id }) => {
                 titulo="Información General"
                 parrafo="Nombre, capacidad máxima, dirección y fotos"
               />
-              <button onClick={handleToggleClick}>
+              <button onClick={handleToggleClickInfo}>
                 {isInfoFormVisible ? (
                   <BiSolidArrowToTop size={20} className="text-gray-600" />
                 ) : (
@@ -37,13 +43,21 @@ const InfoGeneralPage = ({ id }) => {
 
             {isInfoFormVisible && <InfoForm />}
           </div>
-
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center justify-between">
-            <TituloParrafo
-              titulo="Redes Sociales"
-              parrafo="Complete la información de las redes sociales y el sitio web"
-            />
-            <BiSolidArrowToBottom size={20} className="text-gray-600" />
+          <div>
+            <div className="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center justify-between">
+              <TituloParrafo
+                titulo="Redes Sociales"
+                parrafo="Complete la información de las redes sociales y el sitio web"
+              />
+              <button onClick={handleToggleClickRedes}>
+                {isRedesVisible ? (
+                  <BiSolidArrowToTop size={20} className="text-gray-600" />
+                ) : (
+                  <BiSolidArrowToBottom size={20} className="text-gray-600" />
+                )}
+              </button>
+            </div>
+            {isRedesVisible && <Redes />}
           </div>
           <div className="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center justify-between">
             <TituloParrafo
