@@ -24,7 +24,7 @@ const InfoGeneralPage = ({ id }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-2/3">
+      <div className="w-full lg:w-2/3 px-4">
         <div className="mb-4">
           <Titulo titulo="Venues" />
         </div>
@@ -36,7 +36,10 @@ const InfoGeneralPage = ({ id }) => {
               titulo="Información General"
               parrafo="Nombre, capacidad máxima, dirección y fotos"
             />
-            <button onClick={() => handleToggleVisibility("infoForm")}>
+            <button
+              onClick={() => handleToggleVisibility("infoForm")}
+              className="p-2 rounded hover:bg-gray-200"
+            >
               {visibility.infoForm ? (
                 <BiSolidArrowToTop size={20} className="text-gray-600" />
               ) : (
@@ -54,7 +57,10 @@ const InfoGeneralPage = ({ id }) => {
               titulo="Redes Sociales"
               parrafo="Complete la información de las redes sociales y el sitio web"
             />
-            <button onClick={() => handleToggleVisibility("redes")}>
+            <button
+              onClick={() => handleToggleVisibility("redes")}
+              className="p-2 rounded hover:bg-gray-200"
+            >
               {visibility.redes ? (
                 <BiSolidArrowToTop size={20} className="text-gray-600" />
               ) : (
@@ -72,7 +78,10 @@ const InfoGeneralPage = ({ id }) => {
               titulo="Estacionamientos Recomendados"
               parrafo="Ingrese los estacionamientos recomendados para el Venue"
             />
-            <button onClick={() => handleToggleVisibility("recomendado")}>
+            <button
+              onClick={() => handleToggleVisibility("recomendado")}
+              className="p-2 rounded hover:bg-gray-200"
+            >
               {visibility.recomendado ? (
                 <BiSolidArrowToTop size={20} className="text-gray-600" />
               ) : (
@@ -93,6 +102,7 @@ const InfoGeneralPage = ({ id }) => {
             <BiSolidArrowToBottom size={20} className="text-gray-600" />
           </div>
         )}
+
         <div className="mt-6">
           <VenueSetup />
         </div>
