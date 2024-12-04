@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { BiSolidArrowToBottom, BiSolidArrowToTop } from "react-icons/bi";
 // COMPONENTES
 import { Titulo } from "../../../components/Titulo";
@@ -7,12 +8,17 @@ import { TituloParrafo } from "../../../components/venues/edit/TituloParrafo";
 import { Redes } from "../../../components/venues/edit/Redes";
 import { Recomendado } from "../../../components/venues/edit/Recomendado";
 import { VenueSetup } from "../../../components/venues/VenueTable";
+import { EventoInfo } from "../../../components/venues/EventoInfo";
+import { useParams } from "react-router-dom";
 
 const InfoGeneralPage = ({ id }) => {
+  const url = useParams() 
+  
   const [visibility, setVisibility] = useState({
     infoForm: false,
     redes: false,
     recomendado: false,
+    infoEvento: false,
   });
 
   const handleToggleVisibility = (section) => {
@@ -47,7 +53,7 @@ const InfoGeneralPage = ({ id }) => {
               )}
             </button>
           </div>
-          {visibility.infoForm && <InfoForm />}
+          {visibility.infoForm && <InfoForm url={url}/>}
         </div>
 
         {/* SEGUNDO PASO */}
@@ -89,17 +95,30 @@ const InfoGeneralPage = ({ id }) => {
               )}
             </button>
           </div>
-          {visibility.recomendado && <Recomendado />}
+          {visibility.recomendado && <Recomendado url={url} />}
         </div>
 
         {/* CUARTO PASO */}
         {id !== "new" && (
-          <div className="bg-white shadow-md rounded-t-lg p-6 mt-6 flex items-center justify-between">
-            <TituloParrafo
-              titulo="Eventos de Autódromo de la Ciudad de Buenos Aires"
-              parrafo="Vea la información de los diferentes eventos"
-            />
-            <BiSolidArrowToBottom size={20} className="text-gray-600" />
+          <div>
+            <div className="bg-white shadow-md rounded-t-lg p-6 mt-6 flex items-center justify-between">
+              <TituloParrafo
+                titulo="Eventos de Autódromo de la Ciudad de Buenos Aires"
+                parrafo="Vea la información de los diferentes eventos"
+              />
+
+              <button
+                onClick={() => handleToggleVisibility("infoEvento")}
+                className="p-2 rounded hover:bg-gray-200"
+              >
+                {visibility.infoEvento ? (
+                  <BiSolidArrowToTop size={20} className="text-gray-600" />
+                ) : (
+                  <BiSolidArrowToBottom size={20} className="text-gray-600" />
+                )}
+              </button>
+            </div>
+            {visibility.infoEvento && <EventoInfo />}
           </div>
         )}
 

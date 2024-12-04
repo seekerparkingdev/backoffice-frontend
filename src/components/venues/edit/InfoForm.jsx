@@ -20,7 +20,8 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const InfoForm = () => {
+const InfoForm = ({url}) => {
+  
   const [position, setPosition] = useState([-34.6037, -58.3816]); // Coordenadas iniciales (Buenos Aires)
   const [venue, setVenue] = useState({
     nombre: "",
@@ -45,7 +46,7 @@ const InfoForm = () => {
   };
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
+    <div className="p-4 bg-white shadow-lg rounded-bl-lg">
       <form className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
           <div>
@@ -97,6 +98,10 @@ const InfoForm = () => {
                 onChange={handleInputChange}
                 className="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3"
               />
+              {url.view ? (
+                null) : (
+
+
               <button
                 type="button"
                 onClick={() => alert("Mapa actualizado")}
@@ -104,6 +109,8 @@ const InfoForm = () => {
               >
                 Actualizar Mapa
               </button>
+                )
+              }
             </div>
           </div>
         </div>

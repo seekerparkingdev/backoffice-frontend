@@ -1,4 +1,5 @@
 import React from "react";
+
 import DataTable from "react-data-table-component";
 import { NavLink } from "react-router-dom";
 import { Titulo } from "../../components/Titulo";
