@@ -28,7 +28,7 @@ const InfoForm = () => {
   };
 
   return (
-    <div className="mb-4 mt-0 mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="mb-4 mt-0 mx-auto p-6 bg-white shadow-lg rounded-bl-lg">
       <form action="onSubmit" className="space-y-6">
          
         <div className="grid grid-cols-4 gap-4 items-end">
