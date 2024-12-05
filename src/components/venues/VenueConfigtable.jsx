@@ -5,7 +5,7 @@ import { MdDesktopAccessDisabled } from "react-icons/md";
 import { MdOutlineDesktopWindows } from "react-icons/md";
 import { LuDelete } from "react-icons/lu";
 import { BiEditAlt } from "react-icons/bi";
-import { useState } from "react"; // Importar useState
+import { useState } from "react";  
 
 const VenueConfigtable = [
   { name: "Nombre", selector: (row) => row.nombre, sortable: true },
@@ -19,10 +19,10 @@ const VenueConfigtable = [
     name: "Acciones",
     selector: (row) => row.accions,
     cell: (row) => {
-      const [activOdisable, setActivOdisable] = useState(false); // Crear estado para controlar el icono
+      const [activOdisable, setActivOdisable] = useState(false);  
 
       const toggleActivOdisable = () => {
-        setActivOdisable((prevState) => !prevState); // Alternar entre true y false hasta que tengamos un endpoint
+        setActivOdisable((prevState) => !prevState);  
       };
 
       return (

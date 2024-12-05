@@ -1,4 +1,4 @@
-import { InfoGeneralPage } from "../../page/venues/edit/InfoGeneralPage"
+import { InfoGeneralPage } from "../../page/eventos/evento/InfoGeneralPage"
 import { useParams } from "react-router-dom";
 
 

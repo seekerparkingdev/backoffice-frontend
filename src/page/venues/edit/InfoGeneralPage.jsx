@@ -3,12 +3,12 @@ import { useState } from "react";
 import { BiSolidArrowToBottom, BiSolidArrowToTop } from "react-icons/bi";
 // COMPONENTES
 import { Titulo } from "../../../components/Titulo";
-import { InfoForm } from "../../../components/venues/edit/InfoForm/InfoForm";
-import { TituloParrafo } from "../../../components/venues/edit/TituloParrafo";
-import { Redes } from "../../../components/venues/edit/Redes/Redes";
-import { Recomendado } from "../../../components/venues/edit/Recomendado/Recomendado";
+import { InfoForm } from "../../../components/venues/InfoForm/InfoForm";
+import { TituloParrafo } from "../../../components/venues/TituloParrafo";
+import { Redes } from "../../../components/venues/Redes/Redes";
+import { Recomendado } from "../../../components/venues/Recomendado/Recomendado";
 import { VenueSetup } from "../../../components/venues/VenueTable";
-import { TablaEventoInfo } from "../../../components/venues/edit/TablaEventoInfo/TablaEventoInfo";
+import { TablaEventoInfo } from "../../../components/venues/TablaEventoInfo/TablaEventoInfo";
 import { NavLink, useParams } from "react-router-dom";
 
 const InfoGeneralPage = ({ id }) => {

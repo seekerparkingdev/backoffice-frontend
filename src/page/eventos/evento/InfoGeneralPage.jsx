@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Titulo } from "../../../components/Titulo";
-import { InfoForm } from "../../../components/venues/edit/InfoForm/InfoForm";
-import { TituloParrafo } from "../../../components/venues/edit/TituloParrafo";
+import { InfoForm } from "../../../components/venues/InfoForm/InfoForm";
+import { TituloParrafo } from "../../../components/venues/TituloParrafo";
 import { BiSolidArrowToBottom } from "react-icons/bi";
 import { BiSolidArrowToTop } from "react-icons/bi";
 const InfoGeneralPage = ({ id }) => {
