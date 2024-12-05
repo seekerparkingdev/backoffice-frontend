@@ -9,11 +9,12 @@ import { Redes } from "../../../components/venues/edit/Redes";
 import { Recomendado } from "../../../components/venues/edit/Recomendado";
 import { VenueSetup } from "../../../components/venues/VenueTable";
 import { EventoInfo } from "../../../components/venues/EventoInfo";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 const InfoGeneralPage = ({ id }) => {
-  const url = useParams() 
-  
+  const url = useParams();
+  console.log(url);
+
   const [visibility, setVisibility] = useState({
     infoForm: false,
     redes: false,
@@ -53,7 +54,7 @@ const InfoGeneralPage = ({ id }) => {
               )}
             </button>
           </div>
-          {visibility.infoForm && <InfoForm url={url}/>}
+          {visibility.infoForm && <InfoForm url={url} />}
         </div>
 
         {/* SEGUNDO PASO */}
@@ -122,7 +123,25 @@ const InfoGeneralPage = ({ id }) => {
           </div>
         )}
 
-        <div className="mt-6">
+        <div className="relative h-20">
+          {id === "new" ? (
+            <button className="absolute top-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md">
+              Crear
+            </button>
+          ) : url.view === "view" ? (
+            <NavLink to="/venues">
+              <button className="absolute top-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md">
+                Atrás
+              </button>
+            </NavLink>
+          ) : (
+            <button className="absolute top-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md">
+              Guardar
+            </button>
+          )}
+        </div>
+
+        <div className="mt-6  ">
           <VenueSetup />
         </div>
       </div>
