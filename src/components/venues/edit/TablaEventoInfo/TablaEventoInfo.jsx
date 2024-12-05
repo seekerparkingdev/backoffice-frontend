@@ -35,7 +35,7 @@ const columns = [
   }
 ];
 
-const EventoInfo = () => {
+const TablaEventoInfo = () => {
   return (
     <div>
       <DataTable
@@ -49,4 +49,4 @@ const EventoInfo = () => {
   );
 };
 
-export  {EventoInfo};
+export  {TablaEventoInfo};

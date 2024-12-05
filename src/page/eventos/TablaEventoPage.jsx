@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import { Titulo } from "../../components/Titulo";
 import { NavLink } from "react-router-dom";
 // Configuración de columnas
-import { Configtable } from "../../components/venues/Configtable";
+import { VenueConfigtable } from "../../components/venues/VenueConfigtable";
 // Dato ficticio
 import { datavenue } from "../../utils/venues/datavenue";
 
@@ -25,7 +25,7 @@ const TablaEventoPage = () => {
         </div>
 
         <DataTable
-          columns={Configtable}
+          columns={VenueConfigtable}
           data={datavenue}
           pagination
           highlightOnHover

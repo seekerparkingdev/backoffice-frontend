@@ -7,7 +7,7 @@ import { LuDelete } from "react-icons/lu";
 import { BiEditAlt } from "react-icons/bi";
 import { useState } from "react"; // Importar useState
 
-const Configtable = [
+const VenueConfigtable = [
   { name: "Nombre", selector: (row) => row.nombre, sortable: true },
   { name: "Dirección", selector: (row) => row.direccion, sortable: true },
   {
@@ -52,4 +52,4 @@ const Configtable = [
   },
 ];
 
-export { Configtable };
+export { VenueConfigtable };

@@ -3,12 +3,12 @@ import { useState } from "react";
 import { BiSolidArrowToBottom, BiSolidArrowToTop } from "react-icons/bi";
 // COMPONENTES
 import { Titulo } from "../../../components/Titulo";
-import { InfoForm } from "../../../components/venues/edit/InfoForm";
+import { InfoForm } from "../../../components/venues/edit/InfoForm/InfoForm";
 import { TituloParrafo } from "../../../components/venues/edit/TituloParrafo";
-import { Redes } from "../../../components/venues/edit/Redes";
-import { Recomendado } from "../../../components/venues/edit/Recomendado";
+import { Redes } from "../../../components/venues/edit/Redes/Redes";
+import { Recomendado } from "../../../components/venues/edit/Recomendado/Recomendado";
 import { VenueSetup } from "../../../components/venues/VenueTable";
-import { EventoInfo } from "../../../components/venues/EventoInfo";
+import { TablaEventoInfo } from "../../../components/venues/edit/TablaEventoInfo/TablaEventoInfo";
 import { NavLink, useParams } from "react-router-dom";
 
 const InfoGeneralPage = ({ id }) => {
@@ -119,7 +119,7 @@ const InfoGeneralPage = ({ id }) => {
                 )}
               </button>
             </div>
-            {visibility.infoEvento && <EventoInfo />}
+            {visibility.infoEvento && <TablaEventoInfo />}
           </div>
         )}
 

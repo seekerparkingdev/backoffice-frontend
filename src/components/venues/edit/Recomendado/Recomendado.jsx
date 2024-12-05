@@ -12,12 +12,10 @@ const Recomendado = ({ url }) => {
   });
 
   const [estacionamientos, setEstacionamientos] = useState([]);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setRecomendado({ ...recomendado, [name]: value });
   };
-
   const handleAddEstacionamiento = () => {
     if (recomendado.estacionamiento) {
       setEstacionamientos([
@@ -57,7 +55,6 @@ const Recomendado = ({ url }) => {
     }
   };
 
-  // Opciones para el selector
   const opcionesEstacionamiento = [
     { value: "Concepción Arenal 3878", label: "Concepción Arenal 3878" },
     { value: "Acevedo 468", label: "Acevedo 468" },
@@ -70,7 +67,7 @@ const Recomendado = ({ url }) => {
     { value: "Parking Camargo 953", label: "Parking Camargo 953" },
   ];
 
-  // Columnas de la tabla
+  
   const columns = [
     {
       name: "Nombre",
@@ -130,7 +127,7 @@ const Recomendado = ({ url }) => {
       name: "Opciones",
       cell: (row) => (
         <button onClick={() => handleDeleteEstacionamiento(row.id)}>
-          <RiDeleteBackFill size={20}/>
+          <RiDeleteBackFill size={20} />
         </button>
       ),
     },
