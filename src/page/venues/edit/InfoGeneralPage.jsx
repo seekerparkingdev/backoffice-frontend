@@ -7,7 +7,7 @@ import { InfoForm } from "../../../components/venues/InfoForm/InfoForm";
 import { TituloParrafo } from "../../../components/venues/TituloParrafo";
 import { Redes } from "../../../components/venues/Redes/Redes";
 import { Recomendado } from "../../../components/venues/Recomendado/Recomendado";
-import { VenueSetup } from "../../../components/venues/VenueTable";
+import { VenueSetup } from "../../../components/venues/VenueSetup";
 import { TablaEventoInfo } from "../../../components/venues/TablaEventoInfo/TablaEventoInfo";
 import { NavLink, useParams } from "react-router-dom";
 
