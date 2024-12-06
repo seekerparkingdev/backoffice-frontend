@@ -1,6 +1,7 @@
 import React from "react";
 import { ConfigColumns } from "./ConfigColumns";
 import DataTable from "react-data-table-component";
+import EventosFiltroForm from "./EventosFiltroForm";
 import { Titulo } from "../../Titulo";
 
 const data = [
@@ -43,14 +44,22 @@ const data = [
 ];
 
 const EventoGrilla = () => (
-  <div className="p-6 bg-gray-100 min-h-screen   flex items-center justify-center">
-    <div className="w-full max-w-7xl bg-white shadow-md p-4">
-      <DataTable
-        title={<Titulo titulo={"Eventos"}/>}
-        columns={ConfigColumns}
-        data={data}
-        pagination
-      />
+  <div className=" flex justify-center  bg-gray-100">
+    <div className="p-6  min-h-screen justify-center">
+      {/* Título de la sección alineado a la izquierda */}
+      <div className="mb-6">
+        <Titulo titulo={"Eventos"} />
+      </div>
+
+      <div className="w-full max-w-7xl bg-white shadow-md p-4">
+        {/* Filtro de eventos */}
+        <div className="flex justify-start mb-6">
+          <EventosFiltroForm />
+        </div>
+
+        {/* Tabla de eventos */}
+        <DataTable columns={ConfigColumns} data={data} pagination />
+      </div>
     </div>
   </div>
 );

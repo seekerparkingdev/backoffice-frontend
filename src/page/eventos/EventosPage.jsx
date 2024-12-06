@@ -1,11 +1,10 @@
 import EventoGrilla from "../../components/eventos/grilla/EventoGrilla";
+ 
 
 const EventosPage = () => {
   return (
     <div>
-      <div>
-        <EventoGrilla />
-      </div>
+      <EventoGrilla />
     </div>
   );
 };
