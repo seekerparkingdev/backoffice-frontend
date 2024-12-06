@@ -1,28 +1,7 @@
 import React, { useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-// Configuración del icono de Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
-
-const InfoForm = ({url}) => {
-  
-  const [position, setPosition] = useState([-34.6037, -58.3816]); // Coordenadas iniciales (Buenos Aires)
+import MapComponent from "./MapComponent";
+const InfoGeneral = ({ url }) => {
+  const [position, setPosition] = useState([-34.6037, -58.3816]);
   const [venue, setVenue] = useState({
     nombre: "",
     capacidad: "",
@@ -34,15 +13,6 @@ const InfoForm = ({url}) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVenue({ ...venue, [name]: value });
-  };
-
-  const MoverMarcador = () => {
-    useMapEvents({
-      click(e) {
-        setPosition([e.latlng.lat, e.latlng.lng]);
-      },
-    });
-    return null;
   };
 
   return (
@@ -98,19 +68,15 @@ const InfoForm = ({url}) => {
                 onChange={handleInputChange}
                 className="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3"
               />
-              {url.view ? (
-                null) : (
-
-
-              <button
-                type="button"
-                onClick={() => alert("Mapa actualizado")}
-                className="bg-blue-500 text-white py-2 px-4 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Actualizar Mapa
-              </button>
-                )
-              }
+              {url.view ? null : (
+                <button
+                  type="button"
+                  onClick={() => alert("Mapa actualizado")}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Actualizar Mapa
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -155,24 +121,8 @@ const InfoForm = ({url}) => {
             Seleccione la posición donde se encuentre el Venue o actualice el
             mapa mediante la dirección por coordenadas.
           </label>
-          <div className="relative w-full" style={{ height: "300px" }}>
-            <MapContainer
-              center={position}
-              zoom={13}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <MoverMarcador />
-              <Marker position={position}>
-                <Popup>
-                  Coordenadas: <br />
-                  {position[0].toFixed(5)}, {position[1].toFixed(5)}
-                </Popup>
-              </Marker>
-            </MapContainer>
+          <div className="mt-6">
+            <MapComponent position={position} setPosition={setPosition} />
           </div>
         </div>
       </form>
@@ -180,4 +130,4 @@ const InfoForm = ({url}) => {
   );
 };
 
-export { InfoForm };
+export { InfoGeneral };

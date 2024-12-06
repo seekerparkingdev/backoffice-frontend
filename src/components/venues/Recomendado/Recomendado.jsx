@@ -174,7 +174,6 @@ const Recomendado = ({ url }) => {
         </div>
       </form>
 
-      {/* Tabla */}
       <div className="mt-6">
         <DataTable
           columns={columns}
