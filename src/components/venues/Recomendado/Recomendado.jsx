@@ -67,7 +67,6 @@ const Recomendado = ({ url }) => {
     { value: "Parking Camargo 953", label: "Parking Camargo 953" },
   ];
 
-  
   const columns = [
     {
       name: "Nombre",
@@ -161,14 +160,16 @@ const Recomendado = ({ url }) => {
             </select>
           </div>
           <div className="col-span-1 sm:col-span-1 flex justify-start sm:justify-center">
-            <button
-              type="button"
-              onClick={handleAddEstacionamiento}
-              className="flex items-center justify-center gap-2 px-20 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              <IoMdAddCircle size={20} />
-              <span>Añadir</span>
-            </button>
+            {url.view !== "view" ? (
+              <button
+                type="button"
+                onClick={handleAddEstacionamiento}
+                className="flex items-center justify-center gap-2 px-20 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                <IoMdAddCircle size={20} />
+                <span>Añadir</span>
+              </button>
+            ) : null}
           </div>
         </div>
       </form>
