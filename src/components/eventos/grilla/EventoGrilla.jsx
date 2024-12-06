@@ -44,21 +44,23 @@ const data = [
 ];
 
 const EventoGrilla = () => (
-  <div className=" flex justify-center  bg-gray-100">
-    <div className="p-6  min-h-screen justify-center">
+  <div className="flex justify-center bg-gray-100">
+    <div className="p-6 min-h-screen w-full max-w-7xl">
       {/* Título de la sección alineado a la izquierda */}
       <div className="mb-6">
         <Titulo titulo={"Eventos"} />
       </div>
 
-      <div className="w-full max-w-7xl bg-white shadow-md p-4">
+      <div className="w-full bg-white shadow-md p-4">
         {/* Filtro de eventos */}
         <div className="flex justify-start mb-6">
           <EventosFiltroForm />
         </div>
 
         {/* Tabla de eventos */}
-        <DataTable columns={ConfigColumns} data={data} pagination />
+        <div className="overflow-x-auto">
+          <DataTable columns={ConfigColumns} data={data} pagination />
+        </div>
       </div>
     </div>
   </div>
