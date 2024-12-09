@@ -6,6 +6,8 @@ import { Routes, Route } from "react-router-dom";
 import Eventos from "./views/eventos/Eventos";
 import {ViewVenues} from "./views/venues/ViewVenues";
 import {ViewVenueCrud} from "./views/venues/ViewVenueCrud";
+import {ViewEventosNew} from "./views/eventos/ViewEventosNew";
+ 
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
       <Route path="/venues" element={<ViewVenues />} />
       <Route path="/venues/:id/:view?" element={<ViewVenueCrud />} />
       <Route path="/eventos" element={<Eventos />} />
+      <Route path="/eventos/new" element={< ViewEventosNew/>} />
     </Routes>
   );
 }

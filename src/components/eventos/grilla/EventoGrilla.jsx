@@ -2,6 +2,7 @@ import React from "react";
 import { ConfigColumns } from "./ConfigColumns";
 import DataTable from "react-data-table-component";
 import EventosFiltroForm from "./EventosFiltroForm";
+import { NavLink } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 
 const data = [
@@ -46,9 +47,13 @@ const data = [
 const EventoGrilla = () => (
   <div className="flex justify-center bg-gray-100">
     <div className="p-6 min-h-screen w-full max-w-7xl">
-      {/* Título de la sección alineado a la izquierda */}
-      <div className="mb-6">
-        <Titulo titulo={"Eventos"} />
+      <div className="flex items-center justify-between mb-5">
+        <Titulo titulo={"Eventos"} className="text-xl font-bold" />
+        <NavLink to="/eventos/new">
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Nuevo
+          </button>
+        </NavLink>
       </div>
 
       <div className="w-full bg-white shadow-md p-4">
