@@ -2,24 +2,24 @@ import { useState } from "react";
 
 import { BiSolidArrowToBottom, BiSolidArrowToTop } from "react-icons/bi";
 // COMPONENTES
-import { Titulo } from "../../../components/Titulo";
-import { InfoForm } from "../../../components/venues/InfoForm/InfoForm";
-import { TituloParrafo } from "../../../components/venues/TituloParrafo";
-import { Redes } from "../../../components/venues/Redes/Redes";
-import { Recomendado } from "../../../components/venues/Recomendado/Recomendado";
-import { VenueSetup } from "../../../components/venues/VenueTable";
-import { TablaEventoInfo } from "../../../components/venues/TablaEventoInfo/TablaEventoInfo";
+import { Titulo } from "../../components/Titulo";
+import { InfoGeneral} from "../../components/venues/InfoGeneral/InfoGeneral";
+import { TituloParrafo } from "../../components/TituloParrafo";
+import { Redes } from "../../components/venues/Redes/Redes";
+import { Recomendado } from "../../components/venues/Recomendado/Recomendado";
+import { VenueSetup } from "../../components/venues/VenueSetup/VenueSetup";
+import { VenueEventos} from "../../components/venues/Grillas/VenueEventos";
 import { NavLink, useParams } from "react-router-dom";
 
-const InfoGeneralPage = ({ id }) => {
+const PageVenueCrud = ({ id }) => {
   const url = useParams();
   console.log(url);
 
   const [visibility, setVisibility] = useState({
-    infoForm: false,
+    InfoGeneral: false,
     redes: false,
     recomendado: false,
-    infoEvento: false,
+    VenueEventos: false,
   });
 
   const handleToggleVisibility = (section) => {
@@ -44,17 +44,17 @@ const InfoGeneralPage = ({ id }) => {
               parrafo="Nombre, capacidad máxima, dirección y fotos"
             />
             <button
-              onClick={() => handleToggleVisibility("infoForm")}
+              onClick={() => handleToggleVisibility("InfoGeneral")}
               className="p-2 rounded hover:bg-gray-200"
             >
-              {visibility.infoForm ? (
+              {visibility.InfoGeneral ? (
                 <BiSolidArrowToTop size={20} className="text-gray-600" />
               ) : (
                 <BiSolidArrowToBottom size={20} className="text-gray-600" />
               )}
             </button>
           </div>
-          {visibility.infoForm && <InfoForm url={url} />}
+          {visibility.InfoGeneral && <InfoGeneral url={url} />}
         </div>
 
         {/* SEGUNDO PASO */}
@@ -109,17 +109,17 @@ const InfoGeneralPage = ({ id }) => {
               />
 
               <button
-                onClick={() => handleToggleVisibility("infoEvento")}
+                onClick={() => handleToggleVisibility("VenueEventos")}
                 className="p-2 rounded hover:bg-gray-200"
               >
-                {visibility.infoEvento ? (
+                {visibility.VenueEventos ? (
                   <BiSolidArrowToTop size={20} className="text-gray-600" />
                 ) : (
                   <BiSolidArrowToBottom size={20} className="text-gray-600" />
                 )}
               </button>
             </div>
-            {visibility.infoEvento && <TablaEventoInfo />}
+            {visibility.VenueEventos && <VenueEventos />}
           </div>
         )}
 
@@ -149,4 +149,4 @@ const InfoGeneralPage = ({ id }) => {
   );
 };
 
-export { InfoGeneralPage };
+export { PageVenueCrud  };
