@@ -1,11 +1,19 @@
-import { EventosNewPage } from "../../page/eventos/EventosNewPage"
-
+import { useState } from "react";
+import { EventosNewPage } from "../../page/eventos/EventosNewPage";
+import { Menu } from "../../components/Menu";
+import Nav from "../../components/Nav/Nav";
 const ViewEventosNew = () => {
-    return (
-        <div>
-                <EventosNewPage/> 
-        </div>
-    )
-}
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  return (
+    <div>
+      <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-export   {ViewEventosNew}
+      <div>
+        <EventosNewPage />
+      </div>
+    </div>
+  );
+};
+
+export { ViewEventosNew };
