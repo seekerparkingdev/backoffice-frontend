@@ -1,9 +1,11 @@
-import { TablaEventoPage } from "../../page/eventos/TablaEventoPage";
+import { EventosPage } from "../../page/eventos/EventosPage";
+
 const Eventos = () => {
-  return(
+  return (
     <div>
-         <TablaEventoPage />
+      <EventosPage />
     </div>
-)
+  );
 };
-export  default Eventos;
+
+export default Eventos;
