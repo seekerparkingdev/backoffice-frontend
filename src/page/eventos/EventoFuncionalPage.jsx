@@ -2,8 +2,9 @@ import { useState } from "react";
 import { BiSolidArrowToTop, BiSolidArrowToBottom } from "react-icons/bi";
 import { Titulo } from "../../components/Titulo";
 import { TituloParrafo } from "../../components/TituloParrafo";
-import { InfoGeneral } from "../../components/eventos/form/InfoGeneral";
-import { ParkingInfo } from "../../components/eventos/form/ParkingInfo";
+import { InfoGeneral } from "../../components/eventos/form//InfoGeneral/InfoGeneral";
+import { ParkingInfo } from "../../components/eventos/form/ParkingInfo/ParkingInfo";
+ 
 
 const EventoFuncionalPage = () => {
   const [visibility, setVisibility] = useState({
@@ -46,7 +47,7 @@ const EventoFuncionalPage = () => {
           {visibility.InfoGeneral && <InfoGeneral />}
         </div>
 
-        <div className="mb-10 "> 
+        <div className="mb-10 ">
           <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Plazas"

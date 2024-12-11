@@ -1,7 +1,7 @@
 import React from "react";
 import { ConfigColumns } from "./ConfigColumns";
 import DataTable from "react-data-table-component";
-import EventosFiltroForm from "./EventosFiltroForm";
+import EventosFiltroForm from "../form/EventosFiltroForm";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 
