@@ -9,19 +9,24 @@ import { ViewVenues } from "./views/venues/ViewVenues";
 import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
 
+// IMPORTAMOS EL PROVIDER DEL CONTEXTO
+import { ParkingProvider } from "./utils/eventos/ParkingContext";
+
 function App() {
   return (
-    <div className="flex">
-      <div className="flex-1">
-        <Routes>
-          <Route path="/venues" element={<ViewVenues />} />
-          <Route path="/venues/:id/:view?" element={<ViewVenueCrud />} />
-          <Route path="/eventos" element={<Eventos />} />
-          <Route path="/eventos/new" element={<ViewEventosNew />} />
-          <Route path="/eventos/:id" element={<ViewEventoFuncional />} />
-        </Routes>
+    <ParkingProvider>
+      <div className="flex">
+        <div className="flex-1">
+          <Routes>
+            <Route path="/venues" element={<ViewVenues />} />
+            <Route path="/venues/:id/:view?" element={<ViewVenueCrud />} />
+            <Route path="/eventos" element={<Eventos />} />
+            <Route path="/eventos/new" element={<ViewEventosNew />} />
+            <Route path="/eventos/:id" element={<ViewEventoFuncional />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </ParkingProvider>
   );
 }
 
