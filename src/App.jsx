@@ -8,6 +8,7 @@ import { ViewEventoFuncional } from "./views/eventos/ViewEventoFuncional";
 import { ViewVenues } from "./views/venues/ViewVenues";
 import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
+import { ViewEstacionamiento } from "./views/estacionamiento/ViewEstacionamiento";
 
 // IMPORTAMOS EL PROVIDER DEL CONTEXTO
 import { ParkingProvider } from "./utils/eventos/ParkingContext";
@@ -23,6 +24,7 @@ function App() {
             <Route path="/eventos" element={<Eventos />} />
             <Route path="/eventos/new" element={<ViewEventosNew />} />
             <Route path="/eventos/:id" element={<ViewEventoFuncional />} />
+            <Route path="/estacionamiento" element={<ViewEstacionamiento />} />
           </Routes>
         </div>
       </div>
