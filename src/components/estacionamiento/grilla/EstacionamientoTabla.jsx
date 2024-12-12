@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
-
+import { useNavigate } from "react-router-dom";
 const EstacionamientoTabla = () => {
   const data = [
     {
@@ -83,7 +83,10 @@ const EstacionamientoTabla = () => {
     (item) =>
       item.nombre && item.nombre.toLowerCase().includes(filterText.toLowerCase())
   );
-
+ const navigate = useNavigate();
+  const handleRowClick = (row) => {
+    navigate(`/estacionamiento/${row.id}`);
+  };
   return (
     <div className="p-4">
       <div className="mb-4">
@@ -100,6 +103,7 @@ const EstacionamientoTabla = () => {
         data={filteredItems}
         pagination
         highlightOnHover
+        onRowClicked={handleRowClick}
         responsive
         customStyles={{
           table: {
