@@ -3,17 +3,30 @@ import { Menu } from "../../components/Menu";
 import Nav from "../../components/Nav/Nav";
 import { PageVenueCrud } from "../../page/venues/PageVenueCrud";
 import { useParams } from "react-router-dom";
+
 const ViewVenueCrud = () => {
   const { id } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div>
+    <>
+      
       <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div>
-        <PageVenueCrud id={id} />
+
+      
+      <div className="flex min-h-screen bg-gray-100">
+       
+        <div className={`lg:w-64 ${sidebarOpen ? "block" : "hidden"} lg:block`}>
+          <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        </div>
+
+        
+        <div className="flex-1 p-4">
+          
+          <PageVenueCrud id={id} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -92,60 +92,56 @@ const EstacionamientoTabla = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-4 py-6">
-      {/* Título y Botón "Nuevo" */}
-      <div className="w-full max-w-7xl px-4 py-6 mb-6 flex justify-between items-center">
-        <Titulo titulo={"Estacionamientos"} />
-        <button
-          onClick={() => navigate("/estacionamiento/new")}
-          className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-150 "
-          style={{ alignSelf: "flex-start" }}
-        >
-          Nuevo
-        </button>
-      </div>
+    <div className="flex justify-center  min-h-screen">
+      <div className="p-6 min-h-screen w-full lg:w-3/5 max-w-7xl">
+        <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-between mb-5">
+            <Titulo titulo={"Estacionamientos"} className="text-xl font-bold" />
+            <button
+              onClick={() => navigate("/estacionamiento/new")}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Nuevo
+            </button>
+          </div>
 
-      {/* Contenedor de la tabla */}
-      <div className="w-full max-w-7xl px-4 py-6 rounded-lg shadow-xl bg-white">
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Buscar..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div className="overflow-x-auto">
+            <DataTable
+              columns={columns}
+              data={filteredItems}
+              pagination
+              highlightOnHover
+              onRowClicked={handleRowClick}
+              responsive
+              customStyles={{
+                headCells: {
+                  style: {
+                    backgroundColor: "#f7fafc",
+                    fontWeight: "bold",
+                    color: "#4A5568",
+                    padding: "12px",
+                  },
+                },
+                cells: {
+                  style: {
+                    padding: "12px",
+                    textAlign: "center",
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
-        <DataTable
-          columns={columns}
-          data={filteredItems}
-          pagination
-          highlightOnHover
-          onRowClicked={handleRowClick}
-          responsive
-          customStyles={{
-            table: {
-              style: {
-                border: "1px solid #e5e7eb",
-                borderRadius: "10px",
-              },
-            },
-            headCells: {
-              style: {
-                backgroundColor: "#f7fafc",
-                fontWeight: "bold",
-                color: "#4A5568",
-                padding: "12px",
-              },
-            },
-            cells: {
-              style: {
-                padding: "12px",
-                textAlign: "center",
-              },
-            },
-          }}
-        />
       </div>
     </div>
   );

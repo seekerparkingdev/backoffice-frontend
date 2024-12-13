@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BiSolidArrowToTop, BiSolidArrowToBottom } from "react-icons/bi";
 import { Titulo } from "../../components/Titulo";
 import { TituloParrafo } from "../../components/TituloParrafo";
-import { InfoGeneral } from "../../components/eventos/form//InfoGeneral/InfoGeneral";
+import { InfoGeneral } from "../../components/eventos/form/InfoGeneral/InfoGeneral";
 import { ParkingInfo } from "../../components/eventos/form/ParkingInfo/ParkingInfo";
 import { EstacionamientoGrilla } from "../../components/eventos/grilla/Estacionamiento/EstacionamientoGrilla";
 
@@ -21,14 +21,14 @@ const EventoFuncionalPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full lg:w-2/3 px-4">
-        <div className="mb-4">
+    <div className="flex min-h-screen bg-gray-100">
+      <div className="flex-1 p-6 max-w-7xl mx-auto">
+        <div className="mb-6">
           <Titulo titulo="Nombre del Venue" />
         </div>
 
-        <div className="mb-10 ">
-          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
+        <div className="mb-10">
+          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Plazas"
               parrafo="Administre las plazas para el evento."
@@ -47,8 +47,8 @@ const EventoFuncionalPage = () => {
           {visibility.Plazas && <ParkingInfo />}
         </div>
 
-        <div className="mb-10 ">
-          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
+        <div className="mb-10">
+          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Estacionamiento"
               parrafo="Ingrese los estacionamientos para el evento."
@@ -66,11 +66,12 @@ const EventoFuncionalPage = () => {
           </div>
           {visibility.Estacionamiento && <EstacionamientoGrilla />}
         </div>
+
         <div className="mb-10">
-          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
+          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Información General"
-              parrafo="Datos generales del evento"
+              parrafo="Datos generales del evento."
             />
             <button
               onClick={() => handleToggleVisibility("InfoGeneral")}

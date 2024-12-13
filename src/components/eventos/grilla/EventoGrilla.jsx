@@ -55,25 +55,24 @@ const EventoGrilla = () => {
   const handleRowClick = (row) => {
     navigate(`/eventos/${row.id}`);
   };
+
   return (
     <div className="flex justify-center bg-gray-100">
-      <div className="p-6 min-h-screen w-full max-w-7xl">
-        <div className="flex items-center justify-between mb-5">
-          <Titulo titulo={"Eventos"} className="text-xl font-bold" />
-          <NavLink to="/eventos/new">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-              Nuevo
-            </button>
-          </NavLink>
-        </div>
+      <div className="p-6 min-h-screen w-full lg:w-3/5 max-w-7xl">
+        <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-between mb-5 border-b-2 border-gray-200 pb-9">
+            <Titulo titulo={"Eventos"} className="text-xl font-bold" />
+            <NavLink to="/eventos/new">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Nuevo
+              </button>
+            </NavLink>
+          </div>
 
-        <div className="w-full bg-white shadow-md p-4">
-          {/* Filtro de eventos */}
           <div className="flex justify-start mb-6">
             <EventosFiltroForm />
           </div>
 
-          {/* Tabla de eventos */}
           <div className="overflow-x-auto">
             <DataTable
               columns={ConfigColumns}
@@ -81,6 +80,7 @@ const EventoGrilla = () => {
               pagination
               onRowClicked={handleRowClick}
               highlightOnHover
+              className="rounded-lg"
             />
           </div>
         </div>
