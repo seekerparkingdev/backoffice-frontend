@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
+import { Titulo } from "../../Titulo";
+
 const EstacionamientoTabla = () => {
   const data = [
     {
@@ -78,47 +80,73 @@ const EstacionamientoTabla = () => {
   ];
 
   const [filterText, setFilterText] = useState("");
-
   const filteredItems = data.filter(
     (item) =>
-      item.nombre && item.nombre.toLowerCase().includes(filterText.toLowerCase())
+      item.nombre &&
+      item.nombre.toLowerCase().includes(filterText.toLowerCase())
   );
- const navigate = useNavigate();
+
+  const navigate = useNavigate();
   const handleRowClick = (row) => {
     navigate(`/estacionamiento/${row.id}`);
   };
+
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar..."
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-          className="w-full p-2 border rounded shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+    <div className="flex flex-col items-center min-h-screen px-4 py-6">
+      {/* Título y Botón "Nuevo" */}
+      <div className="w-full max-w-7xl px-4 py-6 mb-6 flex justify-between items-center">
+        <Titulo titulo={"Estacionamientos"} />
+        <button
+          onClick={() => navigate("/estacionamiento/new")}
+          className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-150 "
+          style={{ alignSelf: "flex-start" }}
+        >
+          Nuevo
+        </button>
+      </div>
+
+      {/* Contenedor de la tabla */}
+      <div className="w-full max-w-7xl px-4 py-6 rounded-lg shadow-xl bg-white">
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <DataTable
+          columns={columns}
+          data={filteredItems}
+          pagination
+          highlightOnHover
+          onRowClicked={handleRowClick}
+          responsive
+          customStyles={{
+            table: {
+              style: {
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "#f7fafc",
+                fontWeight: "bold",
+                color: "#4A5568",
+                padding: "12px",
+              },
+            },
+            cells: {
+              style: {
+                padding: "12px",
+                textAlign: "center",
+              },
+            },
+          }}
         />
       </div>
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        pagination
-        highlightOnHover
-        onRowClicked={handleRowClick}
-        responsive
-        customStyles={{
-          table: {
-            style: {
-              border: "1px solid #e5e7eb",
-            },
-          },
-          headCells: {
-            style: {
-              backgroundColor: "#f3f4f6",
-              fontWeight: "bold",
-            },
-          },
-        }}
-      />
     </div>
   );
 };
@@ -135,12 +163,12 @@ const ActionMenu = ({ row }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+        className="px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
       >
         Opciones
       </button>
       {isOpen && (
-        <div className="absolute right-0 z-10 w-40 mt-2 bg-white border border-gray-200 rounded shadow-lg">
+        <div className="absolute right-0 z-10 w-40 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
           <ul className="py-1">
             <li
               onClick={() => handleOption("Suspender")}
@@ -167,4 +195,4 @@ const ActionMenu = ({ row }) => {
   );
 };
 
-export  {EstacionamientoTabla};
+export { EstacionamientoTabla };

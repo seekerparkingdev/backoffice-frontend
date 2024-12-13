@@ -37,7 +37,7 @@ const GeneralEdit = () => {
   };
 
   return (
-    <div className="p-8 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
+    <div className="p-8 bg-white max-w-4xl mx-auto">
       <form className="space-y-8">
         {/* Información básica */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
