@@ -1,4 +1,4 @@
-import { EventoNewForm } from "../../components/eventos/EventoNewForm"
+import { EventoNewForm } from "../../components/eventos/form/EventoNew/EventoNewForm"
 
 const EventosNewPage = () => {
     return (

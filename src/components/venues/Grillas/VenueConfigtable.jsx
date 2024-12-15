@@ -17,37 +17,56 @@ const VenueConfigtable = [
   },
   {
     name: "Acciones",
-    selector: (row) => row.accions,
     cell: (row) => {
-      const [activOdisable, setActivOdisable] = useState(false);  
+      const [activOdisable, setActivOdisable] = useState(false);
 
       const toggleActivOdisable = () => {
-        setActivOdisable((prevState) => !prevState);  
+        setActivOdisable((prevState) => !prevState);
       };
 
       return (
-        <div className="flex justify-start">
-          <button className="p-2">
+        <div className="flex items-center gap-2">
+          {/* Botón Eliminar */}
+          <button
+            onClick={() => console.log("Eliminar registro:", row)}
+            className="text-red-500 hover:text-red-600"
+          >
             <LuDelete size={20} />
           </button>
-          <NavLink to={`/venues/${row.id}`} className="p-2">
+
+          {/* Botón Editar */}
+          <NavLink
+            to={`/venues/${row.id}`}
+            className="text-blue-500 hover:text-blue-600"
+          >
             <BiEditAlt size={20} />
           </NavLink>
-          <button onClick={toggleActivOdisable} className="p-2">
+
+          {/* Botón Activar/Desactivar */}
+          <button
+            onClick={toggleActivOdisable}
+            className={`${
+              activOdisable
+                ? "text-gray-500 hover:text-gray-600"
+                : "text-green-500 hover:text-green-600"
+            }`}
+          >
             {activOdisable ? (
               <MdDesktopAccessDisabled size={20} />
             ) : (
               <MdOutlineDesktopWindows size={20} />
             )}
           </button>
-          <NavLink to={`/venues/${row.id}/view`} className="p-2">
+
+          {/* Botón Ver */}
+          <NavLink
+            to={`/venues/${row.id}/view`}
+            className="text-purple-500 hover:text-purple-600"
+          >
             <FaRegEye size={20} />
           </NavLink>
         </div>
       );
-    },
-    headerStyle: {
-      textAlign: "center",
     },
   },
 ];
