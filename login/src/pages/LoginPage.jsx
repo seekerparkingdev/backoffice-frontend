@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthImage from "../images/auth-image.jpg";
-import validarLogin from "../utils/validacion_login";
+import { validarLogin } from "../utils/validacionform";
 
 const LoginPage = () => {
   const [data, setData] = useState({
@@ -59,7 +59,10 @@ const LoginPage = () => {
               <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1" htmlFor="email">
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="email"
+                    >
                       Dirección de email
                     </label>
                     <input
@@ -70,10 +73,15 @@ const LoginPage = () => {
                       className="form-input w-full"
                       type="email"
                     />
-                    {errores.email && <p className="text-red-500 text-xs">{errores.email}</p>}
+                    {errores.email && (
+                      <p className="text-red-500 text-xs">{errores.email}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1" htmlFor="password">
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
                       Contraseña
                     </label>
                     <input
@@ -85,12 +93,17 @@ const LoginPage = () => {
                       type="password"
                       autoComplete="on"
                     />
-                    {errores.password && <p className="text-red-500 text-xs">{errores.password}</p>}
+                    {errores.password && (
+                      <p className="text-red-500 text-xs">{errores.password}</p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-6">
                   <div className="mr-1">
-                    <Link className="text-sm underline hover:no-underline" to="/reset-password">
+                    <Link
+                      className="text-sm underline hover:no-underline"
+                      to="/reset-password"
+                    >
                       ¿Olvidaste la contraseña?
                     </Link>
                   </div>
@@ -106,7 +119,10 @@ const LoginPage = () => {
               <div className="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
                 <div className="text-sm">
                   ¿No tienes una cuenta?{" "}
-                  <Link className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" to="/signup">
+                  <Link
+                    className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
+                    to="/signup"
+                  >
                     Regístrate
                   </Link>
                 </div>
@@ -116,7 +132,10 @@ const LoginPage = () => {
         </div>
 
         {/* Image */}
-        <div className="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
+        <div
+          className="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2"
+          aria-hidden="true"
+        >
           <img
             className="object-cover object-center w-full h-full"
             src={AuthImage}
