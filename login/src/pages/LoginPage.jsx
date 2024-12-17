@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthImage from "../images/auth-image.jpg";
+import validarLogin from "../utils/validacion_login";
 
 const LoginPage = () => {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const [errores, setErrores] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validacion = validarLogin(data);
+    if (Object.keys(validacion).length > 0) {
+      setErrores(validacion);
+    } else {
+      // Enviar datos al backend para validar el login
+      console.log("Login correcto");
+      // Redireccionar a la página principal
+      // window.location.href = "/";
+    }
+  };
+
   return (
     <main className="bg-white dark:bg-gray-900">
       <div className="relative md:flex">
@@ -31,77 +56,59 @@ const LoginPage = () => {
                 ¡Bienvenido a Seeker Parking!
               </h1>
               {/* Form */}
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   <div>
-                    <label
-                      className="block text-sm font-medium mb-1"
-                      htmlFor="email"
-                    >
-                      Direccion de email
+                    <label className="block text-sm font-medium mb-1" htmlFor="email">
+                      Dirección de email
                     </label>
                     <input
+                      onChange={handleChange}
+                      name="email"
+                      value={data.email}
                       id="email"
                       className="form-input w-full"
                       type="email"
                     />
+                    {errores.email && <p className="text-red-500 text-xs">{errores.email}</p>}
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium mb-1"
-                      htmlFor="password"
-                    >
+                    <label className="block text-sm font-medium mb-1" htmlFor="password">
                       Contraseña
                     </label>
                     <input
+                      onChange={handleChange}
+                      name="password"
+                      value={data.password}
                       id="password"
                       className="form-input w-full"
                       type="password"
                       autoComplete="on"
                     />
+                    {errores.password && <p className="text-red-500 text-xs">{errores.password}</p>}
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-6">
                   <div className="mr-1">
-                    <Link
-                      className="text-sm underline hover:no-underline"
-                      to="/reset-password"
-                    >
+                    <Link className="text-sm underline hover:no-underline" to="/reset-password">
                       ¿Olvidaste la contraseña?
                     </Link>
                   </div>
-                  <Link
+                  <button
+                    type="submit"
                     className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white ml-3"
-                    to="/"
                   >
-                    Iniciar sesion
-                  </Link>
+                    Iniciar sesión
+                  </button>
                 </div>
               </form>
               {/* Footer */}
               <div className="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
                 <div className="text-sm">
                   ¿No tienes una cuenta?{" "}
-                  <Link
-                    className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                    to="/signup"
-                  >
-                    Registrate
+                  <Link className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" to="/signup">
+                    Regístrate
                   </Link>
-                </div>
-                {/* Warning */}
-                <div className="mt-5">
-                  <div className="bg-yellow-500/20 text-yellow-700 px-3 py-2 rounded">
-                    <svg
-                      className="inline w-3 h-3 shrink-0 fill-current mr-2"
-                      viewBox="0 0 12 12"
-                    >
-                      <path d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
-                    </svg>
-                    <span className="text-sm">
-                    Para brindarle asistencia durante la pandemia, las funciones súper profesionales son gratuitas hasta el 31 de marzo.
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -109,10 +116,7 @@ const LoginPage = () => {
         </div>
 
         {/* Image */}
-        <div
-          className="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2"
-          aria-hidden="true"
-        >
+        <div className="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
           <img
             className="object-cover object-center w-full h-full"
             src={AuthImage}
