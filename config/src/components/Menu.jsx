@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom"; // Importa useLocation
+import { NavLink, useLocation } from "react-router-dom";
 import SidebarLinkGroup from "../partials/SidebarLinkGroup";
 
 function Menu({ sidebarOpen, setSidebarOpen }) {
   const trigger = useRef(null);
   const sidebar = useRef(null);
-  const { pathname } = useLocation(); // Obtén pathname del hook useLocation
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -24,7 +24,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <div>
-      {/* Background overlay for mobile */}
+       
       <div
         className={`fixed inset-0 bg-gray-600 bg-opacity-50 z-40 lg:hidden transition-opacity ${
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -32,7 +32,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
         onClick={() => setSidebarOpen(false)}
       ></div>
 
-      {/* Sidebar */}
+    
       <div
         ref={sidebar}
         className={`fixed z-40 left-0 top-0 h-screen w-64 bg-white shadow-lg transform transition-transform ${
@@ -80,7 +80,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
               Estacionamiento
             </NavLink>
             <ul>
-              {/* Nuevo grupo de enlaces: Configuración */}
+               
               <SidebarLinkGroup activecondition={pathname.includes("config")}>
                 {(handleClick, open) => {
                   return (
@@ -116,7 +116,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
                               />
                             </svg>
                             <span className="text-sm font-medium ml-4">
-                             Configuracion
+                              Configuracion
                             </span>
                           </div>
                           {/* Icon */}
@@ -136,7 +136,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
                         <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
                           <li>
                             <NavLink
-                              to="/config/account"
+                              to="/config"
                               className={({ isActive }) =>
                                 isActive
                                   ? "text-violet-500"
@@ -146,7 +146,6 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
                               Usuarios
                             </NavLink>
                           </li>
-                           
                         </ul>
                       </div>
                     </React.Fragment>
