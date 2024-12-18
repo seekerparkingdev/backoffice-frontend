@@ -1,4 +1,4 @@
-import "./css/style.css";
+import "../../admin/src/css/style.css";
 import { Route, Routes } from "react-router-dom";
 import ConfiguracionPage from "./pages/configuracionPage";
 function App() {

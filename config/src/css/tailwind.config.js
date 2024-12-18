@@ -6,6 +6,7 @@ export default {
   content: [
     './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
+    "../../../admin/src/**/*.{js,jsx,ts,tsx}",
   ],
   darkMode: 'class',
   theme: {
