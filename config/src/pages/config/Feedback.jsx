@@ -23,7 +23,7 @@ function Feedback() {
             <div className="mb-8">
               {/* Title */}
               <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">
-                Account Settings
+               Configuracion
               </h1>
             </div>
 
