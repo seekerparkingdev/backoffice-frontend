@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import DeleteButton from "../../partials/actions/DeleteButton";
+import Botones from "../../partials/actions/Botones";
 import FilterButton from "../../components/DropdownFilter";
 import UsersTable from "../orders/UsersTable ";
 import PaginationClassic from "../../components/PaginationClassic";
+import SearchForm from "../../partials/actions/SearchForm";
 
 function AccountPanel() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -25,12 +26,11 @@ function AccountPanel() {
                   Usuarios
                 </h1>
               </div>
-
               {/* Right: Actions */}
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Delete button */}
-                <DeleteButton selectedItems={selectedItems} />
-
+                <Botones selectedItems={selectedItems} />
+             
                 {/* Filter button */}
                 <FilterButton align="right" />
                 {/* Add order button */}
@@ -47,7 +47,8 @@ function AccountPanel() {
                 </button>
               </div>
             </div>
-
+            <SearchForm />
+               
             {/* Table */}
             <UsersTable selectedItems={handleSelectedItems} />
 
