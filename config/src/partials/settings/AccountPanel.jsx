@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import Botones from "../../partials/actions/Botones";
 import FilterButton from "../../components/DropdownFilter";
-import UsersTable from "../orders/UsersTable ";
+import ModalBlank from "../../components/ModalBlank";
+import UsersTable from "../abm_usuarios/UsersTable ";
 import PaginationClassic from "../../components/PaginationClassic";
 import SearchForm from "../../partials/actions/SearchForm";
+import UserNew from "../../components/DatosUsers/UserNew";
 
 function AccountPanel() {
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
   const handleSelectedItems = (selectedItems) => {
     setSelectedItems([...selectedItems]);
   };
@@ -30,25 +32,50 @@ function AccountPanel() {
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Delete button */}
                 <Botones selectedItems={selectedItems} />
-             
+
                 {/* Filter button */}
-                <FilterButton align="right" />
+            
                 {/* Add order button */}
-                <button className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                  <svg
-                    className="fill-current shrink-0 xs:hidden"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
+                {/* Info Modal */}
+                <div className="m-1.5">
+                  {/* Start */}
+                  <button
+                    className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                    aria-controls="info-modal"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setInfoModalOpen(true);
+                    }}
                   >
-                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                  </svg>
-                  <span className="max-xs:sr-only">Nuevo usuario</span>
-                </button>
+                    <svg
+                      className="fill-current shrink-0 xs:hidden"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span className="max-xs:sr-only">Nuevo usuario</span>
+                  </button>
+                  <ModalBlank
+                    id="info-modal"
+                    modalOpen={infoModalOpen}
+                    setModalOpen={setInfoModalOpen}
+                  >
+                    <div className="p-5 flex space-x-4">
+                      <UserNew 
+                       modalOpen={infoModalOpen}
+                       setModalOpen={setInfoModalOpen}
+                      />
+                    </div>
+                  </ModalBlank>
+                  
+                </div>
+                <FilterButton align="right" />
               </div>
             </div>
             <SearchForm />
-               
+
             {/* Table */}
             <UsersTable selectedItems={handleSelectedItems} />
 
