@@ -1,14 +1,16 @@
 import "../../admin/src/css/style.css";
 import { Route, Routes } from "react-router-dom";
 import UsuarioPage from "./pages/config/Usuario";
-import Feedback from "./pages/config/Feedback";
+import FeedbackPage from "./pages/config/Feedback";
+import TiposPlazasPage from "./pages/config/TiposPlazas";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/config" element={<UsuarioPage />} />
-        <Route path="/config/feedback" element={<Feedback />} />
+        <Route path="config/feedback" element={<FeedbackPage />} />
+        <Route path="config/usuarios" element={<UsuarioPage />} />
+        <Route path="config/plazas" element={<TiposPlazasPage />} />
       </Routes>
     </>
   );
