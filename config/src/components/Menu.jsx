@@ -24,7 +24,6 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <div>
-      {/* Background overlay for mobile */}
       <div
         className={`fixed inset-0 bg-gray-600 bg-opacity-50 z-40 lg:hidden transition-opacity ${
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -32,7 +31,6 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
         onClick={() => setSidebarOpen(false)}
       ></div>
 
-      {/* Sidebar */}
       <div
         ref={sidebar}
         className={`fixed z-40 left-0 top-0 h-screen w-64 bg-white shadow-lg transform transition-transform ${
@@ -80,7 +78,6 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
               Estacionamiento
             </NavLink>
             <ul>
-              {/* Nuevo grupo de enlaces: Configuración */}
               <SidebarLinkGroup activecondition={pathname.includes("config")}>
                 {(handleClick, open) => {
                   return (
@@ -134,9 +131,9 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
                       </a>
                       <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                         <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
-                          <li>
+                          <li className="mb-1">
                             <NavLink
-                              to="/config"
+                              to="/config/usuarios"
                               className={({ isActive }) =>
                                 isActive
                                   ? "text-violet-500"
@@ -144,6 +141,30 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
                               }
                             >
                               Usuarios
+                            </NavLink>
+                          </li>
+                          <li className="mb-1">
+                            <NavLink
+                              to="/config/plazas"
+                              className={({ isActive }) =>
+                                isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500 hover:text-gray-700"
+                              }
+                            >
+                              Tipos de plazas
+                            </NavLink>
+                          </li>
+                          <li className="mb-1">
+                            <NavLink
+                              to="/config/feedback"
+                              className={({ isActive }) =>
+                                isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500 hover:text-gray-700"
+                              }
+                            >
+                              Feedback
                             </NavLink>
                           </li>
                         </ul>
@@ -160,4 +181,4 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
   );
 }
 
-export { Menu };
+export default Menu;
