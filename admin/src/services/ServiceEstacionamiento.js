@@ -1,7 +1,11 @@
 import axios from "axios";
+// RENZO EL PROBLEMA ESTA ACA QUE APIuRL NO LO TOMA Y A TOKEN TAMPOCO, LOS AGARRA COMO undefined  lo puse adentro y afuera de la funcion pero no funciona
+// EN ESTACIONAMIENTO TABLA ES DONDE USO EL GET ESTACIONAMIENTO PARA PODER PONER LOS DATOS DE ESTACIONAMIENTO EN LA TABLA 
+// TENDRIAS QUE PONER CON LOS NOMBRES QUE TE LO TRAIGA EL BACK 
+const apiUrl = process.env.apiUrl;
+const token = process.env.token;
 export const getEstacionamiento = async () => {
-  const apiUrl = process.env.apiUrl || "http://localhost/api/v1/estacionamiento";
-  const token = process.env.token || "No tenes tokeneyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQyOCwibm9tYnJlX3VzdWFyaW8iOiJTZWVrZXIiLCJub21icmUiOiJTZWVrZXIiLCJhcGVsbGlkbyI6IiIsImVtYWlsIjoiaW5mb0BzZWVrZXIuY29tIiwiaWRfcGVyZmlsZXMiOjE2MjAsInBlcmZpbF9lc3BlY2lhbCI6IjAiLCJhY3Rpdm8iOjF9.0mrFyfJ5_8ST9RIgsboBrylSqlqG0GtcD63u1Z5BZEs";
+  console.log("GET", apiUrl, "Token:", token); // Para debug
   try {
     const response = await axios.get(`${apiUrl}`, {
       headers: {
