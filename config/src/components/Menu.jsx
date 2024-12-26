@@ -66,7 +66,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
               Eventos
             </NavLink>
             <NavLink
-              to="/parking"
+              to="/estacionamiento"
               className={({ isActive }) =>
                 `block px-4 py-2 rounded-md text-sm font-medium ${
                   isActive
