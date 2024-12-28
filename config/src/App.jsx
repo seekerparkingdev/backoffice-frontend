@@ -3,8 +3,9 @@ import { Route, Routes } from "react-router-dom";
 import UsuarioPage from "./pages/config/Usuario";
 import FeedbackPage from "./pages/config/Feedback";
 import TiposPlazasPage from "./pages/config/TiposPlazas";
-
+ 
 function App() {
+
   return (
     <>
       <Routes>
