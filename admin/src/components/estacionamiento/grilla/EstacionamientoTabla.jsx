@@ -93,7 +93,7 @@ const EstacionamientoTabla = () => {
 
   return (
     <div className="flex justify-center  min-h-screen">
-      <div className="p-6 min-h-screen w-full lg:w-3/5 max-w-7xl">
+      <div className="p-6 min-h-screen w-full">
         <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <Titulo titulo={"Estacionamientos"} className="text-xl font-bold" />

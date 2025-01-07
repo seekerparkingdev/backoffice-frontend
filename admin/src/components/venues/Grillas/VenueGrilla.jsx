@@ -7,7 +7,7 @@ import { datavenue } from "../../../utils/venues/datavenue";
 const VenueGrilla = () => {
   return (
     <div className="flex justify-center items-center mt-10">
-      <div className="w-full lg:w-3/5 max-w-7xl border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
+      <div className="w-full    border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
         <div className="flex justify-between items-center mb-10">
           <Titulo titulo="Venues" />
           <NavLink to="/venues/new">
