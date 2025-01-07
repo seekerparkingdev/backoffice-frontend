@@ -7,15 +7,23 @@ const ViewEstacionamientoEdit = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <>
+      {/* Barra de navegación */}
       <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex flex-1 overflow-hidden">
-        <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="flex-1 overflow-auto p-4 lg:px-6">
+
+      {/* Contenedor principal */}
+      <div className="flex min-h-screen bg-gray-100">
+        {/* Menú lateral */}
+        <div className={`lg:w-64 ${sidebarOpen ? "block" : "hidden"} lg:block`}>
+          <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        </div>
+
+        {/* Contenido principal */}
+        <div className="flex-1 p-4">
           <EstacionamientoEditPage />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

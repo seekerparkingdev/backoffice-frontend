@@ -28,7 +28,7 @@ const EventoFuncionalPage = () => {
         </div>
 
         <div className="mb-10">
-          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
+          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Plazas"
               parrafo="Administre las plazas para el evento."
@@ -48,7 +48,7 @@ const EventoFuncionalPage = () => {
         </div>
 
         <div className="mb-10">
-          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
+          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Estacionamiento"
               parrafo="Ingrese los estacionamientos para el evento."
@@ -68,7 +68,7 @@ const EventoFuncionalPage = () => {
         </div>
 
         <div className="mb-10">
-          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between">
+          <div className="bg-white shadow-md rounded-t-lg p-6 flex items-center justify-between">
             <TituloParrafo
               titulo="Información General"
               parrafo="Datos generales del evento."

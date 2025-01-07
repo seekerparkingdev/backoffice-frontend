@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
+import { LuDelete } from "react-icons/lu";
+import { MdDesktopAccessDisabled } from "react-icons/md";
+import { MdOutlineDesktopWindows } from "react-icons/md";
 
 const EstacionamientoTabla = () => {
   const data = [
@@ -71,11 +74,41 @@ const EstacionamientoTabla = () => {
       sortable: true,
     },
     {
-      name: "ACCIONES",
-      cell: (row) => <ActionMenu row={row} />,
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      name: "Acciones",
+      cell: (row) => {
+        const [activOdisable, setActivOdisable] = useState(false);
+
+        const toggleActivOdisable = () => {
+          setActivOdisable((prevState) => !prevState);
+        };
+
+        return (
+          <div className="flex items-center gap-2">
+            {/* Botón para Activar/Desactivar */}
+            <button
+              onClick={() => toggleActivOdisable(row.id)}
+              className={`${
+                activOdisable
+                  ? "text-gray-500 hover:text-gray-600"
+                  : "text-green-500 hover:text-green-600"
+              }`}
+            >
+              {activOdisable ? (
+                <MdDesktopAccessDisabled size={20} />
+              ) : (
+                <MdOutlineDesktopWindows size={20} />
+              )}
+            </button>
+            {/* Botón Eliminar */}
+            <button
+              onClick={() => console.log("Eliminar registro:", row)}
+              className="text-red-500 hover:text-red-600"
+            >
+              <LuDelete size={20} />
+            </button>
+          </div>
+        );
+      },
     },
   ];
 
@@ -143,50 +176,6 @@ const EstacionamientoTabla = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const ActionMenu = ({ row }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOption = (option) => {
-    setIsOpen(false);
-    alert(`Seleccionaste la opción "${option}" para ${row.nombre}`);
-  };
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
-      >
-        Opciones
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 z-10 w-40 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
-          <ul className="py-1">
-            <li
-              onClick={() => handleOption("Suspender")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Suspender
-            </li>
-            <li
-              onClick={() => handleOption("Eliminar")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Eliminar
-            </li>
-            <li
-              onClick={() => handleOption("Premio")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Premio
-            </li>
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
