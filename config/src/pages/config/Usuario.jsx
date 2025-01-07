@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/Menu";
 import Header from "../../components/Nav/Nav";
-import SettingsSidebar from "../../partials/settings/SettingsSidebar";
+ 
 import AccountPanel from "../../partials/settings/AccountPanel";
 
 const Usuario = () => {
@@ -30,7 +30,7 @@ const Usuario = () => {
             {/* Content */}
             <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl mb-8">
               <div className="flex flex-col md:flex-row md:-mr-px">
-                <SettingsSidebar />
+              
                 <AccountPanel />
               </div>
             </div>
