@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const getEstacionamiento = async () => {
-  const apiUrl = import.meta.env.VITE_API_URL;  
-  const token = import.meta.env.VITE_API_TOKEN;  
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
 
   try {
     const response = await axios.get(apiUrl, {
@@ -30,5 +30,35 @@ export const getEstacionamiento = async () => {
       console.error("Error inesperado:", error.message);
       throw new Error(`Error inesperado: ${error.message}`);
     }
+  }
+};
+
+export const postEstacionamiento = async (data) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
+
+  try {
+    const response = await axios.post(apiUrl, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Verifica si la respuesta es exitosa
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Error en la respuesta del servidor.");
+    }
+  } catch (error) {
+    console.error("Error al enviar los datos:", error);
+    throw new Error(
+      error.response
+        ? `Error en la API: ${error.response.status} - ${
+            error.response.data?.message || "Error desconocido"
+          }`
+        : "Error desconocido"
+    );
   }
 };

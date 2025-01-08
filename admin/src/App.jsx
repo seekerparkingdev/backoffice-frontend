@@ -9,6 +9,7 @@ import { ViewVenues } from "./views/venues/ViewVenues";
 import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
 import { ViewEstacionamiento } from "./views/estacionamiento/ViewEstacionamiento";
+import {ViewEstacionamientoNew} from "./views/estacionamiento/ViewEstacionamientoNew";
 import { ViewEstacionamientoEdit } from "./views/estacionamiento/ViewEstacionaminetoEdit";
 import { ViewHome } from "./views/ViewHome";
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/eventos/new" element={<ViewEventosNew />} />
             <Route path="/eventos/:id" element={<ViewEventoFuncional />} />
             <Route path="/estacionamiento" element={<ViewEstacionamiento />} />
+            <Route path="/estacionamiento/new" element={<ViewEstacionamientoNew />} />
             <Route path="/estacionamiento/:id" element={<ViewEstacionamientoEdit />} />
           </Routes>
           </HashRouter>
