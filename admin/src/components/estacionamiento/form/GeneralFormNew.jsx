@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import MapComponent from "../../venues/InfoGeneral/MapComponent";
 import { useEstacionamiento } from "../../../utils/estacionamiento/EstacionamientoContext";
 const GeneralFormNew = () => {

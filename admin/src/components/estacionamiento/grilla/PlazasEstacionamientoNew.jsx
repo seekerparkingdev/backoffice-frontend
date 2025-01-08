@@ -9,8 +9,7 @@ const PlazasEstacionamientoNew = () => {
     "SUV",
     "Traffic",
   ];
-
-  // Estado con los datos para cada tipo de plaza
+ 
   const [data, setData] = useState(
     plazaOptions.map((plaza) => ({
       plaza,
