@@ -56,7 +56,7 @@ function Menu({ sidebarOpen, setSidebarOpen }) {
               Venues
             </NavLink>
             <NavLink
-              to="/events"
+              to="/eventos"
               className={({ isActive }) =>
                 `block px-4 py-2 rounded-md text-sm font-medium ${
                   isActive

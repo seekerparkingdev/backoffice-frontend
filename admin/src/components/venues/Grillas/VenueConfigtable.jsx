@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
 // Importación de iconos
-import { FaRegEye } from "react-icons/fa6";
 import { MdDesktopAccessDisabled } from "react-icons/md";
 import { MdOutlineDesktopWindows } from "react-icons/md";
 import { LuDelete } from "react-icons/lu";
 import { BiEditAlt } from "react-icons/bi";
-import { useState } from "react";  
+import { useState } from "react";
 
 const VenueConfigtable = [
   { name: "Nombre", selector: (row) => row.nombre, sortable: true },
@@ -57,14 +56,6 @@ const VenueConfigtable = [
               <MdOutlineDesktopWindows size={20} />
             )}
           </button>
-
-          {/* Botón Ver */}
-          <NavLink
-            to={`/venues/${row.id}/view`}
-            className="text-purple-500 hover:text-purple-600"
-          >
-            <FaRegEye size={20} />
-          </NavLink>
         </div>
       );
     },

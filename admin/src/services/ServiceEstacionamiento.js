@@ -1,10 +1,8 @@
 import axios from "axios";
 
 export const getEstacionamiento = async () => {
-  const apiUrl = "http://localhost:80/api/v1/estacionamientos";
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQyOCwibm9tYnJlX3VzdWFyaW8iOiJTZWVrZXIiLCJub21icmUiOiJTZWVrZXIiLCJhcGVsbGlkbyI6IiIsImVtYWlsIjoiaW5mb0BzZWVrZXIuY29tIiwiaWRfcGVyZmlsZXMiOjE2MjAsInBlcmZpbF9lc3BlY2lhbCI6IjAiLCJhY3Rpdm8iOjF9.0mrFyfJ5_8ST9RIgsboBrylSqlqG0GtcD63u1Z5BZEs";
+  const apiUrl = import.meta.env.VITE_API_URL;  
+  const token = import.meta.env.VITE_API_TOKEN;  
 
   try {
     const response = await axios.get(apiUrl, {

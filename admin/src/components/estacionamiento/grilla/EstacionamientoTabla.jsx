@@ -3,11 +3,16 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 import { getEstacionamiento } from "../../../services/ServiceEstacionamiento";
- 
+import { FaLocationDot } from "react-icons/fa6";
+import { LuDelete } from "react-icons/lu";
+import { MdDesktopAccessDisabled } from "react-icons/md";
+import { MdOutlineDesktopWindows } from "react-icons/md";
+
 const EstacionamientoTabla = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [estadoActivacion, setEstadoActivacion] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +20,7 @@ const EstacionamientoTabla = () => {
       try {
         setIsLoading(true);
         const response = await getEstacionamiento();
-        setData(response );
+        setData(response);
         setError(null);
       } catch (error) {
         console.error("Error detallado:", error);
@@ -26,66 +31,118 @@ const EstacionamientoTabla = () => {
     };
     obtenerEstacionamientos();
   }, []);
-  
-  console.log(data)
 
   const columns = [
     {
       name: "NOMBRE",
       selector: (row) => row.nombre,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${
+            estadoActivacion[row.id] && row.activo !== false
+              ? "text-red-500"
+              : "text-gray-800"
+          }`}
+        >
+          {row.nombre}
+        </div>
+      ),
     },
     {
       name: "DIRECCION",
       selector: (row) => row.direccion,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${
+            estadoActivacion[row.id] && row.activo !== false
+              ? "text-red-500"
+              : "text-gray-800"
+          }`}
+        >
+          {row.direccion}
+        </div>
+      ),
     },
     {
       name: "CÓDIGO",
       selector: (row) => row.codigo,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${
+            estadoActivacion[row.id] && row.activo !== false
+              ? "text-red-500"
+              : "text-gray-800"
+          }`}
+        >
+          {row.codigo}
+        </div>
+      ),
     },
     {
       name: "ACTIVO",
       selector: (row) => (row.activo ? "Sí" : "No"),
       sortable: true,
-    },
-    {
-      name: "ACCIONES",
       cell: (row) => (
-        <div className="flex space-x-2">
-          <button
-            onClick={() => navigate(`/estacionamiento/${row.id}`)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Ver
-          </button>
-          <button
-            onClick={() => alert("Editar")}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            Editar
-          </button>
+        <div
+          className={`${
+            estadoActivacion[row.id] ? "text-red-500" : "text-gray-800"
+          }`}
+        >
+          {row.activo ? "Sí" : "No"}
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
     },
     {
-      name: "UBICACIÓN",
-      cell: (row) => (
-        <a
-          href={row.url_ubicacion}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 underline"
-        >
-          Ver ubicación
-        </a>
-      ),
-      ignoreRowClick: true,
-      button: true,
+      name: "Acciones",
+      cell: (row) => {
+        const toggleActivOdisable = () => {
+          setEstadoActivacion((prevState) => ({
+            ...prevState,
+            [row.id]: !prevState[row.id],
+          }));
+        };
+
+        return (
+          <div className="flex items-center gap-2">
+            {/* Botón para Activar/Desactivar */}
+            <button
+              onClick={toggleActivOdisable}
+              className={`${
+                estadoActivacion[row.id]
+                  ? "text-red-500 hover:text-red-600"
+                  : "text-green-500 hover:text-green-600"
+              }`}
+            >
+              {estadoActivacion[row.id] ? (
+                <MdDesktopAccessDisabled size={20} />
+              ) : (
+                <MdOutlineDesktopWindows size={20} />
+              )}
+            </button>
+
+            {/* Botón Eliminar */}
+            <button
+              onClick={() => console.log("Eliminar registro:", row)}
+              className="text-red-500 hover:text-red-600"
+            >
+              <LuDelete size={20} />
+            </button>
+
+            {/* Botón Ubicación */}
+            <a
+              href={row.url_ubicacion}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-600"
+            >
+              <FaLocationDot size={20} />
+            </a>
+          </div>
+        );
+      },
     },
   ];
 
@@ -95,7 +152,7 @@ const EstacionamientoTabla = () => {
 
   return (
     <div className="flex justify-center min-h-screen">
-      <div className="p-6 min-h-screen w-full lg:w-3/5 max-w-7xl">
+      <div className="p-6 min-h-screen w-full">
         <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <Titulo titulo="Estacionamientos" className="text-xl font-bold" />
