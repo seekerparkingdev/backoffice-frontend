@@ -1,13 +1,29 @@
-import DataTable from "react-data-table-component";
 import { useState } from "react";
-import Swal from "sweetalert2";
-
+import DataTable from "react-data-table-component";
 const PlazasEstacionamientoNew = () => {
-  const [data, setData] = useState([]);
+  const plazaOptions = [
+    "Auto",
+    "Bicicleta",
+    "Moto",
+    "Pickup",
+    "SUV",
+    "Traffic",
+  ];
+
+  // Estado con los datos para cada tipo de plaza
+  const [data, setData] = useState(
+    plazaOptions.map((plaza) => ({
+      plaza,
+      cantidad: 0,
+      precio: 0,
+      minimo: 0,
+      orden: 1,
+    }))
+  );
 
   const columns = [
     {
-      name: "Tipo de plaza",
+      name: "Tipo de Plaza",
       selector: (row) => row.plaza,
       sortable: true,
       cell: (row) => <span>{row.plaza}</span>,
@@ -15,31 +31,65 @@ const PlazasEstacionamientoNew = () => {
     {
       name: "Cantidad",
       selector: (row) => row.cantidad,
-      sortable: true,
       cell: (row, index) => (
-        <input type="number" className="w-full border p-1 rounded" />
+        <input
+          type="number"
+          value={row.cantidad}
+          onChange={(e) => {
+            const updatedData = [...data];
+            updatedData[index].cantidad = e.target.value;
+            setData(updatedData);
+          }}
+          className="w-full border p-1 rounded"
+        />
       ),
     },
     {
       name: "Precio",
       selector: (row) => row.precio,
-      sortable: true,
       cell: (row, index) => (
-        <input type="number" className="w-full border p-1 rounded" />
+        <input
+          type="number"
+          value={row.precio}
+          onChange={(e) => {
+            const updatedData = [...data];
+            updatedData[index].precio = e.target.value;
+            setData(updatedData);
+          }}
+          className="w-full border p-1 rounded"
+        />
       ),
     },
     {
       name: "Mínimo",
       selector: (row) => row.minimo,
       cell: (row, index) => (
-        <input type="number" className="w-full border p-1 rounded" />
+        <input
+          type="number"
+          value={row.minimo}
+          onChange={(e) => {
+            const updatedData = [...data];
+            updatedData[index].minimo = e.target.value;
+            setData(updatedData);
+          }}
+          className="w-full border p-1 rounded"
+        />
       ),
     },
     {
       name: "Orden",
+      selector: (row) => row.orden,
       cell: (row, index) => (
-        <select className="w-full border p-1 rounded">
-          {[1, 2, 3, 4, 5].map((option) => (
+        <select
+          value={row.orden}
+          onChange={(e) => {
+            const updatedData = [...data];
+            updatedData[index].orden = e.target.value;
+            setData(updatedData);
+          }}
+          className="w-full border p-1 rounded"
+        >
+          {[1, 2, 3, 4, 5, 6].map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -48,15 +98,6 @@ const PlazasEstacionamientoNew = () => {
       ),
     },
   ];
-
-  const handlePropagateValues = () => {
-    Swal.fire({
-      title: "¡Éxito!",
-      text: "Precios correctamente cambiados.",
-      icon: "success",
-      confirmButtonText: "Aceptar",
-    });
-  };
 
   return (
     <div className="p-4">
@@ -88,13 +129,6 @@ const PlazasEstacionamientoNew = () => {
           },
         }}
       />
-
-      <button
-        onClick={handlePropagateValues}
-        className="mt-4 bg-blue-500 text-white p-2 rounded"
-      >
-        Propagar valores
-      </button>
     </div>
   );
 };
