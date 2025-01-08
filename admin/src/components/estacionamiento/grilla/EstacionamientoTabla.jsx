@@ -3,12 +3,11 @@ import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 import { getEstacionamiento } from "../../../services/ServiceEstacionamiento";
-
+ 
 const EstacionamientoTabla = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filterText, setFilterText] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,8 +15,7 @@ const EstacionamientoTabla = () => {
       try {
         setIsLoading(true);
         const response = await getEstacionamiento();
-
-        setData(response || []);
+        setData(response );
         setError(null);
       } catch (error) {
         console.error("Error detallado:", error);
@@ -28,6 +26,9 @@ const EstacionamientoTabla = () => {
     };
     obtenerEstacionamientos();
   }, []);
+  
+  console.log(data)
+
   const columns = [
     {
       name: "NOMBRE",
@@ -51,41 +52,46 @@ const EstacionamientoTabla = () => {
     },
     {
       name: "ACCIONES",
-      cell: (row) => <ActionMenu row={row} />,
+      cell: (row) => (
+        <div className="flex space-x-2">
+          <button
+            onClick={() => navigate(`/estacionamiento/${row.id}`)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Ver
+          </button>
+          <button
+            onClick={() => alert("Editar")}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Editar
+          </button>
+        </div>
+      ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
     },
+    {
+      name: "UBICACIÓN",
+      cell: (row) => (
+        <a
+          href={row.url_ubicacion}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline"
+        >
+          Ver ubicación
+        </a>
+      ),
+      ignoreRowClick: true,
+      button: true,
+    },
   ];
-  console.log(data);
-  const filteredItems = data?.filter((item) => {
-    const searchText = filterText.toLowerCase();
-    return (
-      (item.nombre?.toLowerCase().includes(searchText) ?? false) ||
-      (item.direccion?.toLowerCase().includes(searchText) ?? false) ||
-      (item.codigo?.toLowerCase().includes(searchText) ?? false)
-    );
-  });
 
   const handleRowClick = (row) => {
     navigate(`/estacionamiento/${row.id}`);
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-lg">Cargando estacionamientos...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-lg text-red-600">{error}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex justify-center min-h-screen">
@@ -105,8 +111,6 @@ const EstacionamientoTabla = () => {
             <input
               type="text"
               placeholder="Buscar por nombre, dirección o código..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -114,7 +118,7 @@ const EstacionamientoTabla = () => {
           <div className="overflow-x-auto">
             <DataTable
               columns={columns}
-              data={filteredItems}
+              data={data}
               pagination
               highlightOnHover
               onRowClicked={handleRowClick}
@@ -136,81 +140,18 @@ const EstacionamientoTabla = () => {
                 },
               }}
               noDataComponent={
-                <div className="p-4">No se encontraron estacionamientos</div>
+                isLoading ? (
+                  <div className="p-4">Cargando...</div>
+                ) : error ? (
+                  <div className="p-4">{error}</div>
+                ) : (
+                  <div className="p-4">No se encontraron estacionamientos</div>
+                )
               }
             />
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const ActionMenu = ({ row }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOption = (option) => {
-    setIsOpen(false);
-    // Aquí puedes implementar la lógica real para cada acción
-    switch (option) {
-      case "Suspender":
-        console.log("Suspender estacionamiento:", row.id);
-        break;
-      case "Eliminar":
-        console.log("Eliminar estacionamiento:", row.id);
-        break;
-      case "Premio":
-        console.log("Premio para estacionamiento:", row.id);
-        break;
-      default:
-        break;
-    }
-  };
-
-  return (
-    <div className="relative">
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-        }}
-        className="px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
-      >
-        Opciones
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 z-10 w-40 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
-          <ul className="py-1">
-            <li
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOption("Suspender");
-              }}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Suspender
-            </li>
-            <li
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOption("Eliminar");
-              }}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Eliminar
-            </li>
-            <li
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOption("Premio");
-              }}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Premio
-            </li>
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
