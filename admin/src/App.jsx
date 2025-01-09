@@ -16,37 +16,46 @@ import { ViewHome } from "./views/ViewHome";
 // IMPORTAMOS EL PROVIDER DEL CONTEXTO
 import { ParkingProvider } from "./utils/eventos/ParkingContext";
 import { EstacionamientoProvider } from "./utils/estacionamiento/EstacionamientoContext";
+import { PlazasProvider } from "./utils/estacionamiento/PlazaContext";
 
 function App() {
   return (
     <ParkingProvider>
       <EstacionamientoProvider>
-        <div className="flex">
-          <div className="flex-1">
-            <HashRouter>
-              <Routes>
-                <Route path="/" element={<ViewHome />} />
-                <Route path="/venues" element={<ViewVenues />} />
-                <Route path="/venues/:id/:view?" element={<ViewVenueCrud />} />
-                <Route path="/eventos" element={<Eventos />} />
-                <Route path="/eventos/new" element={<ViewEventosNew />} />
-                <Route path="/eventos/:id" element={<ViewEventoFuncional />} />
-                <Route
-                  path="/estacionamiento"
-                  element={<ViewEstacionamiento />}
-                />
-                <Route
-                  path="/estacionamiento/new"
-                  element={<ViewEstacionamientoNew />}
-                />
-                <Route
-                  path="/estacionamiento/:id"
-                  element={<ViewEstacionamientoEdit />}
-                />
-              </Routes>
-            </HashRouter>
+        <PlazasProvider>
+          <div className="flex">
+            <div className="flex-1">
+              <HashRouter>
+                <Routes>
+                  <Route path="/" element={<ViewHome />} />
+                  <Route path="/venues" element={<ViewVenues />} />
+                  <Route
+                    path="/venues/:id/:view?"
+                    element={<ViewVenueCrud />}
+                  />
+                  <Route path="/eventos" element={<Eventos />} />
+                  <Route path="/eventos/new" element={<ViewEventosNew />} />
+                  <Route
+                    path="/eventos/:id"
+                    element={<ViewEventoFuncional />}
+                  />
+                  <Route
+                    path="/estacionamiento"
+                    element={<ViewEstacionamiento />}
+                  />
+                  <Route
+                    path="/estacionamiento/new"
+                    element={<ViewEstacionamientoNew />}
+                  />
+                  <Route
+                    path="/estacionamiento/:id"
+                    element={<ViewEstacionamientoEdit />}
+                  />
+                </Routes>
+              </HashRouter>
+            </div>
           </div>
-        </div>
+        </PlazasProvider>
       </EstacionamientoProvider>
     </ParkingProvider>
   );

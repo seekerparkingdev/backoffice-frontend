@@ -1,24 +1,9 @@
-import { useState } from "react";
+import React from "react";
 import DataTable from "react-data-table-component";
+import { usePlazas } from "../../../utils/estacionamiento/PlazaContext";
+
 const PlazasEstacionamientoNew = () => {
-  const plazaOptions = [
-    "Auto",
-    "Bicicleta",
-    "Moto",
-    "Pickup",
-    "SUV",
-    "Traffic",
-  ];
- 
-  const [data, setData] = useState(
-    plazaOptions.map((plaza) => ({
-      plaza,
-      cantidad: 0,
-      precio: 0,
-      minimo: 0,
-      orden: 1,
-    }))
-  );
+  const { data, updateField } = usePlazas();
 
   const columns = [
     {
@@ -34,11 +19,7 @@ const PlazasEstacionamientoNew = () => {
         <input
           type="number"
           value={row.cantidad}
-          onChange={(e) => {
-            const updatedData = [...data];
-            updatedData[index].cantidad = e.target.value;
-            setData(updatedData);
-          }}
+          onChange={(e) => updateField(index, "cantidad", e.target.value)}
           className="w-full border p-1 rounded"
         />
       ),
@@ -50,11 +31,7 @@ const PlazasEstacionamientoNew = () => {
         <input
           type="number"
           value={row.precio}
-          onChange={(e) => {
-            const updatedData = [...data];
-            updatedData[index].precio = e.target.value;
-            setData(updatedData);
-          }}
+          onChange={(e) => updateField(index, "precio", e.target.value)}
           className="w-full border p-1 rounded"
         />
       ),
@@ -66,11 +43,7 @@ const PlazasEstacionamientoNew = () => {
         <input
           type="number"
           value={row.minimo}
-          onChange={(e) => {
-            const updatedData = [...data];
-            updatedData[index].minimo = e.target.value;
-            setData(updatedData);
-          }}
+          onChange={(e) => updateField(index, "minimo", e.target.value)}
           className="w-full border p-1 rounded"
         />
       ),
@@ -81,11 +54,7 @@ const PlazasEstacionamientoNew = () => {
       cell: (row, index) => (
         <select
           value={row.orden}
-          onChange={(e) => {
-            const updatedData = [...data];
-            updatedData[index].orden = e.target.value;
-            setData(updatedData);
-          }}
+          onChange={(e) => updateField(index, "orden", e.target.value)}
           className="w-full border p-1 rounded"
         >
           {[1, 2, 3, 4, 5, 6].map((option) => (
@@ -103,10 +72,8 @@ const PlazasEstacionamientoNew = () => {
       <DataTable
         columns={columns}
         data={data}
-        pagination
         highlightOnHover
         responsive
-        selectableRows
         customStyles={{
           table: {
             style: {

@@ -2,21 +2,29 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
-import { getEstacionamiento } from "../../../services/ServiceEstacionamiento";
+import {
+  getEstacionamiento,
+  patchDisabledEstacionamiento,
+  deleteEstacionamiento,
+} from "../../../services/ServiceEstacionamiento";
 import { FaLocationDot } from "react-icons/fa6";
 import { LuDelete } from "react-icons/lu";
-import { MdDesktopAccessDisabled } from "react-icons/md";
-import { MdOutlineDesktopWindows } from "react-icons/md";
+import {
+  MdDesktopAccessDisabled,
+  MdOutlineDesktopWindows,
+} from "react-icons/md";
+
+import Swal from "sweetalert2"; // Importa SweetAlert2
 
 const EstacionamientoTabla = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [estadoActivacion, setEstadoActivacion] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const obtenerEstacionamientos = async () => {
+      if (data.length > 0) return;
       try {
         setIsLoading(true);
         const response = await getEstacionamiento();
@@ -29,8 +37,88 @@ const EstacionamientoTabla = () => {
         setIsLoading(false);
       }
     };
+
     obtenerEstacionamientos();
-  }, []);
+  }, [isLoading]);
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteEstacionamiento(id);
+
+      if (response?.status === "success") {
+        Swal.fire({
+          title: "Eliminado",
+          text: "El estacionamiento ha sido eliminado correctamente.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
+      } else if (response?.status === 404) {
+        Swal.fire({
+          title: "No encontrado",
+          text: "El estacionamiento no fue encontrado. Es posible que ya haya sido eliminado.",
+          icon: "warning",
+          confirmButtonText: "Aceptar",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: `Hubo un error al eliminar el estacionamiento. Código de error: ${
+            response?.status || "desconocido"
+          }`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+
+      const newData = await getEstacionamiento();
+      setData(newData);
+    } catch (error) {
+      console.error("Error al eliminar el estacionamiento:", error);
+
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error inesperado al intentar eliminar el estacionamiento.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
+  const handleDisable = async (row) => {
+    try {
+      let respuesta;
+
+      if (row.activo === 1) {
+        respuesta = await patchDisabledEstacionamiento(row.id);
+        if (respuesta.status === 200) {
+          // Usando SweetAlert para mostrar la alerta
+          Swal.fire({
+            title: "Desactivado",
+            text: "El estacionamiento ha sido desactivado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } else {
+        //ACA HAY QUE CREAR UN IF PARA PODER ACTIVARLO SI DESEA NUEVAMENTE
+        Swal.fire({
+          title: "Error",
+          text: `Hubo un error al desactivar el estacionamiento. Código de error: ${respuesta?.status}`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+
+      const newData = await getEstacionamiento();
+      setData(newData);
+    } catch (error) {
+      console.error("Error al cambiar el estado del estacionamiento:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error al cambiar el estado del estacionamiento.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
 
   const columns = [
     {
@@ -39,11 +127,7 @@ const EstacionamientoTabla = () => {
       sortable: true,
       cell: (row) => (
         <div
-          className={`${
-            estadoActivacion[row.id] && row.activo !== false
-              ? "text-red-500"
-              : "text-gray-800"
-          }`}
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
           {row.nombre}
         </div>
@@ -55,11 +139,7 @@ const EstacionamientoTabla = () => {
       sortable: true,
       cell: (row) => (
         <div
-          className={`${
-            estadoActivacion[row.id] && row.activo !== false
-              ? "text-red-500"
-              : "text-gray-800"
-          }`}
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
           {row.direccion}
         </div>
@@ -71,11 +151,7 @@ const EstacionamientoTabla = () => {
       sortable: true,
       cell: (row) => (
         <div
-          className={`${
-            estadoActivacion[row.id] && row.activo !== false
-              ? "text-red-500"
-              : "text-gray-800"
-          }`}
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
           {row.codigo}
         </div>
@@ -87,9 +163,7 @@ const EstacionamientoTabla = () => {
       sortable: true,
       cell: (row) => (
         <div
-          className={`${
-            estadoActivacion[row.id] ? "text-red-500" : "text-gray-800"
-          }`}
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
           {row.activo ? "Sí" : "No"}
         </div>
@@ -97,52 +171,43 @@ const EstacionamientoTabla = () => {
     },
     {
       name: "Acciones",
-      cell: (row) => {
-        const toggleActivOdisable = () => {
-          setEstadoActivacion((prevState) => ({
-            ...prevState,
-            [row.id]: !prevState[row.id],
-          }));
-        };
+      cell: (row) => (
+        <div className="flex items-center gap-2">
+          {/* Botón para Activar/Desactivar */}
+          <button
+            onClick={() => handleDisable(row)}
+            className={`${
+              row.activo === 0
+                ? "text-gray-500 hover:gray-red-800"
+                : "text-green-500 hover:text-green-600"
+            }`}
+          >
+            {row.activo === 1 ? (
+              <MdOutlineDesktopWindows size={20} />
+            ) : (
+              <MdDesktopAccessDisabled size={20} />
+            )}
+          </button>
 
-        return (
-          <div className="flex items-center gap-2">
-            {/* Botón para Activar/Desactivar */}
-            <button
-              onClick={toggleActivOdisable}
-              className={`${
-                estadoActivacion[row.id]
-                  ? "text-red-500 hover:text-red-600"
-                  : "text-green-500 hover:text-green-600"
-              }`}
-            >
-              {estadoActivacion[row.id] ? (
-                <MdDesktopAccessDisabled size={20} />
-              ) : (
-                <MdOutlineDesktopWindows size={20} />
-              )}
-            </button>
+          {/* Botón Eliminar */}
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="text-red-500 hover:text-red-600"
+          >
+            <LuDelete size={20} />
+          </button>
 
-            {/* Botón Eliminar */}
-            <button
-              onClick={() => console.log("Eliminar registro:", row)}
-              className="text-red-500 hover:text-red-600"
-            >
-              <LuDelete size={20} />
-            </button>
-
-            {/* Botón Ubicación */}
-            <a
-              href={row.url_ubicacion}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-600"
-            >
-              <FaLocationDot size={20} />
-            </a>
-          </div>
-        );
-      },
+          {/* Botón Ubicación */}
+          <a
+            href={row.url_ubicacion}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <FaLocationDot size={20} />
+          </a>
+        </div>
+      ),
     },
   ];
 
