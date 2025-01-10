@@ -1,105 +1,229 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
+import {
+  getEstacionamiento,
+  patchDisabledEstacionamiento,
+  deleteEstacionamiento,
+} from "../../../services/ServiceEstacionamiento";
+import { FaLocationDot } from "react-icons/fa6";
+import { LuDelete } from "react-icons/lu";
+import {
+  MdDesktopAccessDisabled,
+  MdOutlineDesktopWindows,
+} from "react-icons/md";
+
+import Swal from "sweetalert2"; // Importa SweetAlert2
 
 const EstacionamientoTabla = () => {
-  const data = [
-    {
-      id: 1,
-      nombre: "Movistar Arena Parking Oficial",
-      direccion: "Fitz Roy 386, Villa Crespo",
-      duenio: "Administracion Movistar Arena",
-      codigo: "MOV",
-    },
-    {
-      id: 2,
-      nombre: "Concepción Arenal 3878",
-      direccion: "Concepción Arenal 3878, Buenos Aires",
-      duenio: "Mariano Silva",
-      codigo: "ARENAL3878",
-    },
-    {
-      id: 3,
-      nombre: "Thames 539",
-      direccion: "Thames 539, Buenos Aires",
-      duenio: "Mariano Silva",
-      codigo: "THAMES539",
-    },
-    {
-      id: 4,
-      nombre: "Av. Córdoba 4341",
-      direccion: "Avenida Córdoba 4341, Buenos Aires",
-      duenio: "Mariano Silva",
-      codigo: "CORDOBA4341",
-    },
-    {
-      id: 5,
-      nombre: "Acevedo 468",
-      direccion: "Acevedo 468, Buenos Aires",
-      duenio: "Adrian Turek",
-      codigo: "ACE",
-    },
-    {
-      id: 6,
-      nombre: "Parking Camargo 953",
-      direccion: "Camargo 953, Buenos Aires",
-      duenio: "Christian Kania",
-      codigo: "CAMARGO953",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const obtenerEstacionamientos = async () => {
+      if (data.length > 0) return;
+      try {
+        setIsLoading(true);
+        const response = await getEstacionamiento();
+        setData(response);
+        setError(null);
+      } catch (error) {
+        console.error("Error detallado:", error);
+        setError("Error al cargar los estacionamientos");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    obtenerEstacionamientos();
+  }, [isLoading]);
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteEstacionamiento(id);
+
+      if (response?.status === "success") {
+        Swal.fire({
+          title: "Eliminado",
+          text: "El estacionamiento ha sido eliminado correctamente.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
+      } else if (response?.status === 404) {
+        Swal.fire({
+          title: "No encontrado",
+          text: "El estacionamiento no fue encontrado. Es posible que ya haya sido eliminado.",
+          icon: "warning",
+          confirmButtonText: "Aceptar",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: `Hubo un error al eliminar el estacionamiento. Código de error: ${
+            response?.status || "desconocido"
+          }`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+
+      const newData = await getEstacionamiento();
+      setData(newData);
+    } catch (error) {
+      console.error("Error al eliminar el estacionamiento:", error);
+
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error inesperado al intentar eliminar el estacionamiento.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
+  const handleDisable = async (row) => {
+    try {
+      let respuesta;
+
+      if (row.activo === 1) {
+        respuesta = await patchDisabledEstacionamiento(row.id);
+        if (respuesta.status === 200) {
+          // Usando SweetAlert para mostrar la alerta
+          Swal.fire({
+            title: "Desactivado",
+            text: "El estacionamiento ha sido desactivado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } else {
+        //ACA HAY QUE CREAR UN IF PARA PODER ACTIVARLO SI DESEA NUEVAMENTE
+        Swal.fire({
+          title: "Error",
+          text: `Hubo un error al desactivar el estacionamiento. Código de error: ${respuesta?.status}`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+
+      const newData = await getEstacionamiento();
+      setData(newData);
+    } catch (error) {
+      console.error("Error al cambiar el estado del estacionamiento:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error al cambiar el estado del estacionamiento.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
 
   const columns = [
     {
       name: "NOMBRE",
       selector: (row) => row.nombre,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
+        >
+          {row.nombre}
+        </div>
+      ),
     },
     {
       name: "DIRECCION",
       selector: (row) => row.direccion,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
+        >
+          {row.direccion}
+        </div>
+      ),
     },
     {
-      name: "DUEÑO",
-      selector: (row) => row.duenio,
-      sortable: true,
-    },
-    {
-      name: "CODIGO",
+      name: "CÓDIGO",
       selector: (row) => row.codigo,
       sortable: true,
+      cell: (row) => (
+        <div
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
+        >
+          {row.codigo}
+        </div>
+      ),
     },
     {
-      name: "ACCIONES",
-      cell: (row) => <ActionMenu row={row} />,
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
+      name: "ACTIVO",
+      selector: (row) => (row.activo ? "Sí" : "No"),
+      sortable: true,
+      cell: (row) => (
+        <div
+          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
+        >
+          {row.activo ? "Sí" : "No"}
+        </div>
+      ),
+    },
+    {
+      name: "Acciones",
+      cell: (row) => (
+        <div className="flex items-center gap-2">
+          {/* Botón para Activar/Desactivar */}
+          <button
+            onClick={() => handleDisable(row)}
+            className={`${
+              row.activo === 0
+                ? "text-gray-500 hover:gray-red-800"
+                : "text-green-500 hover:text-green-600"
+            }`}
+          >
+            {row.activo === 1 ? (
+              <MdOutlineDesktopWindows size={20} />
+            ) : (
+              <MdDesktopAccessDisabled size={20} />
+            )}
+          </button>
+
+          {/* Botón Eliminar */}
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="text-red-500 hover:text-red-600"
+          >
+            <LuDelete size={20} />
+          </button>
+
+          {/* Botón Ubicación */}
+          <a
+            href={row.url_ubicacion}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600"
+          >
+            <FaLocationDot size={20} />
+          </a>
+        </div>
+      ),
     },
   ];
 
-  const [filterText, setFilterText] = useState("");
-  const filteredItems = data.filter(
-    (item) =>
-      item.nombre &&
-      item.nombre.toLowerCase().includes(filterText.toLowerCase())
-  );
-
-  const navigate = useNavigate();
   const handleRowClick = (row) => {
     navigate(`/estacionamiento/${row.id}`);
   };
 
   return (
-    <div className="flex justify-center  min-h-screen">
-      <div className="p-6 min-h-screen w-full lg:w-3/5 max-w-7xl">
+    <div className="flex justify-center min-h-screen">
+      <div className="p-6 min-h-screen w-full">
         <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
-            <Titulo titulo={"Estacionamientos"} className="text-xl font-bold" />
+            <Titulo titulo="Estacionamientos" className="text-xl font-bold" />
             <button
               onClick={() => navigate("/estacionamiento/new")}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
             >
               Nuevo
             </button>
@@ -108,9 +232,7 @@ const EstacionamientoTabla = () => {
           <div className="mb-6">
             <input
               type="text"
-              placeholder="Buscar..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
+              placeholder="Buscar por nombre, dirección o código..."
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -118,7 +240,7 @@ const EstacionamientoTabla = () => {
           <div className="overflow-x-auto">
             <DataTable
               columns={columns}
-              data={filteredItems}
+              data={data}
               pagination
               highlightOnHover
               onRowClicked={handleRowClick}
@@ -139,54 +261,19 @@ const EstacionamientoTabla = () => {
                   },
                 },
               }}
+              noDataComponent={
+                isLoading ? (
+                  <div className="p-4">Cargando...</div>
+                ) : error ? (
+                  <div className="p-4">{error}</div>
+                ) : (
+                  <div className="p-4">No se encontraron estacionamientos</div>
+                )
+              }
             />
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const ActionMenu = ({ row }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOption = (option) => {
-    setIsOpen(false);
-    alert(`Seleccionaste la opción "${option}" para ${row.nombre}`);
-  };
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
-      >
-        Opciones
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 z-10 w-40 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
-          <ul className="py-1">
-            <li
-              onClick={() => handleOption("Suspender")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Suspender
-            </li>
-            <li
-              onClick={() => handleOption("Eliminar")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Eliminar
-            </li>
-            <li
-              onClick={() => handleOption("Premio")}
-              className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              Premio
-            </li>
-          </ul>
-        </div>
-      )}
     </div>
   );
 };

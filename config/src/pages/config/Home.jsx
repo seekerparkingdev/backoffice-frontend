@@ -4,7 +4,7 @@ import Header from "../../components/Nav/Nav";
  
 import AccountPanel from "../../partials/settings/AccountPanel";
 
-const Usuario = () => {
+const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -41,4 +41,4 @@ const Usuario = () => {
   );
 };
 
-export default Usuario;
+export default Home;

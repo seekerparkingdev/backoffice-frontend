@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import MapComponent from "../../venues/InfoGeneral/MapComponent";
 
 const GeneralEdit = () => {
@@ -18,7 +18,7 @@ const GeneralEdit = () => {
     porcentajeServiceCharge: 12.0,
     horarioEspecial: "00:00",
   });
-
+ 
   const handleCambioInput = (e) => {
     const { name, value, type, checked } = e.target;
     setDatosFormulario({

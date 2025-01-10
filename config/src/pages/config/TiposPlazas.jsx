@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/Menu";
 import Header from "../../components/Nav/Nav";
-import SettingsSidebar from "../../partials/settings/SettingsSidebar";
+ 
 import TiposPlazasPanel from "../../partials/settings/TipoPlazasPanel";
 
 const TiposPlazas = () => {
@@ -31,7 +31,7 @@ const TiposPlazas = () => {
             {/* Content */}
             <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl mb-8">
               <div className="flex flex-col md:flex-row md:-mr-px">
-                <SettingsSidebar />
+             
                 <TiposPlazasPanel />
               </div>
             </div>

@@ -3,11 +3,16 @@ import { NavLink } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 import { VenueConfigtable } from "./VenueConfigtable";
 import { datavenue } from "../../../utils/venues/datavenue";
+import { useNavigate } from "react-router-dom";
 
 const VenueGrilla = () => {
+  const navigate = useNavigate();
+  const handleRowClick = (row) => {
+    navigate(`/venues/${row.id}/view`);
+  };
   return (
     <div className="flex justify-center items-center mt-10">
-      <div className="w-full lg:w-3/5 max-w-7xl border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
+      <div className="w-full    border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
         <div className="flex justify-between items-center mb-10">
           <Titulo titulo="Venues" />
           <NavLink to="/venues/new">
@@ -18,6 +23,7 @@ const VenueGrilla = () => {
         </div>
         <div className="overflow-x-auto">
           <DataTable
+          onRowClicked={handleRowClick}
             columns={VenueConfigtable}
             data={datavenue}
             pagination
