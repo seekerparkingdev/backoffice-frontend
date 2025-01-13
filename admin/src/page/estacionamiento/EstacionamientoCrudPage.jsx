@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Titulo } from "../../components/Titulo";
 import { TituloParrafo } from "../../components/TituloParrafo";
-import { GeneralEdit } from "../../components/estacionamiento/form/GeneralEdit";
+import { GeneralCrud } from "../../components/estacionamiento/form/GeneralCrud";
 import { BiSolidArrowToBottom, BiSolidArrowToTop } from "react-icons/bi";
 import { PlazasEstacionamiento } from "../../components/estacionamiento/grilla/PlazasEstacionamiento";
+import { useContext } from "react";
+import { FormularioContext } from "../../utils/estacionamiento/EstacionamientoContext";
 
-const EstacionamientoEditPage = () => {
+const EstacionamientoCrudPage = () => {
+  const { datosFormulario, setDatosFormulario } = useContext(FormularioContext);
+   
   const [visibility, setVisibility] = useState({
     generalEdit: false,
     precios: false,
@@ -45,7 +49,7 @@ const EstacionamientoEditPage = () => {
           </div>
           {visibility.generalEdit && (
             <div className="bg-white p-6 rounded-b-lg">
-              <GeneralEdit />
+              <GeneralCrud />
             </div>
           )}
         </div>
@@ -79,5 +83,4 @@ const EstacionamientoEditPage = () => {
   );
 };
 
-export { EstacionamientoEditPage };
-
+export { EstacionamientoCrudPage };

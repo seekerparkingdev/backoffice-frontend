@@ -1,24 +1,57 @@
-import React, { useState,useEffect } from "react";
+import React, {useEffect } from "react";
+import { useContext } from "react";
+import { FormularioContext } from "../../../utils/estacionamiento/EstacionamientoContext";
+import { useParams } from "react-router-dom";
 import MapComponent from "../../venues/InfoGeneral/MapComponent";
+import { getEstacionamiento } from "../../../services/ServiceEstacionamiento";
 
-const GeneralEdit = () => {
-  const [datosFormulario, setDatosFormulario] = useState({
-    nombre: "Garage JorMar Thames",
-    propietario: "Mariano Silva",
-    email: "mysilva_garage@hotmail.com",
-    descripcion: "400 m",
-    codigoLugar: "THAMES539",
-    direccion: "Thames 539, Buenos Aires",
-    ubicacion: "https://maps.app.goo.gl/vu4GcAtgGxv9xeEjBA",
-    posicion: [-34.6037, -58.3816],
-    portada: null,
-    recomendar: false,
-    obligatorioLlaves: false,
-    incluirServiceCharge: false,
-    porcentajeServiceCharge: 12.0,
-    horarioEspecial: "00:00",
-  });
- 
+const GeneralCrud = () => {
+  const { id } = useParams();
+  const isEditing = id !== "new";
+  const { datosFormulario, setDatosFormulario } = useContext(FormularioContext);
+
+  useEffect(() => {
+    const renderizado = async () => {
+      try {
+        if (isEditing) {
+          const response = await getEstacionamiento();
+          const parking = response.find(
+            (estacionamiento) => estacionamiento.id === parseInt(id, 10)
+          );
+
+          if (parking) {
+            setDatosFormulario((prev) => ({
+              ...prev,
+              nombre: parking.nombre || "",
+              propietario: parking.id_propietario || "",
+              email: parking.email || "",
+              descripcion: parking.texto || "",
+              codigoLugar: parking.codigo || "",
+              direccion: parking.direccion || "",
+              ubicacion: parking.url_ubicacion || "",
+              posicion: [
+                parseFloat(parking.latitud) || -34.6037,
+                parseFloat(parking.longitud) || -58.3816,
+              ],
+              portada: parking.path || null,
+              recomendar: !!parking.recomendado,
+              obligatorioLlaves: !!parking.requiere_dejar_llave,
+              incluirServiceCharge: !!parking.incluir_service_charge,
+              porcentajeServiceCharge: parseFloat(parking.porcentaje) || 12.0,
+              horarioEspecial: parking.salida_especial || "00:00",
+            }));
+          } else {
+            console.log("Estacionamiento no encontrado.");
+          }
+        }
+      } catch (error) {
+        console.error("Error al obtener el estacionamiento:", error);
+      }
+    };
+
+    renderizado();
+  }, [id, isEditing ]);
+
   const handleCambioInput = (e) => {
     const { name, value, type, checked } = e.target;
     setDatosFormulario({
@@ -35,11 +68,9 @@ const GeneralEdit = () => {
     const file = e.target.files[0];
     setDatosFormulario({ ...datosFormulario, portada: file });
   };
-
   return (
     <div className="p-8 bg-white max-w-4xl mx-auto">
       <form className="space-y-8">
-        {/* Información básica */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label
@@ -72,12 +103,10 @@ const GeneralEdit = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="Mariano Silva">Mariano Silva</option>
-              {/* Agrega más opciones de propietario según sea necesario */}
             </select>
           </div>
         </div>
 
-        {/* Información de contacto */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label
@@ -114,7 +143,6 @@ const GeneralEdit = () => {
           </div>
         </div>
 
-        {/* Información de ubicación */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label
@@ -160,7 +188,6 @@ const GeneralEdit = () => {
           </div>
         </div>
 
-        {/* URL de Ubicación */}
         <div>
           <label
             htmlFor="ubicacion"
@@ -178,7 +205,6 @@ const GeneralEdit = () => {
           />
         </div>
 
-        {/* Foto de portada */}
         <div>
           <label
             htmlFor="portada"
@@ -196,7 +222,6 @@ const GeneralEdit = () => {
           />
         </div>
 
-        {/* Mapa */}
         <div className="mt-6">
           <label className="block text-gray-700 font-medium mb-2">
             Seleccione la posición donde se encuentre el Venue o actualice el
@@ -205,12 +230,11 @@ const GeneralEdit = () => {
           <div className="mt-6">
             <MapComponent
               position={datosFormulario.posicion}
-              onUpdate={handleActualizarMapa}
+              setPosition={handleActualizarMapa}
             />
           </div>
         </div>
 
-        {/* Opciones relacionadas con el lugar */}
         <div className="space-y-6 mt-8">
           <div className="flex items-center space-x-6">
             <div className="flex items-center">
@@ -296,19 +320,9 @@ const GeneralEdit = () => {
             />
           </div>
         </div>
-
-        {/* Botón para guardar */}
-        <div className="mt-8 text-center">
-          <button
-            type="submit"
-            className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            Guardar Cambios
-          </button>
-        </div>
       </form>
     </div>
   );
 };
 
-export { GeneralEdit };
+export { GeneralCrud };

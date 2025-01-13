@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
 import {
   getEstacionamiento,
-  patchDisabledEstacionamiento,
+  patchDisabledEnableEstacionamiento,
   deleteEstacionamiento,
 } from "../../../services/ServiceEstacionamiento";
 import { FaLocationDot } from "react-icons/fa6";
@@ -13,8 +13,7 @@ import {
   MdDesktopAccessDisabled,
   MdOutlineDesktopWindows,
 } from "react-icons/md";
-
-import Swal from "sweetalert2"; // Importa SweetAlert2
+import Swal from "sweetalert2";
 
 const EstacionamientoTabla = () => {
   const [data, setData] = useState([]);
@@ -82,14 +81,13 @@ const EstacionamientoTabla = () => {
       });
     }
   };
-  const handleDisable = async (row) => {
+  const handleDisableEnable = async (row) => {
     try {
       let respuesta;
 
       if (row.activo === 1) {
-        respuesta = await patchDisabledEstacionamiento(row.id);
-        if (respuesta.status === 200) {
-          // Usando SweetAlert para mostrar la alerta
+        respuesta = await patchDisabledEnableEstacionamiento(row.id);
+        if (respuesta.status === "success") {
           Swal.fire({
             title: "Desactivado",
             text: "El estacionamiento ha sido desactivado correctamente.",
@@ -98,22 +96,24 @@ const EstacionamientoTabla = () => {
           });
         }
       } else {
-        //ACA HAY QUE CREAR UN IF PARA PODER ACTIVARLO SI DESEA NUEVAMENTE
-        Swal.fire({
-          title: "Error",
-          text: `Hubo un error al desactivar el estacionamiento. Código de error: ${respuesta?.status}`,
-          icon: "error",
-          confirmButtonText: "Aceptar",
-        });
+        respuesta = await patchDisabledEnableEstacionamiento(row.id);
+        if (respuesta.status === "success") {
+          Swal.fire({
+            title: "Activado",
+            text: "El estacionamiento ha sido activado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+        }
       }
-
+       
       const newData = await getEstacionamiento();
       setData(newData);
     } catch (error) {
       console.error("Error al cambiar el estado del estacionamiento:", error);
       Swal.fire({
         title: "Error",
-        text: "Ocurrió un error al cambiar el estado del estacionamiento.",
+        text: `Ocurrió un error al cambiar el estado del estacionamiento. Detalles: ${error.message}`,
         icon: "error",
         confirmButtonText: "Aceptar",
       });
@@ -175,7 +175,7 @@ const EstacionamientoTabla = () => {
         <div className="flex items-center gap-2">
           {/* Botón para Activar/Desactivar */}
           <button
-            onClick={() => handleDisable(row)}
+            onClick={() => handleDisableEnable(row)}
             className={`${
               row.activo === 0
                 ? "text-gray-500 hover:gray-red-800"

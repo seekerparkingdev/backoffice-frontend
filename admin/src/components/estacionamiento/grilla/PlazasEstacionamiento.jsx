@@ -35,7 +35,7 @@ const PlazasEstacionamiento = () => {
       name: "Tipo de plaza",
       selector: (row) => row.plaza,
       sortable: true,
-      cell: (row) => <span>{row.plaza}</span>, // Solo mostrar el texto del tipo de plaza
+      cell: (row) => <span>{row.plaza}</span>, 
     },
     {
       name: "Cantidad",

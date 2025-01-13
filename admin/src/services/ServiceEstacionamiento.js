@@ -64,12 +64,9 @@ export const postEstacionamiento = async (data) => {
 };
 
 // Servicio para desactivar
-export const patchDisabledEstacionamiento = async (id) => {
-  console.log("Esta es la id que recibe ", id);
+export const patchDisabledEnableEstacionamiento = async (id) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = import.meta.env.VITE_API_TOKEN;
-
-  console.log(token);
 
   try {
     const response = await axios.patch(
@@ -125,5 +122,41 @@ export const deleteEstacionamiento = async (id) => {
           }`
         : "Error desconocido"
     );
+  }
+};
+
+export const editEstacionamiento = async (id, data) => {
+  try {
+    const response = await axios.put(
+      `${apiUrl}estacionamientos/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("Estacionamiento actualizado exitosamente:", response.data);
+      return response.data; // Devuelve los datos actualizados si es necesario
+    }
+  } catch (error) {
+    if (error.response) {
+      // Errores con respuesta del servidor
+      if (error.response.status === 404) {
+        console.error("Estacionamiento no encontrado:", error.response.data);
+      } else {
+        console.error(
+          "Error al actualizar el estacionamiento:",
+          error.response.data
+        );
+      }
+    } else {
+      // Errores sin respuesta del servidor
+      console.error("Error de conexión o solicitud:", error.message);
+    }
+    throw error; // Relanza el error para manejarlo donde se llame a la función
   }
 };

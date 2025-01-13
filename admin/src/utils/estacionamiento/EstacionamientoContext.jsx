@@ -1,11 +1,11 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState } from "react";
 
 // Crear el contexto
-const EstacionamientoContext = createContext();
+export const FormularioContext = createContext();
 
 // Proveedor del contexto
-const EstacionamientoProvider = ({ children }) => {
-  const [formState, setFormState] = useState({
+export const FormularioProvider = ({ children }) => {
+  const [datosFormulario, setDatosFormulario] = useState({
     nombre: "",
     propietario: "",
     email: "",
@@ -13,59 +13,18 @@ const EstacionamientoProvider = ({ children }) => {
     codigoLugar: "",
     direccion: "",
     ubicacion: "",
+    posicion: [-34.6037, -58.3816],
     portada: null,
-    serviceCharge: "",
-    horarioEspecial: "",
-    position: [-34.603684, -58.381559],
-    opciones: {
-      recomendar: false,
-      estacionarCulata: false,
-      obligatorioLlaves: false,
-      incluirServiceCharge: false,
-    },
-    porcentajeServiceCharge: "",
+    recomendar: false,
+    obligatorioLlaves: false,
+    incluirServiceCharge: false,
+    porcentajeServiceCharge: 0,
+    horarioEspecial: "00:00",
   });
 
-  const handleInputChange = (e) => {
-    const { id, value, type, checked } = e.target;
-    setFormState((prevState) => {
-      if (type === "checkbox") {
-        return {
-          ...prevState,
-          opciones: { ...prevState.opciones, [id]: checked },
-        };
-      } else if (type === "file") {
-        return { ...prevState, [id]: e.target.files[0] };
-      } else {
-        return { ...prevState, [id]: value };
-      }
-    });
-  };
-
-  const handlePositionChange = (newPosition) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      position: newPosition,
-    }));
-  };
-
   return (
-    <EstacionamientoContext.Provider
-      value={{
-        formState,
-        setFormState,
-        handleInputChange,
-        handlePositionChange,
-      }}
-    >
+    <FormularioContext.Provider value={{ datosFormulario, setDatosFormulario }}>
       {children}
-    </EstacionamientoContext.Provider>
+    </FormularioContext.Provider>
   );
 };
-
-// Hook personalizado para usar el contexto
-const useEstacionamiento = () => {
-  return useContext(EstacionamientoContext);
-};
-
-export { EstacionamientoProvider, useEstacionamiento };

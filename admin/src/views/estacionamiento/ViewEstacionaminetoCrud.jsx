@@ -1,9 +1,9 @@
+import { EstacionamientoCrudPage } from "../../page/estacionamiento/EstacionamientoCrudPage";
 import { useState } from "react";
 import { Menu } from "../../components/Menu";
 import Nav from "../../components/Nav/Nav";
-import { EstacionamientoNewPage } from "../../page/estacionamiento/EstacionamientoNewPage";
 
-const ViewEstacionamientoNew = () => {
+const ViewEstacionamientoCrud = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -20,11 +20,11 @@ const ViewEstacionamientoNew = () => {
 
         {/* Contenido principal */}
         <div className="flex-1 p-4">
-          <EstacionamientoNewPage />
+          <EstacionamientoCrudPage />
         </div>
       </div>
     </>
   );
 };
 
-export { ViewEstacionamientoNew };
+export { ViewEstacionamientoCrud };
