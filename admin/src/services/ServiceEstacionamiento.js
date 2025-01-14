@@ -32,34 +32,37 @@ export const getEstacionamiento = async () => {
     }
   }
 };
-// Servicio para crear estacionamiento
-export const postEstacionamiento = async (data) => {
+
+export const getByIdEstacionamiento = async (id) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = import.meta.env.VITE_API_TOKEN;
 
   try {
-    const response = await axios.post(`${apiUrl}estacionamientos`, data, {
+    const response = await axios.get(`${apiUrl}estacionamientos/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
-    // Verifica si la respuesta es exitosa
-    if (response.status === 200) {
-      return response.data;
+    if (response && response.status === 200) {
+      return response?.data;
     } else {
-      throw new Error("Error en la respuesta del servidor.");
+      throw new Error("Datos no encontrados en la respuesta.");
     }
   } catch (error) {
-    console.error("Error al enviar los datos:", error);
-    throw new Error(
-      error.response
-        ? `Error en la API: ${error.response.status} - ${
-            error.response.data?.message || "Error desconocido"
-          }`
-        : "Error desconocido"
-    );
+    if (error.response) {
+      throw new Error(
+        `Error en la API: ${error.response.status} - ${
+          error.response.data?.message || "Error desconocido"
+        }`
+      );
+    } else if (error.request) {
+      throw new Error("No se recibió respuesta del servidor.");
+    } else {
+      console.error("Error inesperado:", error.message);
+      throw new Error(`Error inesperado: ${error.message}`);
+    }
   }
 };
 
@@ -126,21 +129,21 @@ export const deleteEstacionamiento = async (id) => {
 };
 
 export const editEstacionamiento = async (id, data) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
   try {
-    const response = await axios.put(
-      `${apiUrl}estacionamientos/${id}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.put(`${apiUrl}estacionamientos/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.status === 200) {
       console.log("Estacionamiento actualizado exitosamente:", response.data);
-      return response.data; // Devuelve los datos actualizados si es necesario
+      return response.status,  response.data;  
+    } else {
+      return response.status
     }
   } catch (error) {
     if (error.response) {
@@ -154,9 +157,38 @@ export const editEstacionamiento = async (id, data) => {
         );
       }
     } else {
-      // Errores sin respuesta del servidor
       console.error("Error de conexión o solicitud:", error.message);
     }
-    throw error; // Relanza el error para manejarlo donde se llame a la función
+    throw error;
+  }
+};
+// Servicio para crear estacionamiento
+export const postEstacionamiento = async (data) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
+
+  try {
+    const response = await axios.post(`${apiUrl}estacionamientos`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Verifica si la respuesta es exitosa
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Error en la respuesta del servidor.");
+    }
+  } catch (error) {
+    console.error("Error al enviar los datos:", error);
+    throw new Error(
+      error.response
+        ? `Error en la API: ${error.response.status} - ${
+            error.response.data?.message || "Error desconocido"
+          }`
+        : "Error desconocido"
+    );
   }
 };
