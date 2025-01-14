@@ -18,7 +18,7 @@ const GeneralCrud = () => {
           const parking = response.find(
             (estacionamiento) => estacionamiento.id === parseInt(id, 10)
           );
-
+            console.log(parking)
           if (parking) {
             setDatosFormulario((prev) => ({
               ...prev,

@@ -35,7 +35,7 @@ const MapComponent = ({ position, setPosition }) => {
   };
 
   return (
-    <div className="relative w-full" style={{ height: "300px" }}>
+    <div className=" " style={{ height: "300px" }}>
       <MapContainer
         center={position}
         zoom={13}
