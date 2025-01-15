@@ -11,7 +11,7 @@ const VenueConfigtable = [
   { name: "Dirección", selector: (row) => row.direccion, sortable: true },
   {
     name: "Capacidad Máxima",
-    selector: (row) => row.capacidad,
+    selector: (row) => row.capacidad_maxima,
     sortable: true,
   },
   {
