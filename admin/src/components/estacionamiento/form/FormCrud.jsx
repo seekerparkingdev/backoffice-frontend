@@ -28,7 +28,7 @@ const EstacionamientosForm = () => {
     requires_key_drop: 0,
     include_service_charge: 0,
     service_charge: "",
-    percentage: "",
+    percentage: "70",
     usarHorarioEspecial: 0,
     horarioEspecial: "00:00",
   });
@@ -230,12 +230,12 @@ const EstacionamientosForm = () => {
         latitude: position[0],
         longitude: position[1],
         prices: plazas.map((plaza, index) => ({
-          plaza_type_id: index + 1,
-          price: plaza.price,
-          minimum: plaza.minimum,
-          quantity: plaza.quantity,
-          order: plaza.order,
-          show_vehicle: plaza.show_vehicle,
+        plaza_type_id: index + 1,
+        price: plaza.price,
+        minimum: plaza.minimum,
+        quantity: plaza.quantity,
+        order: plaza.order,
+        show_vehicle: plaza.show_vehicle,
         })),
       };
       console.log(payload);
