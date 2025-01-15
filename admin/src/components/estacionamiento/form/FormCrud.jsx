@@ -2,12 +2,17 @@ import Swal from "sweetalert2";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MapComponent from "../../venues/InfoGeneral/MapComponent";
+import { validarCampos } from "../../../utils/estacionamiento/Validacion";
 // Servicios
-import { getByIdEstacionamiento } from "../../../services/ServiceEstacionamiento";
-import { editEstacionamiento } from "../../../services/ServiceEstacionamiento";
+import {
+  getByIdEstacionamiento,
+  editEstacionamiento,
+  postEstacionamiento,
+} from "../../../services/ServiceEstacionamiento";
 const EstacionamientosForm = () => {
   const { id } = useParams();
   const isEditMode = id !== "new";
+
   const [formData, setFormData] = useState({
     text: "",
     name: "",
@@ -22,6 +27,7 @@ const EstacionamientosForm = () => {
     special_exit: 0,
     requires_key_drop: 0,
     include_service_charge: 0,
+    service_charge: "",
     percentage: "",
     usarHorarioEspecial: 0,
     horarioEspecial: "00:00",
@@ -171,48 +177,84 @@ const EstacionamientosForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const payload = {
-      ...formData,
-      latitude: position[0],
-      longitude: position[1],
-      prices: plazas.map((plaza, index) => ({
-        plaza_type_id: index + 1,
-        price: plaza.price,
-        minimum: plaza.minimum,
-        quantity: plaza.quantity,
-        order: plaza.order,
-        show_vehicle: plaza.show_vehicle,
-      })),
-    };
-
-    try {
-      const response = await editEstacionamiento(id, payload);
-      console.log(response);
-      // Verificar estado de respuesta
-      if (response.status === 200) {
-        // Mostrar alerta de éxito
-        Swal.fire({
-          icon: "success",
-          title: "¡Éxito!",
-          text: "El estacionamiento ha sido editado correctamente.",
-        });
-      } else {
-        // Mostrar alerta de fallo
-        Swal.fire({
-          icon: "warning",
-          title: "Algo salió mal",
-          text: `No se pudo editar el estacionamiento. Código de respuesta: ${response.status}`,
-        });
+    if (isEditMode) {
+      const payload = {
+        ...formData,
+        latitude: position[0],
+        longitude: position[1],
+        prices: plazas.map((plaza, index) => ({
+          plaza_type_id: index + 1,
+          price: plaza.price,
+          minimum: plaza.minimum,
+          quantity: plaza.quantity,
+          order: plaza.order,
+          show_vehicle: plaza.show_vehicle,
+        })),
+      };
+      // Validar los campos antes de proceder
+      if (!validarCampos(payload)) {
+        return; // Si la validación falla, no continuamos
       }
-    } catch (error) {
-      // Mostrar alerta de error
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `Ocurrió un error al editar el estacionamiento: ${error.message}`,
-      });
-      console.error("Error detallado:", error);
+
+      try {
+        const response = await editEstacionamiento(id, payload);
+
+        // Verificar estado de respuesta
+        if (response.status === 200) {
+          // Mostrar alerta de éxito
+          Swal.fire({
+            icon: "success",
+            title: "¡Éxito!",
+            text: "El estacionamiento ha sido editado correctamente.",
+          });
+        } else {
+          // Mostrar alerta de fallo
+          Swal.fire({
+            icon: "warning",
+            title: "Algo salió mal",
+            text: `No se pudo editar el estacionamiento. Código de respuesta: ${response.status}`,
+          });
+        }
+      } catch (error) {
+        // Mostrar alerta de error
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Ocurrió un error al editar el estacionamiento: ${error.message}`,
+        });
+        console.error("Error detallado:", error);
+      }
+    } else {
+      const payload = {
+        ...formData,
+        latitude: position[0],
+        longitude: position[1],
+        prices: plazas.map((plaza, index) => ({
+          plaza_type_id: index + 1,
+          price: plaza.price,
+          minimum: plaza.minimum,
+          quantity: plaza.quantity,
+          order: plaza.order,
+          show_vehicle: plaza.show_vehicle,
+        })),
+      };
+      console.log(payload);
+      // Validar los campos antes de proceder
+      if (!validarCampos(payload)) {
+        return; // Si la validación falla, no continuamos
+      }
+
+      try {
+        const response = await postEstacionamiento(payload);
+
+        if (response.status === 200) {
+          console.log("creado correctamente", response);
+        } else {
+          console.log("creado mal", response);
+        }
+      } catch (error) {
+        throw new Error(error.message);
+      }
     }
   };
 
@@ -223,7 +265,7 @@ const EstacionamientosForm = () => {
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8 space-y-6"
+        className=" max-w-9xl mx-auto bg-white shadow-md rounded-lg p-8 space-y-6"
       >
         <section>
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
