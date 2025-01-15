@@ -140,10 +140,9 @@ export const editEstacionamiento = async (id, data) => {
     });
 
     if (response.status === 200) {
-      console.log("Estacionamiento actualizado exitosamente:", response.data);
-      return response.status,  response.data;  
+      return response;
     } else {
-      return response.status
+      return response;
     }
   } catch (error) {
     if (error.response) {

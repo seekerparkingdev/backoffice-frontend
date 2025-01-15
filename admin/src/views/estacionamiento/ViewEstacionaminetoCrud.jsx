@@ -19,7 +19,7 @@ const ViewEstacionamientoCrud = () => {
         </div>
 
         {/* Contenido principal */}
-        <div className="flex-1 p-4">
+        <div  >
           <EstacionamientoCrudPage />
         </div>
       </div>

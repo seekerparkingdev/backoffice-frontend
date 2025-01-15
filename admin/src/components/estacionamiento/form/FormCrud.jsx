@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MapComponent from "../../venues/InfoGeneral/MapComponent";
@@ -7,7 +8,6 @@ import { editEstacionamiento } from "../../../services/ServiceEstacionamiento";
 const EstacionamientosForm = () => {
   const { id } = useParams();
   const isEditMode = id !== "new";
-
   const [formData, setFormData] = useState({
     text: "",
     name: "",
@@ -17,27 +17,26 @@ const EstacionamientosForm = () => {
     address: "",
     code: "",
     location_url: "",
-    path: null,
+    path: "",
     recommended: 0,
     special_exit: 0,
     requires_key_drop: 0,
     include_service_charge: 0,
+    percentage: "",
     usarHorarioEspecial: 0,
     horarioEspecial: "00:00",
   });
-  console.log(formData);
-
   useEffect(() => {
     const estacionamiento = async () => {
       if (isEditMode) {
         const response = await getByIdEstacionamiento(id);
-        console.log("Estacionamiento por id ", response.data);
+        console.log("Data estacionamiento ", response.data);
         setFormData({
           name: response.data.nombre,
           owner_id: response.data.id_propietario,
-          //   OWNERS  Tengo que tener los nombres
           email: response.data.email,
           text: response.data.texto,
+          percentage: response.data.porcentaje,
           code: response.data.codigo,
           address: response.data.direccion,
           location_url: response.data.url_ubicacion,
@@ -50,15 +49,13 @@ const EstacionamientosForm = () => {
           usarHorarioEspecial: response.data.salida_especial !== "00:00:00",
           horarioEspecial: response.data.salida_especial,
         });
-
-        // Plazas
         const plazasData = response.data.precios.map((precio) => ({
-          tipo: getTipoPlaza(precio.id_tipo_plaza), // Obtenemos el tipo de plaza
-          cantidad: precio.cantidad || 1,
-          precio: parseFloat(precio.precio),
-          minimo: precio.minimo || 0,
-          orden: precio.orden_vista || 1,
-          activo: precio.mostrar_vehiculo === 1,
+          plaza_type: getTipoPlaza(precio.id_tipo_plaza),
+          quantity: precio.cantidad || 1,
+          price: parseFloat(precio.precio),
+          minimum: precio.minimo || 0,
+          order: precio.orden_vista || 1,
+          show_vehicle: precio.mostrar_vehiculo === 1,
         }));
 
         if (response.data.precios.length > 0) {
@@ -74,7 +71,6 @@ const EstacionamientosForm = () => {
     estacionamiento();
   }, [id]);
 
-  // Helper para obtener tipo de plaza según el id
   const getTipoPlaza = (id) => {
     switch (id) {
       case 1:
@@ -94,15 +90,15 @@ const EstacionamientosForm = () => {
     }
   };
 
-  const [position, setPosition] = useState([-34.603722, -58.381592]); // Coordenadas iniciales
+  const [position, setPosition] = useState([-34.603722, -58.381592]);
   const [plazas, setPlazas] = useState([
     {
-      plaza_type: "Moto", // "Moto" como "Plaza Type"
-      quantity: 1, // "Cantidad"
-      price: 0, // "Precio"
-      minimum: 0, // "Minimo"
-      order: 1, // "Orden"
-      show_vehicle: false, // "Activo"
+      plaza_type: "Moto",
+      quantity: 1,
+      price: 0,
+      minimum: 0,
+      order: 1,
+      show_vehicle: 0,
     },
     {
       plaza_type: "Auto",
@@ -110,7 +106,7 @@ const EstacionamientosForm = () => {
       price: 0,
       minimum: 0,
       order: 2,
-      show_vehicle: false,
+      show_vehicle: 0,
     },
     {
       plaza_type: "Pickup",
@@ -118,7 +114,7 @@ const EstacionamientosForm = () => {
       price: 0,
       minimum: 0,
       order: 3,
-      show_vehicle: false,
+      show_vehicle: 0,
     },
     {
       plaza_type: "Bicicleta",
@@ -126,7 +122,7 @@ const EstacionamientosForm = () => {
       price: 0,
       minimum: 0,
       order: 4,
-      show_vehicle: false,
+      show_vehicle: 0,
     },
     {
       plaza_type: "SUV",
@@ -134,7 +130,7 @@ const EstacionamientosForm = () => {
       price: 0,
       minimum: 0,
       order: 5,
-      show_vehicle: false,
+      show_vehicle: 0,
     },
     {
       plaza_type: "Traffic",
@@ -142,7 +138,7 @@ const EstacionamientosForm = () => {
       price: 0,
       minimum: 0,
       order: 6,
-      show_vehicle: false,
+      show_vehicle: 0,
     },
   ]);
 
@@ -157,19 +153,25 @@ const EstacionamientosForm = () => {
   const handleFileChange = (e) => {
     setFormData({
       ...formData,
-      foto: e.target.files[0],
+      path: e.target.type[0],
     });
   };
 
   const handlePlazaChange = (index, field, value) => {
     const updatedPlazas = [...plazas];
-    updatedPlazas[index][field] =
-      field === "activo" ? value.target.checked : value;
+
+    if (field === "show_vehicle") {
+      updatedPlazas[index][field] = value.target.checked;
+    } else {
+      updatedPlazas[index][field] = value;
+    }
+
     setPlazas(updatedPlazas);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const payload = {
       ...formData,
       latitude: position[0],
@@ -183,16 +185,34 @@ const EstacionamientosForm = () => {
         show_vehicle: plaza.show_vehicle,
       })),
     };
-    console.log("Esto se envia al endpoint editar:", payload);
+
     try {
-      const response = editEstacionamiento(id, payload);
-      if (response.status === "success") {
-        console.log("Estacionamiento editado correctamente");
+      const response = await editEstacionamiento(id, payload);
+      console.log(response);
+      // Verificar estado de respuesta
+      if (response.status === 200) {
+        // Mostrar alerta de éxito
+        Swal.fire({
+          icon: "success",
+          title: "¡Éxito!",
+          text: "El estacionamiento ha sido editado correctamente.",
+        });
       } else {
-        console.log("Estacionamiento   no se pudo editar", response.status);
+        // Mostrar alerta de fallo
+        Swal.fire({
+          icon: "warning",
+          title: "Algo salió mal",
+          text: `No se pudo editar el estacionamiento. Código de respuesta: ${response.status}`,
+        });
       }
     } catch (error) {
-      throw new Error(error);
+      // Mostrar alerta de error
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `Ocurrió un error al editar el estacionamiento: ${error.message}`,
+      });
+      console.error("Error detallado:", error);
     }
   };
 
@@ -302,8 +322,7 @@ const EstacionamientosForm = () => {
           <div className="mt-4">
             <label className="block text-gray-600">Foto de Portada</label>
             <input
-              type="path"
-              value={formData.path}
+              type="file"
               onChange={handleFileChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
             />
@@ -345,7 +364,7 @@ const EstacionamientosForm = () => {
             <div className="flex items-center">
               <input
                 type="checkbox"
-                name="include_service_charge "
+                name="include_service_charge"
                 checked={formData.include_service_charge == 1 ? true : false}
                 onChange={handleInputChange}
                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-300"
@@ -429,7 +448,7 @@ const EstacionamientosForm = () => {
                       onChange={(e) =>
                         handlePlazaChange(
                           index,
-                          "cantidad",
+                          "quantity",
                           Number(e.target.value)
                         )
                       }
@@ -443,7 +462,7 @@ const EstacionamientosForm = () => {
                       onChange={(e) =>
                         handlePlazaChange(
                           index,
-                          "precio",
+                          "price",
                           Number(e.target.value)
                         )
                       }
@@ -457,7 +476,7 @@ const EstacionamientosForm = () => {
                       onChange={(e) =>
                         handlePlazaChange(
                           index,
-                          "minimo",
+                          "minimum",
                           Number(e.target.value)
                         )
                       }
@@ -471,7 +490,7 @@ const EstacionamientosForm = () => {
                       onChange={(e) =>
                         handlePlazaChange(
                           index,
-                          "orden",
+                          "order",
                           Number(e.target.value)
                         )
                       }
@@ -482,7 +501,9 @@ const EstacionamientosForm = () => {
                     <input
                       type="checkbox"
                       checked={plaza.show_vehicle}
-                      onChange={(e) => handlePlazaChange(index, "activo", e)}
+                      onChange={(e) =>
+                        handlePlazaChange(index, "show_vehicle", e)
+                      }
                       className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-300"
                     />
                   </td>
