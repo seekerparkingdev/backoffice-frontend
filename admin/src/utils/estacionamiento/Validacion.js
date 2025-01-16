@@ -24,11 +24,12 @@ const campoTraduccion = {
 };
 
 export function validarCampos(payload) {
-  // Recorrer todas las propiedades del payload
   for (let key in payload) {
-    // Validar campos que sean cadenas no vacías
+    // No validamos el campo owner_name
+    if (key === "owner_name") continue;
+
     if (typeof payload[key] === "string" && payload[key].trim() === "") {
-      const campoNombre = campoTraduccion[key] || key; // Si no hay traducción, usamos la key original
+      const campoNombre = campoTraduccion[key] || key;
       Swal.fire({
         icon: "error",
         title: "¡Error!",
@@ -37,21 +38,13 @@ export function validarCampos(payload) {
       return false;
     }
 
-    // Validar arrays de precios
     if (Array.isArray(payload[key]) && key === "prices") {
       for (let i = 0; i < payload[key].length; i++) {
-        const plaza = payload[key][i];
-        if (!plaza.price || plaza.price <= 0) {
-          Swal.fire({
-            icon: "error",
-            title: "¡Error!",
-            text: `El precio de la plaza tipo ${plaza.plaza_type_id} no puede ser cero o vacío.`,
-          });
-          return false;
-        }
+        // Aquí podrías añadir más validaciones si es necesario
       }
     }
   }
 
-  return true; // Si no hay campos vacíos, retornamos true
+  return true;
 }
+

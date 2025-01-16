@@ -9,15 +9,16 @@ import {
   editEstacionamiento,
   postEstacionamiento,
 } from "../../../services/ServiceEstacionamiento";
+import { getPropietarios } from "../../../services/ServiceUsuarios";
 const EstacionamientosForm = () => {
   const { id } = useParams();
   const isEditMode = id !== "new";
-
   const [formData, setFormData] = useState({
     text: "",
     name: "",
+    owner_name: "",
     owner_id: "",
-    owners: "",
+    owners: {},
     email: "",
     address: "",
     code: "",
@@ -33,14 +34,16 @@ const EstacionamientosForm = () => {
     horarioEspecial: "00:00",
   });
   useEffect(() => {
-    const estacionamiento = async () => {
+    const fetchData = async () => {
       if (isEditMode) {
         const response = await getByIdEstacionamiento(id);
-        console.log("Data estacionamiento ", response.data);
+        console.log(response);
         setFormData({
           name: response.data.nombre,
-          owner_id: response.data.id_propietario,
+          owner_name: "", // Mantenerlo vacío inicialmente
           email: response.data.email,
+          owner_id: response.data.id_propietario,
+          owners: {}, // Inicializar owners como vacío, lo llenaremos luego
           text: response.data.texto,
           percentage: response.data.porcentaje,
           code: response.data.codigo,
@@ -55,6 +58,7 @@ const EstacionamientosForm = () => {
           usarHorarioEspecial: response.data.salida_especial !== "00:00:00",
           horarioEspecial: response.data.salida_especial,
         });
+
         const plazasData = response.data.precios.map((precio) => ({
           plaza_type: getTipoPlaza(precio.id_tipo_plaza),
           quantity: precio.cantidad || 1,
@@ -67,16 +71,42 @@ const EstacionamientosForm = () => {
         if (response.data.precios.length > 0) {
           setPlazas(plazasData);
         }
+
         setPosition([
           parseFloat(response?.data?.latitud),
           parseFloat(response?.data?.longitud),
         ]);
       }
+
+      const ownersResponse = await getPropietarios();
+      if (ownersResponse.codigo === 200) {
+        setFormData((prevState) => ({
+          ...prevState,
+          owners: ownersResponse.data,
+        }));
+      } else {
+        console.error("Error en la respuesta de propietarios:", ownersResponse);
+      }
     };
 
-    estacionamiento();
+    fetchData();
   }, [id]);
 
+  useEffect(() => {
+    if (formData.owner_id && formData.owners.length > 0) {
+      const selectedOwner = formData.owners.find(
+        (owner) => owner.id === parseInt(formData.owner_id)
+      );
+      if (selectedOwner) {
+        setFormData((prevState) => ({
+          ...prevState,
+          owner_name: selectedOwner.nombre,
+        }));
+      }
+    }
+  }, [formData.owner_id, formData.owners]);
+
+  console.log("Este es el dueño de la propiedad:", formData.owner_name);
   const getTipoPlaza = (id) => {
     switch (id) {
       case 1:
@@ -150,10 +180,22 @@ const EstacionamientosForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+
+    if (name === "owner_id") {
+      const selectedOwner = formData.owners.find(
+        (owner) => owner.id === parseInt(value)
+      ); // Asegúrate de comparar con el tipo correcto
+      setFormData({
+        ...formData,
+        [name]: value,
+        owner_name: selectedOwner ? selectedOwner.nombre : "", // Actualizar el nombre del propietario
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
+    }
   };
 
   const handleFileChange = (e) => {
@@ -191,9 +233,9 @@ const EstacionamientosForm = () => {
           show_vehicle: plaza.show_vehicle,
         })),
       };
-      // Validar los campos antes de proceder
+
       if (!validarCampos(payload)) {
-        return; // Si la validación falla, no continuamos
+        return;
       }
 
       try {
@@ -222,7 +264,6 @@ const EstacionamientosForm = () => {
           title: "Error",
           text: `Ocurrió un error al editar el estacionamiento: ${error.message}`,
         });
-        console.error("Error detallado:", error);
       }
     } else {
       const payload = {
@@ -230,15 +271,15 @@ const EstacionamientosForm = () => {
         latitude: position[0],
         longitude: position[1],
         prices: plazas.map((plaza, index) => ({
-        plaza_type_id: index + 1,
-        price: plaza.price,
-        minimum: plaza.minimum,
-        quantity: plaza.quantity,
-        order: plaza.order,
-        show_vehicle: plaza.show_vehicle,
+          plaza_type_id: index + 1,
+          price: plaza.price,
+          minimum: plaza.minimum,
+          quantity: plaza.quantity,
+          order: plaza.order,
+          show_vehicle: plaza.show_vehicle,
         })),
       };
-      console.log(payload);
+
       // Validar los campos antes de proceder
       if (!validarCampos(payload)) {
         return; // Si la validación falla, no continuamos
@@ -247,13 +288,26 @@ const EstacionamientosForm = () => {
       try {
         const response = await postEstacionamiento(payload);
 
-        if (response.status === 200) {
-          console.log("creado correctamente", response);
+        if (response.status === "success") {
+          Swal.fire({
+            icon: "success",
+            title: "¡Éxito!",
+            text: "El estacionamiento ha sido editado correctamente.",
+          });
         } else {
           console.log("creado mal", response);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `Ocurrió un error al crear el estacionamiento. Código de respuesta: ${response.status}`,
+          });
         }
       } catch (error) {
-        throw new Error(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Ocurrió un error al editar el estacionamiento: ${error.message}`,
+        });
       }
     }
   };
@@ -287,17 +341,25 @@ const EstacionamientosForm = () => {
             <div>
               <label className="block text-gray-600">Propietario</label>
               <select
-                name="owners"
-                value={formData.owners}
+                name="owner_id"
+                value={formData.owner_id}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
               >
-                <option value="">Seleccione</option>
-                <option value="1">Opción 1</option>
-                <option value="2">Opción 2</option>
-                <option value="3">Opción 3</option>
+                <option value={formData.owner_id} disabled>
+                  {formData.owner_name || "Seleccione un propietario"}
+                </option>
+                {Array.isArray(formData.owners) &&
+                  formData.owners
+                    .filter((owner) => owner.id !== formData.owner_id) // Excluye al propietario actual de la lista
+                    .map((owner) => (
+                      <option key={owner.id} value={owner.id}>
+                        {owner.nombre}
+                      </option>
+                    ))}
               </select>
             </div>
+
             <div>
               <label className="block text-gray-600">
                 Email para Notificaciones
