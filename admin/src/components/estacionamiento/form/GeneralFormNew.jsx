@@ -1,4 +1,4 @@
-import MapComponent from "../../MapComponent";
+import MapComponent from "../../venues/MapComponent";
 import { useEstacionamiento } from "../../../utils/estacionamiento/EstacionamientoContext";
 const GeneralFormNew = () => {
   const { formState, handleInputChange, handlePositionChange } =

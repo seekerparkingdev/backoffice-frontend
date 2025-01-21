@@ -16,7 +16,7 @@ import { ViewHome } from "./views/ViewHome";
 import { ParkingProvider } from "./utils/eventos/ParkingContext";
 import { EstacionamientoProvider } from "./utils/estacionamiento/EstacionamientoContext";
 import { PlazasProvider } from "./utils/estacionamiento/PlazaContext";
-import { ViewCrudVenue } from "./views/venues/ViewCrudVenue";
+import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
                   <Route path="/venues" element={<ViewVenues />} />
                   <Route
                     path="/venues/:id"
-                    element={<ViewCrudVenue />}
+                    element={<ViewVenueCrud />}
                   />
                   <Route path="/eventos" element={<Eventos />} />
                   <Route path="/eventos/new" element={<ViewEventosNew />} />
