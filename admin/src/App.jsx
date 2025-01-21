@@ -8,21 +8,16 @@ import { ViewEventoFuncional } from "./views/eventos/ViewEventoFuncional";
 import { ViewVenues } from "./views/venues/ViewVenues";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
 import { ViewEstacionamiento } from "./views/estacionamiento/ViewEstacionamiento";
-import { ViewEstacionamientoNew } from "./views/estacionamiento/ViewEstacionamientoNew";
-import { ViewEstacionamientoEdit } from "./views/estacionamiento/ViewEstacionaminetoEdit";
+import { ViewEstacionamientoCrud } from "./views/estacionamiento/ViewEstacionaminetoCrud";
 import { ViewHome } from "./views/ViewHome";
 
 // IMPORTAMOS EL PROVIDER DEL CONTEXTO
-import { ParkingProvider } from "./utils/eventos/ParkingContext";
-import { EstacionamientoProvider } from "./utils/estacionamiento/EstacionamientoContext";
-import { PlazasProvider } from "./utils/estacionamiento/PlazaContext";
+ 
 import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 
 function App() {
   return (
-    <ParkingProvider>
-      <EstacionamientoProvider>
-        <PlazasProvider>
+    
           <div className="flex">
             <div className="flex-1">
               <HashRouter>
@@ -43,21 +38,16 @@ function App() {
                     path="/estacionamiento"
                     element={<ViewEstacionamiento />}
                   />
-                  <Route
-                    path="/estacionamiento/new"
-                    element={<ViewEstacionamientoNew />}
-                  />
+                 
                   <Route
                     path="/estacionamiento/:id"
-                    element={<ViewEstacionamientoEdit />}
+                    element={<ViewEstacionamientoCrud />}
                   />
                 </Routes>
               </HashRouter>
             </div>
           </div>
-        </PlazasProvider>
-      </EstacionamientoProvider>
-    </ParkingProvider>
+        
   );
 }
 

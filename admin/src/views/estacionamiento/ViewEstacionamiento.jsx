@@ -15,7 +15,7 @@ const ViewEstacionamiento = () => {
       <div className="flex-1 flex flex-col">
         <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="p-6">
+        <div className="p-6 ">
           <EstacionamientoPage />
         </div>
       </div>

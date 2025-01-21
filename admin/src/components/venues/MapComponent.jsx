@@ -1,3 +1,4 @@
+import React from "react";
 import {
   MapContainer,
   TileLayer,
@@ -23,14 +24,18 @@ const MapComponent = ({ position, setPosition }) => {
   const MoverMarcador = () => {
     useMapEvents({
       click(e) {
-        setPosition([e.latlng.lat, e.latlng.lng]);
+        if (typeof setPosition === "function") {
+          setPosition([e.latlng.lat, e.latlng.lng]);
+        } else {
+          console.error("setPosition no es una función válida.");
+        }
       },
     });
     return null;
   };
 
   return (
-    <div className="relative w-full" style={{ height: "300px" }}>
+    <div className=" " style={{ height: "300px" }}>
       <MapContainer
         center={position}
         zoom={13}
