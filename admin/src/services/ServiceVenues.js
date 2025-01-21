@@ -1,7 +1,7 @@
 import axios from "axios";
 export const getVenues = async () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const token = import.meta.env.VITE_API_TOKEN;
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = import.meta.env.VITE_API_TOKEN;
     try {
       const response = await axios.get(`${apiUrl}venues`, {
         headers: {
