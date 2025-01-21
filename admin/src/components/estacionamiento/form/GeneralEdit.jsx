@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import MapComponent from "../../venues/InfoGeneral/MapComponent";
+import React, { useState} from "react";
+import MapComponent from "../../MapComponent";
 
 const GeneralEdit = () => {
   const [datosFormulario, setDatosFormulario] = useState({

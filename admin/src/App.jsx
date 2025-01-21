@@ -6,7 +6,6 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import Eventos from "./views/eventos/Eventos";
 import { ViewEventoFuncional } from "./views/eventos/ViewEventoFuncional";
 import { ViewVenues } from "./views/venues/ViewVenues";
-import { ViewVenueCrud } from "./views/venues/ViewVenueCrud";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
 import { ViewEstacionamiento } from "./views/estacionamiento/ViewEstacionamiento";
 import { ViewEstacionamientoNew } from "./views/estacionamiento/ViewEstacionamientoNew";
@@ -17,6 +16,7 @@ import { ViewHome } from "./views/ViewHome";
 import { ParkingProvider } from "./utils/eventos/ParkingContext";
 import { EstacionamientoProvider } from "./utils/estacionamiento/EstacionamientoContext";
 import { PlazasProvider } from "./utils/estacionamiento/PlazaContext";
+import { ViewCrudVenue } from "./views/venues/ViewCrudVenue";
 
 function App() {
   return (
@@ -30,8 +30,8 @@ function App() {
                   <Route path="/" element={<ViewHome />} />
                   <Route path="/venues" element={<ViewVenues />} />
                   <Route
-                    path="/venues/:id/:view?"
-                    element={<ViewVenueCrud />}
+                    path="/venues/:id"
+                    element={<ViewCrudVenue />}
                   />
                   <Route path="/eventos" element={<Eventos />} />
                   <Route path="/eventos/new" element={<ViewEventosNew />} />
