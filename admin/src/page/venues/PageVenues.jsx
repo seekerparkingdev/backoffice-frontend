@@ -1,7 +1,6 @@
 import { VenueGrilla } from "../../components/venues/Grillas/VenueGrilla";
-
 const PageVenues = () => {
-  return <VenueGrilla />;
+  return <VenueGrilla/>;
 };
 
 export { PageVenues };

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Menu } from "../../components/Menu";
 import Nav from "../../components/Nav/Nav";
-import { PageVenueCrud } from "../../page/venues/PageVenueCrud";
 import { useParams } from "react-router-dom";
+import CrudVenue from "../../components/venues/Form/CrudVenue";
 
 const ViewVenueCrud = () => {
   const { id } = useParams();
@@ -23,7 +23,7 @@ const ViewVenueCrud = () => {
         
         <div className="flex-1 p-4">
           
-          <PageVenueCrud id={id} />
+          <CrudVenue id={id} />
         </div>
       </div>
     </>

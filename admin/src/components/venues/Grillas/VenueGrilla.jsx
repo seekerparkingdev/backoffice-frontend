@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const VenueGrilla = () => {
   const navigate = useNavigate();
   const handleRowClick = (row) => {
-    navigate(`/venues/${row.id}/view`);
+    navigate(`/venues/${row.id}`);
   };
   return (
     <div className="flex justify-center items-center mt-10">
