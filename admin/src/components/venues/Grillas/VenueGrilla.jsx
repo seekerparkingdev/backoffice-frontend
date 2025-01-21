@@ -9,7 +9,7 @@ import { getVenues } from "../../../services/ServiceVenues";
 const VenueGrilla = () => {
   const navigate = useNavigate();
   const handleRowClick = (row) => {
-    navigate(`/venues/${row.id}/view`);
+    navigate(`/venues/${row.id}`);
   };
 
   const [data, setData] = useState([]);
@@ -71,7 +71,7 @@ const VenueGrilla = () => {
           ) : (
             <DataTable
               onRowClicked={handleRowClick}
-              columns={VenueConfigtable}
+              columns={VenueConfigtable(setData, setFilteredData)}
               data={filteredData}
               pagination
               highlightOnHover

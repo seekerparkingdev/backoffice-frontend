@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import MapComponent from "../../venues/InfoGeneral/MapComponent";
+import MapComponent from "../../venues/MapComponent";
 import { validarCampos } from "../../../utils/estacionamiento/Validacion";
 // Servicios
 import {
