@@ -5,9 +5,16 @@ import FeedbackPage from "./pages/config/Feedback";
 import TiposPlazasPage from "./pages/config/TiposPlazas";
 import HomePage from "./pages/config/Home";
 
+
+// importacion de menu 
+import { Layout } from "./Layout";
+
 function App() {
   return (
     <>
+    <Layout>
+
+
       <HashRouter>
         <Routes>
         <Route path="/" element={<HomePage />} />
@@ -16,6 +23,7 @@ function App() {
           <Route path="config/plazas" element={<TiposPlazasPage />} />
         </Routes>
       </HashRouter>
+    </Layout>
     </>
   );
 }

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../../components/Menu";
 import Header from "../../components/Nav/Nav";
- 
 import AccountPanel from "../../partials/settings/AccountPanel";
 
 const Home = () => {
@@ -9,8 +7,7 @@ const Home = () => {
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+   
 
       {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden md:ml-[240px]">

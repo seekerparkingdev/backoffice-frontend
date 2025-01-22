@@ -7,7 +7,7 @@ const ViewEventosNew = () => {
   return (
     <div>
       <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+     
 
       <div>
         <EventosNewPage />
