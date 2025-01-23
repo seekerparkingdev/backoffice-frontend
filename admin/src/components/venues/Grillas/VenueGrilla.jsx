@@ -17,7 +17,7 @@ const VenueGrilla = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-
+ console.log(filteredData)
   useEffect(() => {
     const venue = async () => {
       try {

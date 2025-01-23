@@ -1,39 +1,55 @@
 import { NavLink } from "react-router-dom";
-// Importación de iconos
 import { MdDesktopAccessDisabled } from "react-icons/md";
 import { MdOutlineDesktopWindows } from "react-icons/md";
 import { LuDelete } from "react-icons/lu";
 import { BiEditAlt } from "react-icons/bi";
-import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-// Importamos servicios
+import { deleteVenue, toggleSuspend } from "../../../services/ServiceVenues";
 
-import { deleteVenue } from "../../../services/ServiceVenues";
-
- 
-const VenueConfigtable = (setData, setFilteredData) => [ 
-  { name: "Nombre", selector: (row) => row.nombre, sortable: true },
-  { name: "Dirección", selector: (row) => row.direccion, sortable: true },
+const VenueConfigtable = (setData, setFilteredData) => [
+  { name: "Nombre", selector: (row) => row.name, sortable: true },
+  { name: "Dirección", selector: (row) => row.address, sortable: true },
   {
     name: "Capacidad Máxima",
-    selector: (row) => row.capacidad_maxima,
+    selector: (row) => row.max_capacity,
     sortable: true,
   },
   {
     name: "Acciones",
     cell: (row) => {
-      const [activOdisable, setActivOdisable] = useState(false);
+      const handleSuspend = async (id) => {
+        try {
+          const response = await toggleSuspend(id);
+ 
+          setFilteredData((prevData) =>
+            prevData.map((item) =>
+              item.id === id ? { ...item, suspend: item.suspend === 1 ? 0 : 1 } : item
+            )
+          );
 
-      const toggleActivOdisable = () => {
-        setActivOdisable((prevState) => !prevState);
+          Swal.fire({
+            title: "Éxito",
+            text: response.data || "Estado del venue actualizado correctamente.",
+            icon: "success",
+          });
+        } catch (error) {
+          console.error("Error al suspender el evento:", error);
+          Swal.fire({
+            title: "Error",
+            text: error?.message || "Error desconocido al suspender el evento.",
+            icon: "error",
+          });
+        }
       };
+
       const handleDelete = async (id) => {
         try {
           const response = await deleteVenue(id);
           if (response?.status === "deleted") {
             Swal.fire({
               title: "Eliminado",
-              text: response.data || "El evento ha sido eliminado correctamente.",
+              text:
+                response.data || "El evento ha sido eliminado correctamente.",
               icon: "success",
             });
 
@@ -79,14 +95,14 @@ const VenueConfigtable = (setData, setFilteredData) => [
 
           {/* Botón Activar/Desactivar */}
           <button
-            onClick={toggleActivOdisable}
+            onClick={() => handleSuspend(row.id)}
             className={`${
-              activOdisable
+              row.suspend === 1
                 ? "text-gray-500 hover:text-gray-600"
                 : "text-green-500 hover:text-green-600"
             }`}
           >
-            {activOdisable ? (
+            {row.suspend === 1 ? (
               <MdDesktopAccessDisabled size={20} />
             ) : (
               <MdOutlineDesktopWindows size={20} />

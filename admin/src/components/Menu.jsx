@@ -12,7 +12,7 @@ function Menu() {
         const response = await getMenu();
        
         setMenuHTML(response.data);    
-      console.log(response.data);
+       
       } catch (error) {
         console.error("Error:", error);
       }
