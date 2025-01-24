@@ -2,47 +2,101 @@ import { IoMdAddCircle } from "react-icons/io";
 import MapComponent from "../MapComponent";
 import { useState } from "react";
 import { VenueSetup } from "../VenueSetup/VenueSetup";
-
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getVenueById } from "../../../services/ServiceVenues";
 const CrudVenue = () => {
   const [position, setPosition] = useState([-34.6037, -58.3816]);
-  const [estacionamientos, setEstacionamientos] = useState([]);
+  const [venueData, setVenue] = useState({
+    address: "",
+    address_text: "",
+    cover_path: "",
+    description_text: "",
+    domain: "",
+    facebook: "",
+    head_text: "",
+    id: null,
+    instagram: "",
+    latitude: "",
+    logo_path: "",
+    longitude: "",
+    max_capacity: "",
+    name: "",
+    parkings: [],
+    search_enabled: 0,
+    suspend_at: "",
+    suspend_by: null,
+    thumbnail_path: "",
+    twitter: "",
+    website: "",
+  });
+
+  console.log(venueData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id } = useParams();
+  const isEditMode = id !== "new";
+  useEffect(() => {
+    const fetchVenueData = async (id) => {
+      const venueid = Number(id);
+      try {
+        setLoading(true);
+        const data = await getVenueById(venueid);
+        if (data.latitude.length > 0 && data.longitude.length > 0) {
+          setPosition([Number(data.latitude), Number(data.longitude)]);
+        }
+        setVenue(data);
+      } catch (err) {
+        console.error("Error al obtener los datos del venue:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isEditMode) fetchVenueData(id);
+  }, [id]);
+
+  if (loading) {
+    return <p>Cargando...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+
+    setVenue((prev) => ({
+      ...prev,
+      [name]: type === "number" ? Number(value) : value,
+    }));
+  };
+  const handleParkingChange = (index, e) => {
+    const { name, value } = e.target;
+
+    setVenue((prev) => {
+      const updatedParkings = [...prev.parkings];
+      updatedParkings[index] = { ...updatedParkings[index], [name]: value };
+      return { ...prev, parkings: updatedParkings };
+    });
+  };
 
   const handleAddEstacionamiento = () => {
-    setEstacionamientos([
-      ...estacionamientos,
-      { nombre: "", distancia: "", acuerdoPorcentaje: "", acuerdoSumaFija: "" },
-    ]);
+    setVenue((prevVenueData) => ({
+      ...prevVenueData,
+      parkings: [
+        ...prevVenueData.parkings,
+        {
+          name: "",
+          distance_meters: "",
+          agreement_percentage: "",
+          fixed_agreement: "",
+        },
+      ],
+    }));
   };
-
-  const handleInputChange = (index, field, value) => {
-    const updated = estacionamientos.map((item, i) =>
-      i === index ? { ...item, [field]: value } : item
-    );
-    setEstacionamientos(updated);
-  };
-  const TextAreaField = ({ label, ...props }) => (
-    <div className="relative space-y-1.5">
-      <label className="block text-sm font-medium text-gray-700 tracking-wide">
-        {label}
-      </label>
-      <textarea
-        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[100px]"
-        {...props}
-      />
-    </div>
-  );
-  const InputField = ({ label, type = "text", ...props }) => (
-    <div className="relative space-y-1.5">
-      <label className="block text-sm font-medium text-gray-700 tracking-wide">
-        {label}
-      </label>
-      <input
-        type={type}
-        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
-        {...props}
-      />
-    </div>
-  );
 
   return (
     <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-xl space-y-10">
@@ -52,7 +106,6 @@ const CrudVenue = () => {
           Gestión de Venue
         </h1>
       </div>
-
       {/* Main Form */}
       <form className="space-y-12">
         {/* Información General */}
@@ -67,46 +120,115 @@ const CrudVenue = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <InputField label="Nombre" placeholder="Ingrese el nombre" />
-            <InputField
-              label="Capacidad Máxima"
-              type="number"
-              placeholder="Ej: 1000"
-            />
-            <InputField label="Dominio" placeholder="ejemplo.com" />
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Nombre
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                value={venueData.name}
+                onChange={handleChange}
+                placeholder="Ingrese el nombre"
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
+              />
+            </div>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Capacidad Maxima
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="max_capacity"
+                value={venueData.max_capacity}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
+              />
+            </div>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="domain"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Capacidad Maxima
+              </label>
+              <input
+                id="domain"
+                type="text"
+                name="domain"
+                value={venueData.domain}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
+              />
+            </div>
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-gray-700 tracking-wide">
                 Barra de búsqueda en home
               </label>
               <select className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800">
-                <option value="">Seleccione una opción</option>
-                <option value="1">Habilitar</option>
-                <option value="0">Deshabilitar</option>
+                <option>Seleccione unas de estas opciones</option>
+                <option value={venueData.search_enabled}>Habilitar</option>
+                <option value={venueData.search_enabled}>Deshabilitar</option>
               </select>
             </div>
           </div>
-
           <div className="space-y-6">
-            <h4 className="text-lg font-medium text-gray-600">
-              Textos  
-            </h4>
-            <TextAreaField
-              label="Texto de Inicio"
-              placeholder="Ej: Reservá tu parking seguro, llegá tranquilo."
-              defaultValue="Ej:Reservá tu parking seguro, llegá tranquilo."
-            />
-
-            <TextAreaField
-              label="Texto de Dirección"
-              placeholder="Ingrese la dirección completa"
-              defaultValue="Ej:Av. Coronel Roca 6902, Ciudad de Buenos Aires"
-            />
-
-            <TextAreaField
-              label="Texto de Head"
-              
-              defaultValue="Ej:Av. Coronel Roca 6902, Ciudad de Buenos Aires"
-            />
+            <h4 className="text-lg font-medium text-gray-600">Textos</h4>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="description_text"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Texto de Inicio
+              </label>
+              <input
+                id="description_text"
+                name="description_text"
+                value={venueData.description_text}
+                onChange={handleChange}
+                placeholder="Ej: Reservá tu parking seguro, llegá tranquilo."
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
+              />
+            </div>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="address_text"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Texto de direccion
+              </label>
+              <input
+                id="address_text"
+                name="address_text"
+                value={venueData.address_text}
+                onChange={handleChange}
+                placeholder="Ingrese la dirección completa"
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
+              />
+            </div>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="description_text"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Texto de Head
+              </label>
+              <textarea
+                id="head_text"
+                name="head_text"
+                value={venueData.head_text}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[100px]"
+              />
+            </div>
           </div>
         </section>
 
@@ -125,6 +247,9 @@ const CrudVenue = () => {
                 type="text"
                 placeholder="Ingrese la dirección"
                 className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                onChange={handleChange}
+                value={venueData.address}
+                name="address"
               />
               <button
                 type="button"
@@ -166,46 +291,78 @@ const CrudVenue = () => {
           </div>
 
           <div className="space-y-6">
-            {estacionamientos.map((est, index) => (
+            {venueData.parkings.map((parking, index) => (
               <div
                 key={index}
                 className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-gray-50 rounded-lg"
               >
-                <InputField
-                  value={est.nombre}
-                  label="Nombre"
-                  onChange={(e) =>
-                    handleInputChange(index, "nombre", e.target.value)
-                  }
-                />
-                <InputField
-                  value={est.distancia}
-                  label="Distancia (mts)"
-                  type="number"
-                  onChange={(e) =>
-                    handleInputChange(index, "distancia", e.target.value)
-                  }
-                />
-                <InputField
-                  value={est.acuerdoPorcentaje}
-                  label="Acuerdo %"
-                  type="number"
-                  onChange={(e) =>
-                    handleInputChange(
-                      index,
-                      "acuerdoPorcentaje",
-                      e.target.value
-                    )
-                  }
-                />
-                <InputField
-                  value={est.acuerdoSumaFija}
-                  label="Acuerdo Suma Fija"
-                  type="number"
-                  onChange={(e) =>
-                    handleInputChange(index, "acuerdoSumaFija", e.target.value)
-                  }
-                />
+                <div className="relative space-y-1.5">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Nombre
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    value={parking.name}
+                    onChange={(e) => handleParkingChange(index, e)}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2
+                     focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+                  />
+                </div>
+                <div className="relative space-y-1.5">
+                  <label
+                    htmlFor="distance_meters"
+                    className="block text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Distancia (mts)
+                  </label>
+                  <input
+                    value={parking.distance_meters}
+                    onChange={(e) => handleParkingChange(index, e)}
+                    id="distance_meters"
+                    name="distance_meters"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                     transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+                  />
+                </div>
+
+                <div className="relative space-y-1.5">
+                  <label
+                    htmlFor="fixed_agreement"
+                    className="block text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Acuerdo %
+                  </label>
+                  <input
+                    id="fixed_agreement"
+                    name="fixed_agreement"
+                    value={parking.fixed_agreement}
+                    onChange={(e) => handleParkingChange(index, e)}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
+                     duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+                  />
+                </div>
+
+                <div className="relative space-y-1.5">
+                  <label
+                    htmlFor="agreement_percentage"
+                    className="block text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Acuerdo Suma Fija
+                  </label>
+                  <input
+                    id="agreement_percentage"
+                    name="agreement_percentage"
+                    value={parking.agreement_percentage}
+                    onChange={(e) => handleParkingChange(index, e)}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg
+                     focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
+                      duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -223,10 +380,78 @@ const CrudVenue = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <InputField label="Facebook" placeholder="URL de Facebook" />
-            <InputField label="Instagram" placeholder="URL de Instagram" />
-            <InputField label="Twitter" placeholder="URL de Twitter" />
-            <InputField label="Sitio web" placeholder="URL del sitio web" />
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="facebook"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Facebook
+              </label>
+              <input
+                id="facebook"
+                name="facebook"
+                placeholder="URL de Facebook"
+                value={venueData.facebook}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+              />
+            </div>
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="instagram"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Instagram
+              </label>
+              <input
+                id="instagram"
+                name="instagram"
+                placeholder="URL de Instagram"
+                value={venueData.instagram}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border 
+                 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                 transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+              />
+            </div>
+
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="twitter"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Twitter
+              </label>
+              <input
+                id="twitter"
+                name="twitter"
+                placeholder="URL de twitter"
+                value={venueData.twitter}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
+                 duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
+              />
+            </div>
+
+            <div className="relative space-y-1.5">
+              <label
+                htmlFor="website"
+                className="block text-sm font-medium text-gray-700 tracking-wide"
+              >
+                Sitio web
+              </label>
+              <input
+                id="website"
+                name="websiter"
+                placeholder="URL del sitio web"
+                value={venueData.website}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg 
+                focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 *
+                 placeholder-gray-400 text-sm min-h-[20px]"
+              />
+            </div>
           </div>
         </section>
 
@@ -289,7 +514,7 @@ const CrudVenue = () => {
             type="submit"
             className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
           >
-            Guardar Cambios
+            {venueData.id ? "Actualizar Lugar" : "Crear Lugar"}
           </button>
         </div>
 

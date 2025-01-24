@@ -56,6 +56,32 @@ export const deleteVenue = async (id) => {
     );
   }
 };
+// Venue por id 
+ 
+export const getVenueById = async (id) => {
+  try {
+    const response = await axios.get(`${apiUrl}venues/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data.data;  // Regresa los datos obtenidos
+    } else {
+      throw new Error("Error en la respuesta del servidor.");
+    }
+  } catch (error) {
+    throw new Error(
+      error?.response
+        ? `Error en la API: ${error.response.status} - ${
+            error.response.data?.message || "Error desconocido"
+          }`
+        : "Error desconocido"
+    );
+  }
+};
 
 // Suspender/Habilitar
 export const toggleSuspend = async (id) => {
