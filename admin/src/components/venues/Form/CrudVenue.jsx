@@ -4,10 +4,11 @@ import { useState } from "react";
 import { VenueSetup } from "../VenueSetup/VenueSetup";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getVenueById } from "../../../services/ServiceVenues";
+import { getVenueById, putVenueEdit } from "../../../services/ServiceVenues";
 const CrudVenue = () => {
   const [position, setPosition] = useState([-34.6037, -58.3816]);
   const [venueData, setVenue] = useState({
+    company_id: "",
     address: "",
     address_text: "",
     cover_path: "",
@@ -30,22 +31,25 @@ const CrudVenue = () => {
     twitter: "",
     website: "",
   });
-
   console.log(venueData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   const { id } = useParams();
   const isEditMode = id !== "new";
+
   useEffect(() => {
     const fetchVenueData = async (id) => {
       const venueid = Number(id);
       try {
         setLoading(true);
         const data = await getVenueById(venueid);
+        
         if (data.latitude.length > 0 && data.longitude.length > 0) {
           setPosition([Number(data.latitude), Number(data.longitude)]);
         }
-        setVenue(data);
+        
+        setVenue(data); // Actualiza los datos del venue
       } catch (err) {
         console.error("Error al obtener los datos del venue:", err);
         setError(err.message);
@@ -54,11 +58,17 @@ const CrudVenue = () => {
       }
     };
 
-    if (isEditMode) fetchVenueData(id);
-  }, [id]);
+    // Solo llamamos a la API si estamos en modo de edición
+    if (isEditMode && id !== "new") {
+      fetchVenueData(id);
+    } else {
+      // Si es un nuevo venue, no necesitamos cargar datos desde la API
+      setLoading(false);
+    }
+  }, [id, isEditMode]);
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <p>Cargando...</p>; // Muestra el cargando solo cuando estamos en modo de edición
   }
 
   if (error) {
@@ -98,16 +108,40 @@ const CrudVenue = () => {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    if (isEditMode) {
+
+      try {
+        e.preventDefault();
+  
+        if (!venueData.id || !venueData.name || !venueData.address) {
+          throw new Error("Faltan datos obligatorios para actualizar el venue.");
+        }
+  
+        if (isEditMode) {
+          const response = await putVenueEdit(venueData.id, venueData);
+          console.log("Venue actualizado:", response);
+          alert("Venue actualizado correctamente."); // Feedback al usuario
+        }
+      } catch (error) {
+        console.error("Error al enviar el formulario:", error.message);
+        alert(`Error: ${error.message}`); // Feedback en caso de error
+      }
+    } else { 
+      console.log("Creando nuevo venue:", venueData);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-xl space-y-10">
-      {/* Header Section */}
+      
       <div className="border-b border-gray-200 pb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
           Gestión de Venue
         </h1>
       </div>
       {/* Main Form */}
-      <form className="space-y-12">
+      <form className="space-y-12" onSubmit={handleSubmit}>
         {/* Información General */}
         <section className="space-y-6">
           <div className="border-b border-gray-200 pb-4">
@@ -260,7 +294,17 @@ const CrudVenue = () => {
             </div>
 
             <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
-              <MapComponent position={position} setPosition={setPosition} />
+              <MapComponent
+                position={position}
+                setPosition={(newPosition) => {
+                  setPosition(newPosition);
+                  setVenue((prevVenueData) => ({
+                    ...prevVenueData,
+                    latitude: String(newPosition[0]),
+                    longitude: String(newPosition[1]),
+                  }));
+                }}
+              />
             </div>
           </div>
         </section>
@@ -443,7 +487,7 @@ const CrudVenue = () => {
               </label>
               <input
                 id="website"
-                name="websiter"
+                name="website"
                 placeholder="URL del sitio web"
                 value={venueData.website}
                 onChange={handleChange}

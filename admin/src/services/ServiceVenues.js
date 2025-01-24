@@ -56,8 +56,8 @@ export const deleteVenue = async (id) => {
     );
   }
 };
-// Venue por id 
- 
+// Venue por id
+
 export const getVenueById = async (id) => {
   try {
     const response = await axios.get(`${apiUrl}venues/${id}`, {
@@ -68,7 +68,7 @@ export const getVenueById = async (id) => {
     });
 
     if (response.status === 200) {
-      return response.data.data;  // Regresa los datos obtenidos
+      return response.data.data; // Regresa los datos obtenidos
     } else {
       throw new Error("Error en la respuesta del servidor.");
     }
@@ -114,3 +114,29 @@ export const toggleSuspend = async (id) => {
   }
 };
 
+export const putVenueEdit = async (id, venueData) => {
+  console.log(`${apiUrl}venues/${id}`);
+  try {
+    const response = await axios.put(`${apiUrl}venues/${id}`, venueData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.status === 200) {
+      console.log(response);
+      return response.data;
+    } else {
+      console.log(response);
+      throw new Error("Error inesperado en la API.");
+    }
+  } catch (error) {
+    throw new Error(
+      error?.response
+        ? `Error en la API: ${error.response.status} - ${
+            error.response.data?.message || "Error desconocido"
+          }`
+        : "Error desconocido"
+    );
+  }
+};
