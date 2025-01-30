@@ -3,13 +3,21 @@ import { MdLabelOutline } from "react-icons/md";
 import { FaArrowDown } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-const EventoNewForm = () => {
+import { NavLink, useParams, useNavigate } from "react-router-dom";
+
+const EventoCrud = () => {
+  const { id } = useParams();
+  const isModeEdit = id !== "new";
+  const navigate = useNavigate();
   const [showEventTime, setShowEventTime] = useState(false);
 
   return (
     <div>
       <div className="mb-8 ml-2 mt-4 border-b-2  ">
-        <h1 className="text-3xl font-bold mb-4 mt-8  ">Nuevo Evento</h1>
+        <h1 className="text-3xl font-bold mb-4 mt-8  ">
+          {" "}
+          {isModeEdit ? "Editar Evento" : "Nuevo Evento"}
+        </h1>
       </div>
       <form className="max-w-7xl   bg-white p-8">
         {/* Encabezado */}
@@ -200,13 +208,31 @@ const EventoNewForm = () => {
         </div>
 
         <div className="flex justify-end mt-6">
-          <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500">
-            Guardar
-          </button>
+          {isModeEdit ? (
+            <div>
+              <NavLink
+                to="/eventos/estacionamientos"
+                className="px-6 py-2 bg-[#4B6FC7] text-white rounded ml-3"
+              >
+                Estacionamientos
+              </NavLink>
+              <NavLink className="px-6 py-2 bg-[#4B6FC7] text-white rounded  ml-3"
+                to="/eventos/plazas">
+                Plazas
+              </NavLink>
+              <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
+                Editar
+              </button>
+            </div>
+          ) : (
+            <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
+              Guardar
+            </button>
+          )}
         </div>
       </form>
     </div>
   );
 };
 
-export { EventoNewForm };
+export { EventoCrud };
