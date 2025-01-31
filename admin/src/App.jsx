@@ -8,6 +8,7 @@ import { ViewVenues } from "./views/venues/ViewVenues";
 import { ViewEventosNew } from "./views/eventos/ViewEventosNew";
 import { ViewEstacionamiento } from "./views/estacionamiento/ViewEstacionamiento";
 import { ViewEstacionamientoCrud } from "./views/estacionamiento/ViewEstacionaminetoCrud";
+import { ViewEventoPlazas } from "./views/eventos/ViewEventoPlazas";
 import { ViewHome } from "./views/ViewHome";
 
 import { EventosPlazas } from "./page/eventos/EventosPlazas";
@@ -29,8 +30,11 @@ function App() {
               <Route path="/venues/:id" element={<ViewVenueCrud />} />
               <Route path="/eventos" element={<Eventos />} />
               <Route path="/eventos/:id" element={<ViewEventosNew />} />
-              <Route path="/eventos/plazas" element={<EventosPlazas/>} />
-              <Route path="/eventos/estacionamientos"   element={<ViewEventoEstacionamiento/>} />
+              <Route path="/eventos/plazas" element={<ViewEventoPlazas />} />
+              <Route
+                path="/eventos/estacionamientos"
+                element={<ViewEventoEstacionamiento />}
+              />
               <Route
                 path="/estacionamiento"
                 element={<ViewEstacionamiento />}
