@@ -20,13 +20,13 @@ const EstacionamientoTabla = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     const obtenerEstacionamientos = async () => {
       if (data.length > 0) return;
       try {
         setIsLoading(true);
         const response = await getEstacionamiento();
+        console.log(response);
         setData(response);
         setError(null);
       } catch (error) {
@@ -85,7 +85,7 @@ const EstacionamientoTabla = () => {
     try {
       let respuesta;
 
-      if (row.activo === 1) {
+      if (row.active === 1) {
         respuesta = await patchDisabledEnableEstacionamiento(row.id);
         if (respuesta.status === "success") {
           Swal.fire({
@@ -106,8 +106,9 @@ const EstacionamientoTabla = () => {
           });
         }
       }
-       
+
       const newData = await getEstacionamiento();
+
       setData(newData);
     } catch (error) {
       console.error("Error al cambiar el estado del estacionamiento:", error);
@@ -129,43 +130,43 @@ const EstacionamientoTabla = () => {
         <div
           className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
-          {row.nombre}
+          {row.name}
         </div>
       ),
     },
     {
       name: "DIRECCION",
-      selector: (row) => row.direccion,
+      selector: (row) => row.address,
       sortable: true,
       cell: (row) => (
         <div
           className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
-          {row.direccion}
+          {row.address}
         </div>
       ),
     },
     {
       name: "CÓDIGO",
-      selector: (row) => row.codigo,
+      selector: (row) => row.code,
       sortable: true,
       cell: (row) => (
         <div
           className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
         >
-          {row.codigo}
+          {row.code}
         </div>
       ),
     },
     {
       name: "ACTIVO",
-      selector: (row) => (row.activo ? "Sí" : "No"),
+      selector: (row) => (row.active ? "Sí" : "No"),
       sortable: true,
       cell: (row) => (
         <div
-          className={`${row.activo === 0 ? "text-red-500" : "text-gray-800"}`}
+          className={`${row.active === 0 ? "text-red-500" : "text-gray-800"}`}
         >
-          {row.activo ? "Sí" : "No"}
+          {row.active ? "Sí" : "No"}
         </div>
       ),
     },
@@ -177,12 +178,12 @@ const EstacionamientoTabla = () => {
           <button
             onClick={() => handleDisableEnable(row)}
             className={`${
-              row.activo === 0
+              row.active === 0
                 ? "text-gray-500 hover:gray-red-800"
                 : "text-green-500 hover:text-green-600"
             }`}
           >
-            {row.activo === 1 ? (
+            {row.active === 1 ? (
               <MdOutlineDesktopWindows size={20} />
             ) : (
               <MdDesktopAccessDisabled size={20} />
