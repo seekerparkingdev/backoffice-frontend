@@ -1,10 +1,15 @@
+import Swal from "sweetalert2";
 import { IoMdAddCircle } from "react-icons/io";
 import MapComponent from "../MapComponent";
 import { useState } from "react";
 import { VenueSetup } from "../VenueSetup/VenueSetup";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getVenueById, putVenueEdit } from "../../../services/ServiceVenues";
+import {
+  getVenueById,
+  postVenueNew,
+  putVenueEdit,
+} from "../../../services/ServiceVenues";
 const CrudVenue = () => {
   const [position, setPosition] = useState([-34.6037, -58.3816]);
   const [venueData, setVenue] = useState({
@@ -34,7 +39,7 @@ const CrudVenue = () => {
   console.log(venueData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const { id } = useParams();
   const isEditMode = id !== "new";
 
@@ -44,11 +49,11 @@ const CrudVenue = () => {
       try {
         setLoading(true);
         const data = await getVenueById(venueid);
-        
+        console.log(data);
         if (data.latitude.length > 0 && data.longitude.length > 0) {
           setPosition([Number(data.latitude), Number(data.longitude)]);
         }
-        
+        console.log("Esta es la data", data);
         setVenue(data); // Actualiza los datos del venue
       } catch (err) {
         console.error("Error al obtener los datos del venue:", err);
@@ -110,31 +115,43 @@ const CrudVenue = () => {
 
   const handleSubmit = async (e) => {
     if (isEditMode) {
-
       try {
         e.preventDefault();
-  
+
         if (!venueData.id || !venueData.name || !venueData.address) {
-          throw new Error("Faltan datos obligatorios para actualizar el venue.");
+          throw new Error(
+            "Faltan datos obligatorios para actualizar el venue."
+          );
         }
-  
+
         if (isEditMode) {
           const response = await putVenueEdit(venueData.id, venueData);
           console.log("Venue actualizado:", response);
-          alert("Venue actualizado correctamente."); // Feedback al usuario
+
+          Swal.fire({
+            icon: "success",
+            title: "¡Éxito!",
+            text: "Venue actualizado correctamente.",
+          });
         }
       } catch (error) {
         console.error("Error al enviar el formulario:", error.message);
         alert(`Error: ${error.message}`); // Feedback en caso de error
       }
-    } else { 
-      console.log("Creando nuevo venue:", venueData);
+    } else {
+      // Crear nuevo venue
+      try {
+        e.preventDefault();
+        const response = await postVenueNew(venueData);
+        console.log("Venue creado:", response);
+      } catch (error) {
+        console.log("Venue no  creado:", error);
+      }
     }
   };
 
   return (
     <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-xl space-y-10">
-      
       <div className="border-b border-gray-200 pb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
           Gestión de Venue
@@ -180,7 +197,7 @@ const CrudVenue = () => {
               </label>
               <input
                 id="name"
-                type="text"
+                type="number"
                 name="max_capacity"
                 value={venueData.max_capacity}
                 onChange={handleChange}
@@ -192,7 +209,7 @@ const CrudVenue = () => {
                 htmlFor="domain"
                 className="block text-sm font-medium text-gray-700 tracking-wide"
               >
-                Capacidad Maxima
+                Dominio (No incluir protocolo https/http)
               </label>
               <input
                 id="domain"
@@ -500,57 +517,59 @@ const CrudVenue = () => {
         </section>
 
         {/* Eventos Table */}
-        <section className="space-y-4">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold text-gray-800">Eventos</h3>
-            <p className="text-gray-600 mt-1">
-              Vea la información de los diferentes eventos
-            </p>
-            {/* <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+        {isEditMode ? (
+          <section className="space-y-4">
+            <div className="border-b border-gray-200 pb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Eventos</h3>
+              <p className="text-gray-600 mt-1">
+                Vea la información de los diferentes eventos
+              </p>
+              {/* <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
             <IoMdAddCircle className="mr-2" />
             Nuevo Evento
           </button> */}
-          </div>
+            </div>
 
-          <div className="overflow-x-auto rounded-lg border border-gray-200">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                    Evento
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                    Fecha
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                    Descripción
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                    Opciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr className="hover:bg-gray-50 transition-colors duration-200">
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    Carrera Nacional
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    15/02/2025
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    Evento principal del mes.
-                  </td>
-                  <td className="px-6 py-4">
-                    <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
-                      Ver detalles
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
+                      Evento
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
+                      Fecha
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
+                      Descripción
+                    </th>
+                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
+                      Opciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      Carrera Nacional
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      15/02/2025
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      Evento principal del mes.
+                    </td>
+                    <td className="px-6 py-4">
+                      <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
+                        Ver detalles
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : null}
 
         {/* Submit Button */}
         <div className="flex justify-end pt-6">
