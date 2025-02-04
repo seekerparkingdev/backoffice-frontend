@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 
-const EventosFiltroForm = () => {
+const EventosFiltroForm = ({ onFilterChange }) => {
   const [nombreEvento, setNombreEvento] = useState("");
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
   const [venue, setVenue] = useState("");
 
   const handleFiltrar = () => {
+    const filtros = {};
+    if (nombreEvento.trim()) filtros.name = nombreEvento;
+    if (fechaDesde) filtros.date_from = fechaDesde;
+    if (fechaHasta) filtros.date_to = fechaHasta;
+    if (venue) filtros.venue_id = venue;
+
+    onFilterChange(filtros);
+
     Swal.fire({
       title: "Filtros Aplicados",
       html: `
@@ -16,92 +24,87 @@ const EventosFiltroForm = () => {
         <p><strong>Fecha Hasta:</strong> ${fechaHasta || "No especificada"}</p>
         <p><strong>Venue:</strong> ${venue || "No especificado"}</p>
       `,
-      icon: "info",
+      icon: "success",
       confirmButtonText: "Aceptar",
     });
   };
 
+  const handleLimpiar = () => {
+    setNombreEvento("");
+    setFechaDesde("");
+    setFechaHasta("");
+    setVenue("");
+    onFilterChange({}); // Resetear los filtros en EventoGrilla
+  };
+
   return (
-    <div className="flex flex-wrap items-end gap-4 p-4     max-w-full">
+    <div className="flex flex-wrap items-end gap-4 p-4   rounded-lg">
       {/* Nombre del evento */}
       <div className="flex flex-col">
-        <label
-          htmlFor="eventNombre"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Nombre
+        <label className="block text-sm font-medium text-gray-700">
+          Nombre del Evento
         </label>
         <input
           type="text"
-          id="eventNombre"
           value={nombreEvento}
           onChange={(e) => setNombreEvento(e.target.value)}
-          className="mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          onKeyPress={(e) => e.key === "Enter" && handleFiltrar()}
+          className="mt-1 block w-48 px-2 py-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
-      {/* Fecha desde */}
+      {/* Fecha Desde */}
       <div className="flex flex-col">
-        <label
-          htmlFor="fechaDesde"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Fecha desde
+        <label className="block text-sm font-medium text-gray-700">
+          Fecha Desde
         </label>
         <input
           type="date"
-          id="fechaDesde"
           value={fechaDesde}
           onChange={(e) => setFechaDesde(e.target.value)}
-          className="mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-48 px-2 py-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
-      {/* Fecha hasta */}
+      {/* Fecha Hasta */}
       <div className="flex flex-col">
-        <label
-          htmlFor="fechaHasta"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Fecha hasta
+        <label className="block text-sm font-medium text-gray-700">
+          Fecha Hasta
         </label>
         <input
           type="date"
-          id="fechaHasta"
           value={fechaHasta}
           onChange={(e) => setFechaHasta(e.target.value)}
-          className="mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-48 px-2 py-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
       {/* Venue */}
       <div className="flex flex-col">
-        <label
-          htmlFor="venue"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Venue
+        <label className="block text-sm font-medium text-gray-700">
+          Venue (ID)
         </label>
-        <select
-          id="venue"
+        <input
+          type="number"
           value={venue}
           onChange={(e) => setVenue(e.target.value)}
-          className="mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-        >
-          <option value="">Seleccionar un venue</option>
-          <option value="Venue A">Venue A</option>
-          <option value="Venue B">Venue B</option>
-          <option value="Venue C">Venue C</option>
-        </select>
+          className="mt-1 block w-32 px-2 py-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
       </div>
 
-      {/* Botón Filtrar */}
-      <div className="flex flex-col">
+      {/* Botones */}
+      <div className="flex items-end gap-2">
         <button
           onClick={handleFiltrar}
-          className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Filtrar
+        </button>
+        <button
+          onClick={handleLimpiar}
+          className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+        >
+          Limpiar
         </button>
       </div>
     </div>
@@ -109,3 +112,4 @@ const EventosFiltroForm = () => {
 };
 
 export default EventosFiltroForm;
+

@@ -1,64 +1,50 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ConfigColumns } from "./ConfigColumns";
 import DataTable from "react-data-table-component";
 import EventosFiltroForm from "../form/EventosFiltroForm";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Titulo } from "../../Titulo";
-
-const data = [
-  {
-    id: 1,
-    resumen: "Concierto de ROD STEWART en Nueva York",
-    nombre: "ROD STEWART",
-    fecha: "21:00 04/10/2023",
-    venue: "Madison Square Garden, Nueva York",
-  },
-  {
-    id: 2,
-    resumen: "Show exclusivo de ULISES BUENO en Buenos Aires",
-    nombre: "ULISES BUENO",
-    fecha: "20:00 26/01/2024",
-    venue: "Luna Park, Buenos Aires",
-  },
-  {
-    id: 3,
-    resumen: "COLDPLAY en su gira mundial por Londres",
-    nombre: "COLDPLAY",
-    fecha: "20:30 15/12/2024",
-    venue: "Wembley Stadium, Londres",
-  },
-  {
-    id: 4,
-    resumen: "Set especial de NICK WARREN en Colorado",
-    nombre: "NICK WARREN",
-    fecha: "22:00 10/02/2024",
-    venue: "Red Rocks Amphitheatre, Colorado",
-  },
-  {
-    id: 5,
-    resumen: "Festival de música en California con artistas top",
-    nombre: "BIZARREN FESTIVAL",
-    fecha: "20:30 01/03/2024",
-    venue: "Coachella Valley, California",
-  },
-  {
-    id: 6,
-    resumen: "Techno live de Richie Hawtin en Berlín",
-    nombre: "Richie Hawtin",
-    fecha: "23:10 04/05/2024",
-    venue: "Berghain, Berlín",
-  },
-];
+import { getEventos } from "../../../services/ServiceEventos";
+import { debounce } from "lodash";
 
 const EventoGrilla = () => {
+  const [data2, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filtros, setFiltros] = useState({});
+
+  // Función de obtención de eventos con debounce
+  const fetchEventos = useCallback(
+    debounce(async (filtros) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await getEventos(filtros);
+        setData(Array.isArray(response) ? response : []);
+      } catch (error) {
+        setError("Error al obtener los eventos.");
+        console.error("Error al obtener los eventos:", error);
+      } finally {
+        setLoading(false);
+      }
+    }, 500),
+    []
+  );
+
+  // Ejecutar cada vez que los filtros cambian
+  useEffect(() => {
+    fetchEventos(filtros);
+  }, [filtros, fetchEventos]);
+
   const navigate = useNavigate();
+
   const handleRowClick = (row) => {
     navigate(`/eventos/${row.id}`);
   };
 
   return (
     <div className="flex justify-center bg-gray-100">
-      <div className="p-6 min-h-screen w-full  ">
+      <div className="p-6 min-h-screen w-full">
         <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-5 border-b-2 border-gray-200 pb-9">
             <Titulo titulo={"Eventos"} className="text-xl font-bold" />
@@ -69,20 +55,32 @@ const EventoGrilla = () => {
             </NavLink>
           </div>
 
+          {/* Formulario de filtros */}
           <div className="flex justify-start mb-6">
-            <EventosFiltroForm />
+            <EventosFiltroForm onFilterChange={setFiltros} />
           </div>
 
-          <div className="overflow-x-auto">
-            <DataTable
-              columns={ConfigColumns}
-              data={data}
-              pagination
-              onRowClicked={handleRowClick}
-              highlightOnHover
-              className="rounded-lg"
-            />
-          </div>
+          {/* Mensajes de estado */}
+          {loading ? (
+            <p className="text-center text-gray-500">Cargando eventos...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : data2.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No hay eventos disponibles.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <DataTable
+                columns={ConfigColumns(setData)}
+                data={data2}
+                pagination
+                onRowClicked={handleRowClick}
+                highlightOnHover
+                className="rounded-lg"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -90,3 +88,4 @@ const EventoGrilla = () => {
 };
 
 export default EventoGrilla;
+
