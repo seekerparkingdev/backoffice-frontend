@@ -1,18 +1,17 @@
-import { useState } from "react";
-import { EventosNewPage } from "../../page/eventos/EventosNewPage";
+import { EventosEstacionamiento } from "../../page/eventos/EventosEstacionamiento";
 import Nav from "../../components/Nav/Nav";
-const ViewEventosNew = () => {
+import { useState } from "react";
+const ViewEventoEstacionamiento = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
       <Nav sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-     
 
       <div>
-        <EventosNewPage />
+        <EventosEstacionamiento />
       </div>
     </div>
   );
 };
 
-export { ViewEventosNew };
+export { ViewEventoEstacionamiento };

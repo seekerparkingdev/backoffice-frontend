@@ -1,8 +1,8 @@
-import { MdEmail } from "react-icons/md";
-import { TiDelete } from "react-icons/ti";
-import { MdDesktopAccessDisabled } from "react-icons/md";
-import { MdOutlineDesktopWindows } from "react-icons/md";
-import { RiSurveyLine } from "react-icons/ri";
+import { CgMail } from "react-icons/cg";
+import { HiOutlineDuplicate } from "react-icons/hi";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { AiOutlineCheck } from "react-icons/ai";
+import { LuSendHorizontal } from "react-icons/lu";
 import Swal from "sweetalert2";
 import {
   deleteEvento,
@@ -10,21 +10,45 @@ import {
 } from "../../../services/ServiceEventos";
 
 const ConfigColumns = (setData) => [
+  { name: "Fecha del evento", selector: (row) => row.datetime, sortable: true },
   {
-    name: "Resumen",
-    selector: (row) => row.resumen,
-    sortable: true,
-  },
-  {
-    name: "Nombre",
+    name: "Nombre del evento",
     selector: (row) => row.name,
     sortable: true,
+    cell: (row) => <span className="text-black font-medium">{row.name}</span>,
   },
   {
-    name: "Fecha",
-    selector: (row) => row.date,
+    name: "Vendidas",
+    cell: (row) => {
+      console.log(row);
+
+      // Verificamos si hay estacionamientos y tipos de spots disponibles
+      const totalSpots = row.parkings?.[0]?.spot_quantity || 0;
+      const soldSpots =
+        row.parkings?.[0]?.spot_types?.reduce(
+          (acc, spot) => acc + (spot.quantity || 0),
+          0
+        ) || 0;
+
+      const percentage = totalSpots > 0 ? (soldSpots / totalSpots) * 100 : 0;
+
+      return (
+        <div className="w-32">
+          <p className="text-sm font-medium text-gray-700">
+            {soldSpots}/{totalSpots}
+          </p>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-[#76D8FF] h-2 rounded-full"
+              style={{ width: `${percentage}%` }}
+            ></div>
+          </div>
+        </div>
+      );
+    },
     sortable: true,
   },
+
   {
     name: "Venue",
     selector: (row) => row.venue,
@@ -47,6 +71,8 @@ const ConfigColumns = (setData) => [
 
         try {
           const response = await toggleSuspendEvent(id);
+
+           
           setData((prevData) =>
             prevData.map((item) =>
               item.id === id ? { ...item, suspend: item.suspend ? 0 : 1 } : item
@@ -101,37 +127,44 @@ const ConfigColumns = (setData) => [
       return (
         <div className="flex items-center gap-2">
           {/* Botón Email */}
-          <button className="text-blue-500 hover:text-blue-700">
-            <MdEmail size={20} />
+          <button
+            onClick={() => console.log("Enviar email a:", row)}
+            className="text-[#191919] "
+          >
+            <CgMail size={15} />
+          </button>
+          {/* Botón Marcar como completado */}
+          <button className="text-[#191919] ">
+            <HiOutlineDuplicate size={15} />
           </button>
 
-          {/* Botón Tilde */}
+          {/* Botón Suspender */}
+          {/* Botón Suspender / Habilitar */}
           <button
             onClick={() => handleSuspend(row.id)}
-            className={`${
-              row.suspend === 1
-                ? "text-gray-500 hover:text-gray-600"
-                : "text-green-500 hover:text-green-600"
-            }`}
+            className={`text-[${row.suspend ? "#D9534F" : "#1849D6"}]`} // Rojo si suspendido, azul si activo
+            title={row.suspend ? "Habilitar evento" : "Suspender evento"}
           >
-            {row.suspend === 1 ? (
-              <MdDesktopAccessDisabled size={20} />
+            {row.suspend ? (
+              <AiOutlineCheck size={15} />
             ) : (
-              <MdOutlineDesktopWindows size={20} />
+              <AiOutlineCheck size={15} />
             )}
           </button>
 
           {/* Botón Encuesta */}
-          <button className="text-yellow-500 hover:text-yellow-700">
-            <RiSurveyLine size={20} />
+          <button
+            onClick={() => console.log("Abrir encuesta para:", row)}
+            className="text-[#191919 -rotate-90"
+          >
+            <LuSendHorizontal size={15} />
           </button>
-
           {/* Botón Eliminar */}
           <button
             onClick={() => handleDelete(row.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-600  "
           >
-            <TiDelete size={20} />
+            <RiDeleteBinLine size={15} />
           </button>
         </div>
       );

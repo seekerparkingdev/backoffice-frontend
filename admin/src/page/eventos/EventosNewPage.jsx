@@ -1,9 +1,9 @@
-import { EventoNewForm } from "../../components/eventos/form/EventoNew/EventoNewForm"
+import { EventoCrud} from "../../components/eventos/form/EventoCrud"
 
 const EventosNewPage = () => {
     return (
         <div>
-            <EventoNewForm/>
+            <EventoCrud/>
         </div>
     )
 }
