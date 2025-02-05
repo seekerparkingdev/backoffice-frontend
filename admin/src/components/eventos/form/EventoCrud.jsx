@@ -1,15 +1,129 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import { MdLabelOutline } from "react-icons/md";
-import { FaArrowDown } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+
+// Servicios
+import { eventbyid } from "../../../services/ServiceEventos";
+import { postEvento } from "../../../services/ServiceEventos";
+import { getVenues } from "../../../services/ServiceVenues";
 
 const EventoCrud = () => {
+  const [data, setData] = useState({
+    name: "",
+    date: "",
+    hour: "",
+    venue_id: "",
+    purchace_limit_date: "",
+    id_event_type: "",
+    enabled_before: "",
+    enabled_after: "",
+    path: "",
+  });
+  console.log(data);
+  const [venues, setVenues] = useState({});
+
   const { id } = useParams();
   const isModeEdit = id !== "new";
-  const navigate = useNavigate();
   const [showEventTime, setShowEventTime] = useState(false);
+
+  useEffect(() => {
+    const venues = async () => {
+      try {
+        const response = await getVenues();
+
+        if (response.status === "success") {
+          setVenues(response.data.data);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "No se puede crear el evento",
+            text: "En este momento no es posible crear un evento. Inténtalo más tarde.",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "No se puede crear el evento",
+          text: "En este momento no es posible crear un evento. Inténtalo más tarde.",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    };
+
+    const getEvent = async () => {
+      try {
+        const response = await eventbyid(id);
+        console.log("Evento me trae esto:", response);
+
+        if (response.status === "success" && response.data) {
+          const eventData = response.data; //
+
+          setData({
+            name: eventData.nombre || "",
+            date: eventData.fecha || "",
+            hour: eventData.hora || "",
+            venue_id: eventData.id_venue || "",
+            purchace_limit_date: eventData.hora_limite_compra || "",
+            id_event_type:
+              eventData.evento_tipos.length > 0
+                ? eventData.evento_tipos[0]?.id
+                : "", //
+            enabled_before: eventData.habilitado_antes || "",
+            enabled_after: eventData.habilitado_despues || "",
+            path: "",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "No se puede cargar el evento",
+            text: "Inténtalo más tarde.",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al cargar el evento",
+          text: `Código de error: ${error.message || error}`,
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    };
+
+    if (isModeEdit) getEvent();
+    venues();
+  }, []);
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    if (!isModeEdit) {
+      try {
+        const response = await postEvento(data);
+        if (response.status === "success") {
+          alert("Creado correctamente");
+        } else {
+          alert("Error");
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else { 
+      
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+  };
 
   return (
     <div>
@@ -19,7 +133,7 @@ const EventoCrud = () => {
           {isModeEdit ? "Editar Evento" : "Nuevo Evento"}
         </h1>
       </div>
-      <form className="max-w-7xl   bg-white p-8">
+      <form className="max-w-7xl   bg-white p-8" onSubmit={handleOnSubmit}>
         {/* Encabezado */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold">Información general</h3>
@@ -46,19 +160,40 @@ const EventoCrud = () => {
                       Nombre del evento <b className="text-[#FF1010]"> *</b>
                     </label>
                     <input
+                      onChange={handleChange}
+                      name="name"
+                      value={data.name}
                       type="text"
                       className="w-full px-3 py-2 border rounded bg-[#F0F2F6] focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                       placeholder="La Bomba de Tiempo"
                     />
                   </div>
-                  <div className="w-64 ml-5 flex items-center gap-2 mt-6">
-                    <span className="transform rotate-[240deg]">
+                  <div className="w-64 ml-5 flex items-center gap-2 mt-6 relative">
+                    {/* Icono de etiqueta rotado */}
+                    <span className="transform rotate-[240deg] text-gray-700">
                       <MdLabelOutline />
                     </span>
-                    <span>Tipo de evento</span>
-                    <span className="ml-8">
-                      <FaArrowDown />
-                    </span>
+
+                    {/* Contenedor del select estilizado */}
+                    <div className="relative w-full cursor-pointer  appearance-none  outline-none">
+                      <select
+                        name="id_event_type"
+                        onChange={handleChange}
+                        value={data.id_event_type}
+                        className="appearance-none  bg-transparent border-none outline-none text-gray-700 w-full pr-6 cursor-pointer"
+                      >
+                        <option value={1}>Tipo de evento</option>
+                        <option value={2}>Conferencia</option>
+                        <option value={3}>Taller</option>
+                        <option value={4}>Webinar</option>
+                      </select>
+
+                      {/* Flecha personalizada  
+                      <span className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-700 pointer-events-none">
+                        <FaArrowDown />
+                      </span>
+                      */}
+                    </div>
                   </div>
                 </div>
 
@@ -68,7 +203,10 @@ const EventoCrud = () => {
                       Fecha del evento <b className="text-[#FF1010]"> *</b>
                     </label>
                     <input
-                      type="text"
+                      onChange={handleChange}
+                      type="date"
+                      name="date"
+                      value={data.date}
                       className="w-full px-3 py-2 border bg-[#F0F2F6] rounded focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                       placeholder="dd/mm/aaaa"
                     />
@@ -77,10 +215,21 @@ const EventoCrud = () => {
                     <label className="block text-sm mb-2">
                       Venue <b className="text-[#FF1010]"> *</b>
                     </label>
-                    <input
-                      type="text"
+                    <select
+                      onChange={handleChange}
+                      value={data.venue_id}
+                      name="venue_id"
                       className="w-full px-3 py-2 border rounded bg-[#F0F2F6] focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                    />
+                    >
+                      <option value="">Selecciona un venue</option>
+
+                      {venues.length > 0 &&
+                        venues.map((venue) => (
+                          <option key={venue.id} value={venue.id}>
+                            {venue.name}
+                          </option>
+                        ))}
+                    </select>
                   </div>
                 </div>
 
@@ -105,7 +254,10 @@ const EventoCrud = () => {
                         Hora del evento
                       </label>
                       <input
-                        type="date"
+                        onChange={handleChange}
+                        name="hour"
+                        value={data.hour}
+                        type="time"
                         className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
                       />
                     </div>
@@ -114,6 +266,9 @@ const EventoCrud = () => {
                         Hora límite de reserva/compra
                       </label>
                       <input
+                        onChange={handleChange}
+                        name="purchace_limit_date"
+                        value={data.purchace_limit_date}
                         type="date"
                         className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
                       />
@@ -131,6 +286,9 @@ const EventoCrud = () => {
                   </label>
                   <div className="flex items-center gap-2">
                     <input
+                      onChange={handleChange}
+                      name="path"
+                      value={data.path}
                       type="file"
                       className="px-4 py-2 border-none    bg-white text-sm hover:bg-gray-50"
                     />
@@ -191,6 +349,9 @@ const EventoCrud = () => {
                 Hora permitida de ingreso al parking
               </label>
               <input
+                onChange={handleChange}
+                value={data.enabled_before}
+                name="enabled_before"
                 type="date"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
@@ -200,6 +361,9 @@ const EventoCrud = () => {
                 Hora límite de salida del parking
               </label>
               <input
+                onChange={handleChange}
+                value={data.enabled_after}
+                name="enabled_after"
                 type="date"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
@@ -216,8 +380,10 @@ const EventoCrud = () => {
               >
                 Estacionamientos
               </NavLink>
-              <NavLink className="px-6 py-2 bg-[#4B6FC7] text-white rounded  ml-3"
-                to="/eventos/plazas">
+              <NavLink
+                className="px-6 py-2 bg-[#4B6FC7] text-white rounded  ml-3"
+                to="/eventos/plazas"
+              >
                 Plazas
               </NavLink>
               <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
@@ -225,8 +391,11 @@ const EventoCrud = () => {
               </button>
             </div>
           ) : (
-            <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
-              Guardar
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3"
+            >
+              Crear evento
             </button>
           )}
         </div>

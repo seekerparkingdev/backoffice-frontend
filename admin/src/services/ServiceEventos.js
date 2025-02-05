@@ -1,6 +1,7 @@
 import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = import.meta.env.VITE_API_TOKEN;
+
 export const getEventos = async (filtros = {}) => {
   console.log("Enviando filtros a la API:", filtros); // DEBUG
   if (!apiUrl || !token) {
@@ -16,7 +17,7 @@ export const getEventos = async (filtros = {}) => {
       },
       params: filtros, // Agregar filtros a la solicitud GET
     });
-    console.log(response?.data?.data?.data);
+    
     if (response.status === 200) {
       return response?.data?.data?.data || [];
     } else {
@@ -40,7 +41,7 @@ const manejarErrorAPI = (error) => {
 };
 
 export const deleteEvento = async (id) => {
-  console.log(id);
+  
   try {
     const response = await axios.delete(`${apiUrl}eventos/${id}`, {
       headers: {
@@ -48,7 +49,7 @@ export const deleteEvento = async (id) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+     
     if (response.status === 200) {
       return response.data;
     } else {
@@ -84,7 +85,7 @@ export const toggleSuspendEvent = async (id) => {
     );
 
     if (response.status === 200) {
-      console.log(response);
+       
       return response.data; // Devuelve los datos directamente.
     } else {
       throw new Error("Error inesperado en la API.");
@@ -97,5 +98,49 @@ export const toggleSuspendEvent = async (id) => {
           }`
         : "Error desconocido"
     );
+  }
+};
+
+export const postEvento = async (data) => {
+  try {
+    const response = await axios.post(`${apiUrl}eventos`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+     
+      return response.data;
+    } else {
+      console.log(response);
+      throw new Error("Error inesperado en la API.");
+    }
+  } catch (error) {
+    console.error("Error al crear  venue:", error);
+    throw error;
+  }
+};
+
+export const eventbyid = async (id) => {
+  try {
+    const response = await axios.get(`${apiUrl}eventos/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    
+    if (response.status === 200) {
+      
+     return response.data 
+    } else {
+      console.log(`error: ${response.data}`);
+      response.data;
+    }
+  } catch (error) {
+    console.error("Error al obtener evento por ID:", error);
+    throw error;
   }
 };
