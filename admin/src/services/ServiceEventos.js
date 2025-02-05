@@ -144,3 +144,21 @@ export const eventbyid = async (id) => {
     throw error;
   }
 };
+
+
+
+export const updateEvent = async (id, event) => { 
+  try {
+    const response = await axios.put(`${apiUrl}eventos/${id}`, event, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;  
+  } catch (error) { 
+    console.error("Error actualizando el evento:", error);
+    throw error;  
+  }
+};

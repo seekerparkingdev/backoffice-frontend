@@ -4,12 +4,13 @@ import { MdLabelOutline } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 import { NavLink, useParams } from "react-router-dom";
-
 // Servicios
-import { eventbyid } from "../../../services/ServiceEventos";
-import { postEvento } from "../../../services/ServiceEventos";
+import {
+  eventbyid,
+  updateEvent,
+  postEvento,
+} from "../../../services/ServiceEventos";
 import { getVenues } from "../../../services/ServiceVenues";
-
 const EventoCrud = () => {
   const [data, setData] = useState({
     name: "",
@@ -22,13 +23,11 @@ const EventoCrud = () => {
     enabled_after: "",
     path: "",
   });
-  console.log(data);
-  const [venues, setVenues] = useState({});
 
+  const [venues, setVenues] = useState({});
   const { id } = useParams();
   const isModeEdit = id !== "new";
   const [showEventTime, setShowEventTime] = useState(false);
-
   useEffect(() => {
     const venues = async () => {
       try {
@@ -55,11 +54,9 @@ const EventoCrud = () => {
         });
       }
     };
-
     const getEvent = async () => {
       try {
         const response = await eventbyid(id);
-        console.log("Evento me trae esto:", response);
 
         if (response.status === "success" && response.data) {
           const eventData = response.data; //
@@ -73,7 +70,7 @@ const EventoCrud = () => {
             id_event_type:
               eventData.evento_tipos.length > 0
                 ? eventData.evento_tipos[0]?.id
-                : "", //
+                : "",
             enabled_before: eventData.habilitado_antes || "",
             enabled_after: eventData.habilitado_despues || "",
             path: "",
@@ -97,11 +94,9 @@ const EventoCrud = () => {
         });
       }
     };
-
     if (isModeEdit) getEvent();
     venues();
   }, []);
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!isModeEdit) {
@@ -113,18 +108,40 @@ const EventoCrud = () => {
           alert("Error");
         }
       } catch (error) {
-        console.log(error.message);
+        alert("Error");
       }
-    } else { 
-      
+    } else {
+      try {
+        const response = await updateEvent(id, data);
+        if (response.status === "success") {
+          Swal.fire({
+            title: "¡Éxito!",
+            text: `El evento "${response.data.name}" ha sido editado correctamente.`,
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Hubo un problema al editar el evento. Por favor, intenta de nuevo.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: `Ocurrió un error: ${error.message || "Error desconocido"}`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
     }
   };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
   };
-
   return (
     <div>
       <div className="mb-8 ml-2 mt-4 border-b-2  ">
@@ -221,7 +238,9 @@ const EventoCrud = () => {
                       name="venue_id"
                       className="w-full px-3 py-2 border rounded bg-[#F0F2F6] focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                     >
-                      <option value="">Selecciona un venue</option>
+                      <option value="" disabled>
+                        Selecciona un venue
+                      </option>
 
                       {venues.length > 0 &&
                         venues.map((venue) => (
@@ -269,7 +288,7 @@ const EventoCrud = () => {
                         onChange={handleChange}
                         name="purchace_limit_date"
                         value={data.purchace_limit_date}
-                        type="date"
+                        type="datetime-local"
                         className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
                       />
                     </div>
@@ -352,7 +371,7 @@ const EventoCrud = () => {
                 onChange={handleChange}
                 value={data.enabled_before}
                 name="enabled_before"
-                type="date"
+                type="time"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
             </div>
@@ -364,7 +383,7 @@ const EventoCrud = () => {
                 onChange={handleChange}
                 value={data.enabled_after}
                 name="enabled_after"
-                type="date"
+                type="time"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
             </div>
@@ -375,7 +394,10 @@ const EventoCrud = () => {
           {isModeEdit ? (
             <div>
               <NavLink
-                to="/eventos/estacionamientos"
+                to={{
+                  pathname: "/eventos/estacionamientos",
+                  state: { eventId: id }, // Pasamos el objeto como estado
+                }}
                 className="px-6 py-2 bg-[#4B6FC7] text-white rounded ml-3"
               >
                 Estacionamientos

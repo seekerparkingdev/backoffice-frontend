@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useLocation } from "react-router-dom";
 const EventosEstacionamiento = () => {
+  const location = useLocation();
+  const { eventId, id } = location.state || {};
+  console.log(eventId, id);
   const [estacionamientoData, setEstacionamientoData] = useState({
     estacionamiento: "",
     auto: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
@@ -354,7 +358,6 @@ const EventosEstacionamiento = () => {
   const customStyles = {
     headRow: {
       style: {
-        
         backgroundColor: "#F3F3F3",
         fontWeight: "bold",
         fontSize: "14px",

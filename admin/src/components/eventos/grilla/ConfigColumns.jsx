@@ -51,9 +51,10 @@ const ConfigColumns = (setData) => [
 
   {
     name: "Venue",
-    selector: (row) => row.venue,
+    selector: (row) => row.venue?.name || "Sin información",
     sortable: true,
   },
+
   {
     name: "Acciones",
     cell: (row) => {
@@ -72,7 +73,6 @@ const ConfigColumns = (setData) => [
         try {
           const response = await toggleSuspendEvent(id);
 
-           
           setData((prevData) =>
             prevData.map((item) =>
               item.id === id ? { ...item, suspend: item.suspend ? 0 : 1 } : item
