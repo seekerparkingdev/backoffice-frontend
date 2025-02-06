@@ -5,12 +5,14 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import { eventbyid } from "../../services/ServiceEventos";
 import { updateEvent } from "../../services/ServiceEventos";
+import { getEstacionamiento } from "../../services/ServiceEstacionamiento";
 
 const EventosEstacionamiento = () => {
   const { id } = useParams();
-  const isModeEdit = id !== "new";
+  const isModeEdit = id !== Number(id);
   const [data, setData] = useState();
-
+  const [selectedParking, setSelectedParking] = useState(null);
+  const [estacionamientos, setEstacionamientos] = useState([]);
   useEffect(() => {
     const getEvent = async () => {
       try {
@@ -39,20 +41,65 @@ const EventosEstacionamiento = () => {
         });
       }
     };
-    if (isModeEdit) getEvent();
+
+    const getEstacionamientos = async () => {
+      try {
+        const response = await getEstacionamiento();
+
+        if (!response || response.length === 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "No hay estacionamientos disponibles",
+            text: "Por favor, intenta más tarde.",
+            confirmButtonColor: "#f39c12", // Color de botón amarillo de advertencia
+          });
+        } else {
+          console.log(response);
+          setEstacionamientos(response);
+
+          Swal.fire({
+            icon: "success",
+            title: "Estacionamientos cargados",
+            text: "Los datos han sido obtenidos correctamente.",
+            confirmButtonColor: "#28a745", // Color verde de éxito
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al obtener estacionamientos",
+          text: `Hubo un problema: ${error.message || error}`,
+          confirmButtonColor: "#d33", // Color rojo de error
+        });
+      }
+    };
+
+    if (id) getEvent();
+
+    getEstacionamientos();
   }, []);
-  console.log(data);
-  const [estacionamientoData, setEstacionamientoData] = useState({
-    estacionamiento: "",
-    auto: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    bicicleta: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    moto: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    pickup: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    suv: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    traffic: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-    distancia: "",
-  });
-  const [estacionamientos, setEstacionamientos] = useState([]);
+  const handleAddParking = () => {
+    if (!selectedParking) {
+      Swal.fire({
+        icon: "warning",
+        title: "Por favor, selecciona un estacionamiento",
+        confirmButtonColor: "#f39c12",
+      });
+      return;
+    }
+
+    // Buscar el estacionamiento en la lista de opciones
+    const parking = estacionamientos.find(
+      (p) => p.id === Number(selectedParking)
+    );
+
+    if (!parking) return;
+
+    console.log(parking);
+
+    // Limpiar la selección
+    setSelectedParking(null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,24 +131,7 @@ const EventosEstacionamiento = () => {
       }
     }
   };
-  const handleAddEstacionamiento = () => {
-    if (estacionamientoData.estacionamiento) {
-      setEstacionamientos([
-        ...estacionamientos,
-        { ...estacionamientoData, id: Date.now() },
-      ]);
-      setEstacionamientoData({
-        estacionamiento: "",
-        auto: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        bicicleta: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        moto: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        pickup: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        suv: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        traffic: { cantidad: "", precio: "", minimo: "", ocupadas: "" },
-        distancia: "",
-      });
-    }
-  };
+
   const handleChangeDistance = (id, value) => {
     setData((prevData) => {
       return prevData.map((parking) =>
@@ -156,17 +186,6 @@ const EventosEstacionamiento = () => {
       </div>
     ) : null;
   };
-  const opcionesEstacionamiento = [
-    { value: "Concepción Arenal 3878", label: "Concepción Arenal 3878" },
-    { value: "Acevedo 468", label: "Acevedo 468" },
-    { value: "Av. Cordoba 4341", label: "Av. Cordoba 4341" },
-    { value: "Av. Dorrego 1639", label: "Av. Dorrego 1639" },
-    {
-      value: "Movistar Arena Parking Oficial",
-      label: "Movistar Arena Parking Oficial",
-    },
-    { value: "Parking Camargo 953", label: "Parking Camargo 953" },
-  ];
 
   const VEHICLE_TYPES = {
     2: { key: "auto", name: "Auto" },
@@ -279,11 +298,13 @@ const EventosEstacionamiento = () => {
               id="estacionamiento"
               name="estacionamiento"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={selectedParking || ""}
+              onChange={(e) => setSelectedParking(e.target.value)}
             >
               <option value="">Seleccione un estacionamiento</option>
-              {opcionesEstacionamiento.map((opcion) => (
-                <option key={opcion.value} value={opcion.value}>
-                  {opcion.label}
+              {estacionamientos?.map((opcion) => (
+                <option key={opcion.id} value={opcion.id}>
+                  {opcion.name}
                 </option>
               ))}
             </select>
@@ -291,7 +312,7 @@ const EventosEstacionamiento = () => {
           <div className="col-span-1 sm:col-span-1 flex justify-start sm:justify-center">
             <button
               type="button"
-              onClick={handleAddEstacionamiento}
+              onClick={handleAddParking}
               className="flex items-center justify-center gap-2 px-8 py-2 bg-[#61B4CE] text-white font-semibold rounded-lg  transition-colors mr-3"
             >
               <span>+ Agregar</span>

@@ -54,7 +54,7 @@ const EventoCrud = () => {
         });
       }
     };
-    const getEvent = async () => {
+    const getEventId = async () => {
       try {
         const response = await eventbyid(id);
 
@@ -94,7 +94,7 @@ const EventoCrud = () => {
         });
       }
     };
-    if (isModeEdit) getEvent();
+    if (isModeEdit) getEventId();
     venues();
   }, []);
   const handleOnSubmit = async (e) => {
@@ -412,12 +412,12 @@ const EventoCrud = () => {
               </button>
             </div>
           ) : (
-            <button
-              type="submit"
+            <NavLink
+            to={'/eventos/estacionamientos'}
               className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3"
             >
-              Crear evento
-            </button>
+              Siguiente
+            </NavLink>
           )}
         </div>
       </form>

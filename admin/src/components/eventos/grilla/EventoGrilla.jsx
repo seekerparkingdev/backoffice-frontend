@@ -21,15 +21,14 @@ const EventoGrilla = () => {
       setError(null);
       try {
         const response = await getEventos(filtros);
-        console.log("data para la tabla", response);
+
         setData(Array.isArray(response) ? response : []);
       } catch (error) {
         setError("Error al obtener los eventos.");
-        console.error("Error al obtener los eventos:", error);
       } finally {
         setLoading(false);
       }
-    }, 500),
+    }, 100),
     []
   );
 
