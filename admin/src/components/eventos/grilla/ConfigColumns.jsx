@@ -20,18 +20,13 @@ const ConfigColumns = (setData) => [
   {
     name: "Vendidas",
     cell: (row) => {
-      console.log(row);
-
-      // Verificamos si hay estacionamientos y tipos de spots disponibles
       const totalSpots = row.parkings?.[0]?.spot_quantity || 0;
       const soldSpots =
         row.parkings?.[0]?.spot_types?.reduce(
           (acc, spot) => acc + (spot.quantity || 0),
           0
         ) || 0;
-
       const percentage = totalSpots > 0 ? (soldSpots / totalSpots) * 100 : 0;
-
       return (
         <div className="w-32">
           <p className="text-sm font-medium text-gray-700">
@@ -48,13 +43,11 @@ const ConfigColumns = (setData) => [
     },
     sortable: true,
   },
-
   {
     name: "Venue",
     selector: (row) => row.venue?.name || "Sin información",
     sortable: true,
   },
-
   {
     name: "Acciones",
     cell: (row) => {
@@ -67,18 +60,14 @@ const ConfigColumns = (setData) => [
           confirmButtonText: "Sí, cambiar",
           cancelButtonText: "Cancelar",
         });
-
         if (!result.isConfirmed) return;
-
         try {
           const response = await toggleSuspendEvent(id);
-
           setData((prevData) =>
             prevData.map((item) =>
               item.id === id ? { ...item, suspend: item.suspend ? 0 : 1 } : item
             )
           );
-
           Swal.fire({
             title: "Éxito",
             text: response.data?.message || "Estado del evento actualizado.",
@@ -93,7 +82,6 @@ const ConfigColumns = (setData) => [
           });
         }
       };
-
       const handleDelete = async (id) => {
         try {
           const response = await deleteEvento(id);
@@ -104,8 +92,6 @@ const ConfigColumns = (setData) => [
                 response.data || "El evento ha sido eliminado correctamente.",
               icon: "success",
             });
-
-            // Actualiza la lista de eventos después de la eliminación
             setData((prevData) => prevData.filter((item) => item.id !== id));
           } else {
             Swal.fire({
@@ -123,7 +109,6 @@ const ConfigColumns = (setData) => [
           console.error("Error al eliminar el evento:", error);
         }
       };
-
       return (
         <div className="flex items-center gap-2">
           {/* Botón Email */}

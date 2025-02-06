@@ -32,7 +32,7 @@ function App() {
               <Route path="/eventos/:id" element={<ViewEventosNew />} />
               <Route path="/eventos/plazas" element={<ViewEventoPlazas />} />
               <Route
-                path="/eventos/estacionamientos"
+                path="/eventos/estacionamientos/:id?"
                 element={<ViewEventoEstacionamiento />}
               />
               <Route

@@ -62,17 +62,17 @@ const EventoCrud = () => {
           const eventData = response.data; //
 
           setData({
-            name: eventData.nombre || "",
-            date: eventData.fecha || "",
-            hour: eventData.hora || "",
-            venue_id: eventData.id_venue || "",
-            purchace_limit_date: eventData.hora_limite_compra || "",
+            name: eventData.name || "",
+            date: eventData.date || "",
+            hour: eventData.time || "",
+            venue_id: eventData.venue_id || "",
+            purchace_limit_date: eventData.purchase_deadline || "",
             id_event_type:
-              eventData.evento_tipos.length > 0
-                ? eventData.evento_tipos[0]?.id
+              eventData.event_types.length > 0
+                ? eventData.event_types[0]?.id
                 : "",
-            enabled_before: eventData.habilitado_antes || "",
-            enabled_after: eventData.habilitado_despues || "",
+            enabled_before: eventData.enabled_after || "",
+            enabled_after: eventData.enabled_before || "",
             path: "",
           });
         } else {
@@ -395,8 +395,7 @@ const EventoCrud = () => {
             <div>
               <NavLink
                 to={{
-                  pathname: "/eventos/estacionamientos",
-                  state: { eventId: id }, // Pasamos el objeto como estado
+                  pathname: `/eventos/estacionamientos/${id}`,
                 }}
                 className="px-6 py-2 bg-[#4B6FC7] text-white rounded ml-3"
               >

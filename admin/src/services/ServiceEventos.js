@@ -17,7 +17,7 @@ export const getEventos = async (filtros = {}) => {
       },
       params: filtros, // Agregar filtros a la solicitud GET
     });
-    
+
     if (response.status === 200) {
       return response?.data?.data?.data || [];
     } else {
@@ -41,7 +41,6 @@ const manejarErrorAPI = (error) => {
 };
 
 export const deleteEvento = async (id) => {
-  
   try {
     const response = await axios.delete(`${apiUrl}eventos/${id}`, {
       headers: {
@@ -49,7 +48,7 @@ export const deleteEvento = async (id) => {
         "Content-Type": "application/json",
       },
     });
-     
+
     if (response.status === 200) {
       return response.data;
     } else {
@@ -85,7 +84,6 @@ export const toggleSuspendEvent = async (id) => {
     );
 
     if (response.status === 200) {
-       
       return response.data; // Devuelve los datos directamente.
     } else {
       throw new Error("Error inesperado en la API.");
@@ -111,14 +109,13 @@ export const postEvento = async (data) => {
     });
 
     if (response.status === 200) {
-     
       return response.data;
     } else {
       console.log(response);
       throw new Error("Error inesperado en la API.");
     }
   } catch (error) {
-    console.error("Error al crear  venue:", error);
+    console.error("Error al crear  Evento:", error);
     throw error;
   }
 };
@@ -131,10 +128,9 @@ export const eventbyid = async (id) => {
         "Content-Type": "application/json",
       },
     });
-    
+
     if (response.status === 200) {
-      
-     return response.data 
+      return response.data;
     } else {
       console.log(`error: ${response.data}`);
       response.data;
@@ -145,9 +141,7 @@ export const eventbyid = async (id) => {
   }
 };
 
-
-
-export const updateEvent = async (id, event) => { 
+export const updateEvent = async (id, event) => {
   try {
     const response = await axios.put(`${apiUrl}eventos/${id}`, event, {
       headers: {
@@ -156,9 +150,9 @@ export const updateEvent = async (id, event) => {
       },
     });
 
-    return response.data;  
-  } catch (error) { 
+    return response.data;
+  } catch (error) {
     console.error("Error actualizando el evento:", error);
-    throw error;  
+    throw error;
   }
 };
