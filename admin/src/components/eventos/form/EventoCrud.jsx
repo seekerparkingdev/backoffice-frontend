@@ -100,16 +100,7 @@ const EventoCrud = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!isModeEdit) {
-      try {
-        const response = await postEvento(data);
-        if (response.status === "success") {
-          alert("Creado correctamente");
-        } else {
-          alert("Error");
-        }
-      } catch (error) {
-        alert("Error");
-      }
+       console.log("Nos vamos a siguiente")
     } else {
       try {
         const response = await updateEvent(id, data);
@@ -138,9 +129,14 @@ const EventoCrud = () => {
       }
     }
   };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
+    localStorage.setItem(
+      "eventData",
+      JSON.stringify({ ...data, [name]: value })
+    );
   };
   return (
     <div>
@@ -413,7 +409,9 @@ const EventoCrud = () => {
             </div>
           ) : (
             <NavLink
-            to={'/eventos/estacionamientos'}
+              to={{
+                pathname: "/eventos/estacionamientos",
+              }}
               className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3"
             >
               Siguiente

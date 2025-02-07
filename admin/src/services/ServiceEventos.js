@@ -99,9 +99,33 @@ export const toggleSuspendEvent = async (id) => {
   }
 };
 
-export const postEvento = async (data) => {
+export const postEvento = async (data, event) => {
+  // Construir el objeto con la estructura requerida
+  const eventData = {
+    venue_id: event.venue_id,
+    name: event.name,
+    date: event.date,
+    hour: event.hour,
+    enabled_before: event.enabled_before,
+    enabled_after: event.enabled_after,
+    purchace_limit_date: event.purchace_limit_date,
+    path: event.path,
+    id_event_types: event.id_event_types,
+    parkings: data.map((parking) => ({
+      distance_km: parking.distance_km,
+      id: parking.id,
+      spot_types: parking.spot_types.map((spot) => ({
+        spot_type_id: spot.spot_type_id,
+        quantity: spot.quantity,
+        price: spot.price,
+      })),
+    })),
+  };
+
+  console.log("Enviando evento a la API:", eventData); // DEBUG
+
   try {
-    const response = await axios.post(`${apiUrl}eventos`, data, {
+    const response = await axios.post(`${apiUrl}eventos`, eventData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -115,7 +139,7 @@ export const postEvento = async (data) => {
       throw new Error("Error inesperado en la API.");
     }
   } catch (error) {
-    console.error("Error al crear  Evento:", error);
+    console.error("Error al crear Evento:", error);
     throw error;
   }
 };

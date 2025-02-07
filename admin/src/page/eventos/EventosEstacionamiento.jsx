@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import DataTable from "react-data-table-component";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useParams } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { eventbyid } from "../../services/ServiceEventos";
-import { updateEvent } from "../../services/ServiceEventos";
-import { getEstacionamiento } from "../../services/ServiceEstacionamiento";
+import { updateEvent, postEvento } from "../../services/ServiceEventos";
+import { getEstacionamiento , getByIdEstacionamiento } from "../../services/ServiceEstacionamiento";
 
 const EventosEstacionamiento = () => {
   const { id } = useParams();
-  const isModeEdit = id !== Number(id);
-  const [data, setData] = useState();
+  const isModeEdit = id;
+  const [data, setData] = useState([]);
+  const [event, setEvent] = useState();
   const [selectedParking, setSelectedParking] = useState(null);
   const [estacionamientos, setEstacionamientos] = useState([]);
   useEffect(() => {
@@ -51,34 +52,30 @@ const EventosEstacionamiento = () => {
             icon: "warning",
             title: "No hay estacionamientos disponibles",
             text: "Por favor, intenta más tarde.",
-            confirmButtonColor: "#f39c12", // Color de botón amarillo de advertencia
+            confirmButtonColor: "#f39c12",
           });
         } else {
-          console.log(response);
           setEstacionamientos(response);
-
-          Swal.fire({
-            icon: "success",
-            title: "Estacionamientos cargados",
-            text: "Los datos han sido obtenidos correctamente.",
-            confirmButtonColor: "#28a745", // Color verde de éxito
-          });
+          //Aca puede ir un loading
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
           title: "Error al obtener estacionamientos",
           text: `Hubo un problema: ${error.message || error}`,
-          confirmButtonColor: "#d33", // Color rojo de error
+          confirmButtonColor: "#d33",
         });
       }
     };
-
+    if (!isModeEdit) {
+      const eventInfo = localStorage.getItem("eventData");
+      const eventData = JSON.parse(eventInfo);
+      setEvent(eventData);
+    }
     if (id) getEvent();
-
     getEstacionamientos();
   }, []);
-  const handleAddParking = () => {
+  const handleAddParking = async () => {
     if (!selectedParking) {
       Swal.fire({
         icon: "warning",
@@ -87,22 +84,47 @@ const EventosEstacionamiento = () => {
       });
       return;
     }
+    try {
+      const response = await getByIdEstacionamiento(Number(selectedParking));
+      if (response.status === "success" && response.data) {
+        console.log(response.data);
+        const nuevoEstacionamiento = {
+          id: response.data.id,
+          name: response.data.name,
+          distance_km: "",
+          spot_types: response.data.prices.map((price) => ({
+            spot_type_id: price.plaza_type_id || "",
+            minimum: price.minimum || "",
+            quantity: price.quantity || "",
+            price: price.price || "",
+          })),
+        };
+        setData((prevData) => [...prevData, nuevoEstacionamiento]);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "No se pudo agregar el estacionamiento",
+          text: "Inténtalo más tarde.",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al cargar el estacionamiento",
+        text: `Código de error: ${error.message || error}`,
+        confirmButtonColor: "#d33",
+        confirmButtonText: "Aceptar",
+      });
+    }
 
-    // Buscar el estacionamiento en la lista de opciones
-    const parking = estacionamientos.find(
-      (p) => p.id === Number(selectedParking)
-    );
-
-    if (!parking) return;
-
-    console.log(parking);
-
-    // Limpiar la selección
     setSelectedParking(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isModeEdit) {
       try {
         const response = await updateEvent(id, data);
@@ -129,6 +151,18 @@ const EventosEstacionamiento = () => {
           confirmButtonText: "Aceptar",
         });
       }
+    } else {
+      try {
+        const response = await postEvento(data, event);
+        console.log(response)
+        if (response.status === "success") {
+          alert("Creado correctamente");
+        } else {
+          alert("Error aca ");
+        }
+      } catch (error) {
+        alert("Error aca");
+      }
     }
   };
 
@@ -149,8 +183,8 @@ const EventosEstacionamiento = () => {
               spot_types: parking.spot_types.map((spot) =>
                 spot.spot_type_id === Number(field.split(".")[0])
                   ? {
-                      ...spot, // Copiamos todos los datos del tipo de spot
-                      [field.split(".")[1]]: value, // Modificamos el campo específico
+                      ...spot,
+                      [field.split(".")[1]]: value,
                     }
                   : spot
               ),
@@ -317,12 +351,21 @@ const EventosEstacionamiento = () => {
             >
               <span>+ Agregar</span>
             </button>
-            <button
-              type="submit"
-              className="flex items-center justify-center gap-2 px-8 py-2 bg-[#61B4CE] text-white font-semibold rounded-lg  transition-colors"
-            >
-              <span>Editar</span>
-            </button>
+            {isModeEdit ? (
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 px-8 py-2 bg-[#61B4CE] text-white font-semibold rounded-lg  transition-colors"
+              >
+                <span>Editar</span>
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 px-8 py-2 bg-[#61B4CE] text-white font-semibold rounded-lg  transition-colors"
+              >
+                <span>Crear</span>
+              </button>
+            )}
           </div>
         </div>
       </form>
