@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { MdDesktopAccessDisabled } from "react-icons/md";
 import { MdOutlineDesktopWindows } from "react-icons/md";
-import { LuDelete } from "react-icons/lu";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { MdOutlineEdit } from "react-icons/md";
 import { BiEditAlt } from "react-icons/bi";
 import Swal from "sweetalert2";
 import { deleteVenue, toggleSuspend } from "../../../services/ServiceVenues";
@@ -12,6 +13,7 @@ const VenueConfigtable = (setData, setFilteredData) => [
   {
     name: "Capacidad Máxima",
     selector: (row) => row.max_capacity,
+    className: " border rounded-md",
     sortable: true,
   },
   {
@@ -20,16 +22,19 @@ const VenueConfigtable = (setData, setFilteredData) => [
       const handleSuspend = async (id) => {
         try {
           const response = await toggleSuspend(id);
- 
+
           setFilteredData((prevData) =>
             prevData.map((item) =>
-              item.id === id ? { ...item, suspend: item.suspend === 1 ? 0 : 1 } : item
+              item.id === id
+                ? { ...item, suspend: item.suspend === 1 ? 0 : 1 }
+                : item
             )
           );
 
           Swal.fire({
             title: "Éxito",
-            text: response.data || "Estado del venue actualizado correctamente.",
+            text:
+              response.data || "Estado del venue actualizado correctamente.",
             icon: "success",
           });
         } catch (error) {
@@ -82,15 +87,12 @@ const VenueConfigtable = (setData, setFilteredData) => [
             onClick={() => handleDelete(row.id)}
             className="text-red-500 hover:text-red-600"
           >
-            <LuDelete size={20} />
+            <RiDeleteBinLine size={20} />
           </button>
 
           {/* Botón Editar */}
-          <NavLink
-            to={`/venues/${row.id}`}
-            className="text-blue-500 hover:text-blue-600"
-          >
-            <BiEditAlt size={20} />
+          <NavLink to={`/venues/${row.id}`}>
+            <MdOutlineEdit size={20} />
           </NavLink>
 
           {/* Botón Activar/Desactivar */}
