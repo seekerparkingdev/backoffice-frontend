@@ -111,7 +111,7 @@ const VenueGrilla = () => {
           </div>
           <div>
             <input
-              type="text"
+              type="search"
               placeholder="Buscar por nombre o dirección..."
               className="border border-gray-300 rounded-md w-full p-"
               value={searchQuery}

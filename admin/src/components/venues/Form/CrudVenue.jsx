@@ -4,7 +4,7 @@ import MapComponent from "../MapComponent";
 import { useState } from "react";
 import { VenueSetup } from "../VenueSetup/VenueSetup";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import {
   getVenueById,
   postVenueNew,
@@ -54,7 +54,7 @@ const CrudVenue = () => {
           setPosition([Number(data.latitude), Number(data.longitude)]);
         }
         console.log("Esta es la data", data);
-        setVenue(data); // Actualiza los datos del venue
+        setVenue(data);
       } catch (err) {
         console.error("Error al obtener los datos del venue:", err);
         setError(err.message);
@@ -527,7 +527,7 @@ const CrudVenue = () => {
               {/* <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
             <IoMdAddCircle className="mr-2" />
             Nuevo Evento
-          </button> */}
+            </button> */}
             </div>
 
             <div className="overflow-x-auto rounded-lg border border-gray-200">
@@ -570,9 +570,14 @@ const CrudVenue = () => {
             </div>
           </section>
         ) : null}
-
-        {/* Submit Button */}
+ 
         <div className="flex justify-end pt-6">
+          <NavLink className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg ml-3 hover:bg-blue-700 transition-colors duration-200"
+          to={`/venues/eventos/${id}`}
+          >
+            Eventos
+          </NavLink>
+
           <button
             type="submit"
             className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
