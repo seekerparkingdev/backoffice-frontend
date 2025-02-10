@@ -429,151 +429,17 @@ const CrudVenue = () => {
           </div>
         </section>
 
-        {/* Redes Sociales */}
-        <section className="space-y-6">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Redes Sociales
-            </h3>
-            <p className="text-gray-600 mt-1">
-              Configure los enlaces a redes sociales
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="facebook"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Facebook
-              </label>
-              <input
-                id="facebook"
-                name="facebook"
-                placeholder="URL de Facebook"
-                value={venueData.facebook}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-              />
-            </div>
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="instagram"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Instagram
-              </label>
-              <input
-                id="instagram"
-                name="instagram"
-                placeholder="URL de Instagram"
-                value={venueData.instagram}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border 
-                 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                 transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-              />
-            </div>
-
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="twitter"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Twitter
-              </label>
-              <input
-                id="twitter"
-                name="twitter"
-                placeholder="URL de twitter"
-                value={venueData.twitter}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
-                 duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-              />
-            </div>
-
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="website"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Sitio web
-              </label>
-              <input
-                id="website"
-                name="website"
-                placeholder="URL del sitio web"
-                value={venueData.website}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg 
-                focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 *
-                 placeholder-gray-400 text-sm min-h-[20px]"
-              />
-            </div>
-          </div>
-        </section>
-
         {/* Eventos Table */}
-        {isEditMode ? (
-          <section className="space-y-4">
-            <div className="border-b border-gray-200 pb-4">
-              <h3 className="text-xl font-semibold text-gray-800">Eventos</h3>
-              <p className="text-gray-600 mt-1">
-                Vea la información de los diferentes eventos
-              </p>
-              {/* <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-            <IoMdAddCircle className="mr-2" />
-            Nuevo Evento
-            </button> */}
-            </div>
-
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                      Evento
-                    </th>
-                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                      Fecha
-                    </th>
-                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                      Descripción
-                    </th>
-                    <th className="px-6 py-3.5 text-left text-sm font-semibold text-gray-700">
-                      Opciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  <tr className="hover:bg-gray-50 transition-colors duration-200">
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      Carrera Nacional
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      15/02/2025
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      Evento principal del mes.
-                    </td>
-                    <td className="px-6 py-4">
-                      <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
-                        Ver detalles
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        ) : null}
- 
         <div className="flex justify-end pt-6">
-          <NavLink className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg ml-3 hover:bg-blue-700 transition-colors duration-200"
-          to={`/venues/eventos/${id}`}
+        <NavLink
+            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            to={`/venues/redes/${id}`}
+          >
+            Redes
+          </NavLink>
+          <NavLink
+            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            to={`/venues/eventos/${id}`}
           >
             Eventos
           </NavLink>
