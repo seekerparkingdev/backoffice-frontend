@@ -154,7 +154,9 @@ const EstacionamientosVenue = () => {
       <div className=" border-b-2 border-[#9CA3AF] p-4 mb-4">
         <h1 className="font-bold text-3xl mb-3">Venues</h1>
       </div>
-      <div className="p-6 bg-white rounded-lg mt-2">
+      <div className="p-6 bg-white rounded-lg mt-2 ">
+
+        <div className="border-b-2  mb-4 border-[#9CA3AF]">
         {/* Título */}
         <h3 className="text-xl font-semibold text-gray-800 mb-2">
           Estacionamientos Recomendados
@@ -162,6 +164,7 @@ const EstacionamientosVenue = () => {
         <p className="text-gray-600 mb-4">
           Ingrese los estacionamientos recomendados para el Venue.
         </p>
+        </div>
 
         {/* Selector y botón de agregar */}
         <div className="flex gap-4 mb-4">

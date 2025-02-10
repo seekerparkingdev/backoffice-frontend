@@ -98,8 +98,6 @@ const CrudVenue = () => {
     });
   };
 
-  
-
   const handleSubmit = async (e) => {
     if (isEditMode) {
       try {
@@ -138,14 +136,15 @@ const CrudVenue = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-xl space-y-10">
-      <div className="border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
-          Gestión de Venue
-        </h1>
+    <div className="max-w-7xl mx-auto">
+      <div className="border-b-2 mb-5 p-2">
+        <h1 className="text-3xl font-bold mb-3">Venues</h1>
       </div>
       {/* Main Form */}
-      <form className="space-y-12" onSubmit={handleSubmit}>
+      <form
+        className="space-y-12 bg-white shadow-lg max-w-7xl mx-auto p-8 rounded-xl "
+        onSubmit={handleSubmit}
+      >
         {/* Información General */}
         <section className="space-y-6">
           <div className="border-b border-gray-200 pb-4">
@@ -153,7 +152,7 @@ const CrudVenue = () => {
               Información General
             </h3>
             <p className="text-gray-600 mt-1">
-              Complete los datos básicos del venue
+              Nombre, capacidad máxima, dirección y fotos.
             </p>
           </div>
 
@@ -174,6 +173,22 @@ const CrudVenue = () => {
                 placeholder="Ingrese el nombre"
                 className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
               />
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Ingrese la dirección"
+                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                onChange={handleChange}
+                value={venueData.address}
+                name="address"
+              />
+              <button
+                type="button"
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+              >
+                Actualizar Mapa
+              </button>
             </div>
             <div className="relative space-y-1.5">
               <label
@@ -272,31 +287,12 @@ const CrudVenue = () => {
 
         {/* Ubicación */}
         <section className="space-y-6">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold text-gray-800">Ubicación</h3>
-            <p className="text-gray-600 mt-1">
-              Establezca la ubicación del venue
-            </p>
-          </div>
+          <p className="text-gray-600 mt-1">
+            Mueva el icono hasta la posicion donde se encuentre el Venue o
+            actualice el mapa mediante la dirección.
+          </p>
 
           <div className="space-y-4">
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Ingrese la dirección"
-                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                onChange={handleChange}
-                value={venueData.address}
-                name="address"
-              />
-              <button
-                type="button"
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
-              >
-                Actualizar Mapa
-              </button>
-            </div>
-
             <div className="h-[300px] rounded-lg overflow-hidden border border-gray-200">
               <MapComponent
                 position={position}
@@ -316,20 +312,20 @@ const CrudVenue = () => {
         {/* Eventos Table */}
         <div className="flex justify-end pt-6">
           <NavLink
-            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3   transition-colors duration-200"
             to={`/venues/estacionamientos/${id}`}
           >
             Estacionamientos
           </NavLink>
 
           <NavLink
-            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3   transition-colors duration-200"
             to={`/venues/redes/${id}`}
           >
             Redes
           </NavLink>
           <NavLink
-            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3  transition-colors duration-200"
             to={`/venues/eventos/${id}`}
           >
             Eventos
@@ -337,7 +333,7 @@ const CrudVenue = () => {
 
           <button
             type="submit"
-            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg   transition-colors duration-200"
           >
             {venueData.id ? "Actualizar Lugar" : "Crear Lugar"}
           </button>
