@@ -98,20 +98,7 @@ const CrudVenue = () => {
     });
   };
 
-  const handleAddEstacionamiento = () => {
-    setVenue((prevVenueData) => ({
-      ...prevVenueData,
-      parkings: [
-        ...prevVenueData.parkings,
-        {
-          name: "",
-          distance_meters: "",
-          agreement_percentage: "",
-          fixed_agreement: "",
-        },
-      ],
-    }));
-  };
+  
 
   const handleSubmit = async (e) => {
     if (isEditMode) {
@@ -326,112 +313,16 @@ const CrudVenue = () => {
           </div>
         </section>
 
-        {/* Estacionamientos */}
-        <section className="space-y-6">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Estacionamientos Recomendados
-            </h3>
-            <p className="text-gray-600 mt-1">
-              Gestione los estacionamientos asociados
-            </p>
-          </div>
-
-          <div className="flex gap-4">
-            <select className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
-              <option value="">Seleccione un estacionamiento</option>
-            </select>
-            <button
-              type="button"
-              onClick={handleAddEstacionamiento}
-              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
-            >
-              <IoMdAddCircle size={20} />
-              Añadir
-            </button>
-          </div>
-
-          <div className="space-y-6">
-            {venueData.parkings.map((parking, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-gray-50 rounded-lg"
-              >
-                <div className="relative space-y-1.5">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 tracking-wide"
-                  >
-                    Nombre
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    value={parking.name}
-                    onChange={(e) => handleParkingChange(index, e)}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2
-                     focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-                  />
-                </div>
-                <div className="relative space-y-1.5">
-                  <label
-                    htmlFor="distance_meters"
-                    className="block text-sm font-medium text-gray-700 tracking-wide"
-                  >
-                    Distancia (mts)
-                  </label>
-                  <input
-                    value={parking.distance_meters}
-                    onChange={(e) => handleParkingChange(index, e)}
-                    id="distance_meters"
-                    name="distance_meters"
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-                  />
-                </div>
-
-                <div className="relative space-y-1.5">
-                  <label
-                    htmlFor="fixed_agreement"
-                    className="block text-sm font-medium text-gray-700 tracking-wide"
-                  >
-                    Acuerdo %
-                  </label>
-                  <input
-                    id="fixed_agreement"
-                    name="fixed_agreement"
-                    value={parking.fixed_agreement}
-                    onChange={(e) => handleParkingChange(index, e)}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
-                     duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-                  />
-                </div>
-
-                <div className="relative space-y-1.5">
-                  <label
-                    htmlFor="agreement_percentage"
-                    className="block text-sm font-medium text-gray-700 tracking-wide"
-                  >
-                    Acuerdo Suma Fija
-                  </label>
-                  <input
-                    id="agreement_percentage"
-                    name="agreement_percentage"
-                    value={parking.agreement_percentage}
-                    onChange={(e) => handleParkingChange(index, e)}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all
-                      duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[20px]"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Eventos Table */}
         <div className="flex justify-end pt-6">
-        <NavLink
+          <NavLink
+            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
+            to={`/venues/estacionamientos/${id}`}
+          >
+            Estacionamientos
+          </NavLink>
+
+          <NavLink
             className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg mr-3 hover:bg-blue-700 transition-colors duration-200"
             to={`/venues/redes/${id}`}
           >
