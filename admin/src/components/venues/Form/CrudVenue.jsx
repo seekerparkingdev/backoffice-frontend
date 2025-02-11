@@ -156,85 +156,111 @@ const CrudVenue = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Nombre
-              </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={venueData.name}
-                onChange={handleChange}
-                placeholder="Ingrese el nombre"
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
-              />
+          <div className="space-y-4">
+            {/* Primera fila: Nombre y Dirección */}
+            <div className="flex gap-6">
+              <div className="flex-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Nombre
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={venueData.name}
+                  onChange={handleChange}
+                  placeholder="Movistar Arena"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="flex-1 flex gap-2">
+                <div className="flex-1">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Dirección del venue
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    id="address"
+                    value={venueData.address}
+                    onChange={handleChange}
+                    placeholder="Humboldt 450, Villa Crespo, Buenos Aires"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="self-end px-4 py-2 bg-[#61B4CE] text-white rounded-md  transition-colors text-sm"
+                >
+                  Actualizar mapa
+                </button>
+              </div>
             </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Ingrese la dirección"
-                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                onChange={handleChange}
-                value={venueData.address}
-                name="address"
-              />
-              <button
-                type="button"
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
-              >
-                Actualizar Mapa
-              </button>
-            </div>
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Capacidad Maxima
-              </label>
-              <input
-                id="name"
-                type="number"
-                name="max_capacity"
-                value={venueData.max_capacity}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
-              />
-            </div>
-            <div className="relative space-y-1.5">
-              <label
-                htmlFor="domain"
-                className="block text-sm font-medium text-gray-700 tracking-wide"
-              >
-                Dominio (No incluir protocolo https/http)
-              </label>
-              <input
-                id="domain"
-                type="text"
-                name="domain"
-                value={venueData.domain}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700 tracking-wide">
-                Barra de búsqueda en home
-              </label>
-              <select className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800">
-                <option>Seleccione unas de estas opciones</option>
-                <option value={venueData.search_enabled}>Habilitar</option>
-                <option value={venueData.search_enabled}>Deshabilitar</option>
-              </select>
+
+            {/* Segunda fila: Dominio, Capacidad y Búsqueda */}
+            <div className="flex gap-6">
+              <div className="flex-1">
+                <label
+                  htmlFor="domain"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Dominio (No incluir protocolo https/http)
+                </label>
+                <input
+                  id="domain"
+                  type="text"
+                  name="domain"
+                  value={venueData.domain}
+                  onChange={handleChange}
+                  placeholder="movistarenasandbox.seekerparking.ar"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="w-32">
+                <label
+                  htmlFor="max_capacity"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Capacidad máxima
+                </label>
+                <input
+                  id="max_capacity"
+                  type="number"
+                  name="max_capacity"
+                  value={venueData.max_capacity}
+                  onChange={handleChange}
+                  placeholder="1500"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="w-48">
+                <label
+                  htmlFor="search_enabled"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Barra de búsqueda en home
+                </label>
+                <select
+                  id="search_enabled"
+                  name="search_enabled"
+                  value={venueData.search_enabled}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none"
+                >
+                  <option value="">Habilitada</option>
+                  <option value="true">Habilitada</option>
+                  <option value="false">Deshabilitada</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="space-y-6">
-            <h4 className="text-lg font-medium text-gray-600">Textos</h4>
             <div className="relative space-y-1.5">
               <label
                 htmlFor="description_text"
@@ -308,6 +334,125 @@ const CrudVenue = () => {
             </div>
           </div>
         </section>
+
+        <div className="flex gap-6">
+          {/* Foto de portada */}
+          <div className="flex-1">
+            <span className="block text-sm font-medium text-gray-700 mb-1">
+              Foto de portada
+            </span>
+            <span className="block text-xs text-gray-500 mb-2">
+              (La imagen debe tener un tamaño de 1280×427) *
+            </span>
+            <div className="border border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center">
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                  />
+                </svg>
+                Examinar
+              </button>
+            </div>
+            <div className="flex mt-2 text-xs text-gray-500">
+              <button type="button" className="mr-4 hover:text-gray-700">
+                Editar foto de portada
+              </button>
+              <button type="button" className="hover:text-gray-700">
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+          {/* Foto de miniatura */}
+          <div className="flex-1">
+            <span className="block text-sm font-medium text-gray-700 mb-1">
+              Foto de miniatura
+            </span>
+            <span className="block text-xs text-gray-500 mb-2">
+              (La imagen debe tener un tamaño de 250×250) *
+            </span>
+            <div className="border border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center">
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                  />
+                </svg>
+                Examinar
+              </button>
+            </div>
+            <div className="flex mt-2 text-xs text-gray-500">
+              <button type="button" className="mr-4 hover:text-gray-700">
+                Editar foto de portada
+              </button>
+              <button type="button" className="hover:text-gray-700">
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+          {/* Logo */}
+          <div className="flex-1">
+            <span className="block text-sm font-medium text-gray-700 mb-1">
+              Logo
+            </span>
+            <div className="border border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center mt-6">
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                  />
+                </svg>
+                Examinar
+              </button>
+            </div>
+            <div className="flex mt-2 text-xs text-gray-500">
+              <button type="button" className="mr-4 hover:text-gray-700">
+                Editar foto de portada
+              </button>
+              <button type="button" className="hover:text-gray-700">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Eventos Table */}
         <div className="flex justify-end pt-6">
