@@ -173,7 +173,7 @@ const CrudVenue = () => {
                   value={venueData.name}
                   onChange={handleChange}
                   placeholder="Movistar Arena"
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-[#F0F2F6] border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="flex-1 flex gap-2">
@@ -191,7 +191,7 @@ const CrudVenue = () => {
                     value={venueData.address}
                     onChange={handleChange}
                     placeholder="Humboldt 450, Villa Crespo, Buenos Aires"
-                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-[#F0F2F6] border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <button
@@ -219,7 +219,7 @@ const CrudVenue = () => {
                   value={venueData.domain}
                   onChange={handleChange}
                   placeholder="movistarenasandbox.seekerparking.ar"
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-[#F0F2F6] border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="w-32">
@@ -236,7 +236,7 @@ const CrudVenue = () => {
                   value={venueData.max_capacity}
                   onChange={handleChange}
                   placeholder="1500"
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-[#F0F2F6] border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="w-48">
@@ -251,7 +251,7 @@ const CrudVenue = () => {
                   name="search_enabled"
                   value={venueData.search_enabled}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none"
+                  className="w-full px-3 py-2 bg-[#F0F2F6] border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none"
                 >
                   <option value="">Habilitada</option>
                   <option value="true">Habilitada</option>
@@ -274,7 +274,7 @@ const CrudVenue = () => {
                 value={venueData.description_text}
                 onChange={handleChange}
                 placeholder="Ej: Reservá tu parking seguro, llegá tranquilo."
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
+                className="w-full px-4 py-2.5 bg-[#F0F2F6] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
               />
             </div>
             <div className="relative space-y-1.5">
@@ -290,7 +290,7 @@ const CrudVenue = () => {
                 value={venueData.address_text}
                 onChange={handleChange}
                 placeholder="Ingrese la dirección completa"
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
+                className="w-full px-4 py-2.5 bg-[#F0F2F6] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[30px]"
               />
             </div>
             <div className="relative space-y-1.5">
@@ -305,7 +305,7 @@ const CrudVenue = () => {
                 name="head_text"
                 value={venueData.head_text}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[100px]"
+                className="w-full px-4 py-2.5 bg-[#F0F2F6] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ease-in-out text-gray-800 placeholder-gray-400 text-sm min-h-[100px]"
               />
             </div>
           </div>

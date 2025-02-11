@@ -1,4 +1,6 @@
 import { CgMail } from "react-icons/cg";
+import { CgToggleOff } from "react-icons/cg";
+import { CgToggleOn } from "react-icons/cg";
 import { HiOutlineDuplicate } from "react-icons/hi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineCheck } from "react-icons/ai";
@@ -10,12 +12,25 @@ import {
 } from "../../../services/ServiceEventos";
 
 const ConfigColumns = (setData) => [
-  { name: "Fecha del evento", selector: (row) => row.datetime, sortable: true },
+  {
+    name: "Fecha del evento",
+    selector: (row) =>
+      row.datetime && row.suspend == 0 ? (
+        <span className="text-gray-500">{row.datetime}</span>
+      ) : (
+        <span>{row.datetime}</span>
+      ),
+    sortable: true,
+  },
   {
     name: "Nombre del evento",
-    selector: (row) => row.name,
+    selector: (row) =>
+      row.name && row.suspend == 0 ? (
+        <span className="text-gray-500">{row.name}</span>
+      ) : (
+        <span className="text-black font-bold">{row.name}</span>
+      ),
     sortable: true,
-    cell: (row) => <span className="text-black font-medium">{row.name}</span>,
   },
   {
     name: "Vendidas",
@@ -45,7 +60,27 @@ const ConfigColumns = (setData) => [
   },
   {
     name: "Venue",
-    selector: (row) => row.venue?.name || "Sin información",
+    selector: (row) =>
+      row.venue && row.venue.name && row.suspend == 0 ? (
+        <span className="text-gray-500">
+          {row.venue.name || "Sin informacion"}{" "}
+        </span>
+      ) : (
+        <span className="text-black font-semibold">
+          {row.venue?.name || "Sin informacion"}
+        </span>
+      ),
+    sortable: true,
+  },
+  {
+    name: "Estado",
+    selector: (row) =>
+      row.suspend == 1 ? (
+        <CgToggleOff size={30} className="text-green-500" />
+      ) : (
+        <CgToggleOn size={30} className="text-[#9CA3AF]" />
+      ),
+
     sortable: true,
   },
   {
