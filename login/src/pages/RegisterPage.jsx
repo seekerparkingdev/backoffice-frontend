@@ -170,7 +170,7 @@ function RegisterPage() {
                   ¿Tienes una cuenta?{" "}
                   <Link
                     className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                    to="/login"
+                    to="/"
                   >
                     Iniciar sesión
                   </Link>
