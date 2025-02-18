@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import AuthImage from "../images/auth-image.jpg";
 import { validarLogin } from "../utils/validacionform";
 import { PostLogin } from "../services/PostLogin";
+import TokenIframe from "../components/TokenIframe";
 
 const LoginPage = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
- 
+
   const [errores, setErrores] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +29,8 @@ const LoginPage = () => {
 
       if (response) {
         const token = response.token;
-        sessionStorage.setItem("token", token); // Guardar en sessionStorage
+        sessionStorage.setItem("token", token);
+        return <TokenIframe />;
       }
     }
   };

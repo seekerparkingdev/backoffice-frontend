@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-
 const TokenIframe = () => {
   const iframeRef = useRef(null);
   const [token, setToken] = useState(sessionStorage.getItem("token") || ""); // Estado para el token
@@ -28,8 +27,12 @@ const TokenIframe = () => {
     if (token) {
       // Si el token existe, actualiza el src del iframe
       if (iframeRef.current) {
-        iframeRef.current.src = `http://127.0.0.1:80/api/v1/setToken?token=${encodeURIComponent(token)}`;
+        iframeRef.current.src = `http://127.0.0.1:80/api/v1/setToken?token=${encodeURIComponent(
+          token
+        )}`;
       }
+
+      window.location.href = "http://localhost:5174";
     } else {
       console.warn("No se encontró un token en sessionStorage");
     }
