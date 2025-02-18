@@ -17,22 +17,20 @@ const LoginPage = () => {
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validacion = validarLogin(data);
     if (Object.keys(validacion).length > 0) {
       setErrores(validacion);
     } else {
       setErrores({});
-     const response = await PostLogin(data)
-     if(response) {
-        
+      const response = await PostLogin(data);
 
-     }
-     
-      
-      // Redireccionar a la página principal si es necesario
-      // window.location.href = "/";
+      if (response) {
+        localStorage.setItem("user", JSON.stringify(response.token, data));
+        // Redireccionar a la página principal si es necesario
+        // window.location.href = "/";
+      }
     }
   };
 
