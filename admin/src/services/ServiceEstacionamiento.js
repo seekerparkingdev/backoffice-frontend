@@ -73,7 +73,7 @@ export const patchDisabledEnableEstacionamiento = async (id) => {
 
   try {
     const response = await axios.patch(
-      `${apiUrl}estacionamientos/suspender/${id}`,
+      `${apiUrl}estacionamientos/toggleSuspend/${id}`,
       {},
       {
         headers: {

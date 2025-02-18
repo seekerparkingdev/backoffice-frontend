@@ -2,36 +2,42 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthImage from "../images/auth-image.jpg";
 import { validarLogin } from "../utils/validacionform";
+import { PostLogin } from "../services/PostLogin";
 
 const LoginPage = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  console.log(data);
   const [errores, setErrores] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validacion = validarLogin(data);
     if (Object.keys(validacion).length > 0) {
       setErrores(validacion);
     } else {
-      // Enviar datos al backend para validar el login
-      console.log("Login correcto");
-      // Redireccionar a la página principal
-      // window.location.href = "/";
+      setErrores({});
+      const response = await PostLogin(data);
+
+      if (response) {
+        localStorage.setItem("user", JSON.stringify(response.token, data));
+        // Redireccionar a la página principal si es necesario
+        // window.location.href = "/";
+      }
     }
   };
 
   return (
     <main className="bg-white dark:bg-gray-900">
       <div className="relative md:flex">
-        {/* Content */}
+        {/* Contenido */}
         <div className="md:w-1/2">
           <div className="min-h-[100dvh] h-full flex flex-col after:flex-1">
             {/* Header */}
@@ -55,7 +61,8 @@ const LoginPage = () => {
               <h1 className="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">
                 ¡Bienvenido a Seeker Parking!
               </h1>
-              {/* Form */}
+
+              {/* Formulario */}
               <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   <div>
@@ -72,6 +79,7 @@ const LoginPage = () => {
                       id="email"
                       className="form-input w-full"
                       type="email"
+                      required
                     />
                     {errores.email && (
                       <p className="text-red-500 text-xs">{errores.email}</p>
@@ -91,22 +99,15 @@ const LoginPage = () => {
                       id="password"
                       className="form-input w-full"
                       type="password"
-                      autoComplete="on"
+                      autoComplete="current-password"
+                      required
                     />
                     {errores.password && (
                       <p className="text-red-500 text-xs">{errores.password}</p>
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-between mt-6">
-                  <div className="mr-1">
-                    <Link
-                      className="text-sm underline hover:no-underline"
-                      to="/reset-password"
-                    >
-                      ¿Olvidaste la contraseña?
-                    </Link>
-                  </div>
+                <div className="flex items-center justify-end mt-6">
                   <button
                     type="submit"
                     className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white ml-3"
@@ -115,23 +116,11 @@ const LoginPage = () => {
                   </button>
                 </div>
               </form>
-              {/* Footer */}
-              <div className="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
-                <div className="text-sm">
-                  ¿No tienes una cuenta?{" "}
-                  <Link
-                    className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                    to="/signup"
-                  >
-                    Regístrate
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Image */}
+        {/* Imagen */}
         <div
           className="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2"
           aria-hidden="true"

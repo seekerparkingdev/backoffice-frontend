@@ -15,6 +15,7 @@
     "chartjs-adapter-moment": "^1.0.1",
     "dotenv": "^16.4.7",
     "leaflet": "^1.9.4",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-data-table-component": "^7.6.2",
@@ -23,6 +24,7 @@
     "react-icons": "^5.4.0",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.28.0",
+    "react-select": "^5.10.0",
     "react-transition-group": "^4.4.5",
     "sweetalert2": "^11.14.5"
   },

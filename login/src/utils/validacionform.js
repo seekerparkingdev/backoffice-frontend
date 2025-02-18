@@ -10,7 +10,7 @@ export const validarLogin = ({ email, password }) => {
   if (!password) {
     errores.password = "La contraseña es obligatoria.";
   } else if (password.length < 6) {
-    errores.password = "La contraseña debe tener al menos 6 caracteres.";
+    // errores.password = "La contraseña debe tener al menos 6 caracteres.";
   }
 
   return errores;
