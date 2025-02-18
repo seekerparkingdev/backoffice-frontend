@@ -9,9 +9,8 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  console.log(data);
+ 
   const [errores, setErrores] = useState({});
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
@@ -20,6 +19,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validacion = validarLogin(data);
+
     if (Object.keys(validacion).length > 0) {
       setErrores(validacion);
     } else {
@@ -27,9 +27,8 @@ const LoginPage = () => {
       const response = await PostLogin(data);
 
       if (response) {
-        localStorage.setItem("user", JSON.stringify(response.token, data));
-        // Redireccionar a la página principal si es necesario
-        // window.location.href = "/";
+        const token = response.token;
+        sessionStorage.setItem("token", token); // Guardar en sessionStorage
       }
     }
   };
