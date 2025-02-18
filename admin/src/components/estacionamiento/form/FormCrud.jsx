@@ -39,47 +39,49 @@ const EstacionamientosForm = () => {
         const response = await getByIdEstacionamiento(id);
         console.log(response);
         setFormData({
-          name: response.data.nombre,
+          name: response.data.name,
           owner_name: "", // Mantenerlo vacío inicialmente
           email: response.data.email,
           owner_id: response.data.id_propietario,
           owners: {}, // Inicializar owners como vacío, lo llenaremos luego
-          text: response.data.texto,
-          percentage: response.data.porcentaje,
-          code: response.data.codigo,
-          address: response.data.direccion,
-          location_url: response.data.url_ubicacion,
+          text: response.data.text,
+          percentage: response.data.percentage,
+          code: response.data.code,
+          address: response.data.address,
+          location_url: response.data.location_url,
           service_charge: response.data.service_charge,
-          recommended: response.data.recomendado,
+          recommended: response.data.recommended,
           path: response.data.path,
-          special_exit: response.data.estacionar_culata,
-          requires_key_drop: response.data.requiere_dejar_llave,
-          include_service_charge: response.data.incluir_service_charge,
+          special_exit: response.data.special_exit,
+          requires_key_drop: response.data.requires_key_drop,
+          include_service_charge: response.data.include_service_charge,
           usarHorarioEspecial: response.data.salida_especial !== "00:00:00",
           horarioEspecial: response.data.salida_especial,
+          latitude: response.data.latitude,
+          longitude: response.data.longitude,
         });
 
-        const plazasData = response.data.precios.map((precio) => ({
-          plaza_type: getTipoPlaza(precio.id_tipo_plaza),
-          quantity: precio.cantidad || 1,
-          price: parseFloat(precio.precio),
-          minimum: precio.minimo || 0,
-          order: precio.orden_vista || 1,
-          show_vehicle: precio.mostrar_vehiculo === 1,
+        const plazasData = response.data.prices.map((precio) => ({
+          plaza_type: getTipoPlaza(precio.plaza_type_id),
+          quantity: precio.quantity || 1,
+          price: parseFloat(precio.price),
+          minimum: precio.minimum || 0,
+          order: precio.order || 1,
+          show_vehicle: precio.show_vehicle === 1,
         }));
 
-        if (response.data.precios.length > 0) {
+        if (response.data.prices.length > 0) {
           setPlazas(plazasData);
         }
-
         setPosition([
-          parseFloat(response?.data?.latitud),
-          parseFloat(response?.data?.longitud),
+          parseFloat(response?.data?.latitude),
+          parseFloat(response?.data?.longitude),
         ]);
       }
 
       const ownersResponse = await getPropietarios();
-      if (ownersResponse.codigo === 200) {
+      console.log("ownersRepsonse:", ownersResponse);
+      if (ownersResponse.status === "success") {
         setFormData((prevState) => ({
           ...prevState,
           owners: ownersResponse.data,
@@ -106,7 +108,7 @@ const EstacionamientosForm = () => {
     }
   }, [formData.owner_id, formData.owners]);
 
-  console.log("Este es el dueño de la propiedad:", formData.owner_name);
+  console.log(formData);
   const getTipoPlaza = (id) => {
     switch (id) {
       case 1:
@@ -344,16 +346,24 @@ const EstacionamientosForm = () => {
                 name="owner_id"
                 value={formData.owner_id}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-white text-black focus:ring focus:ring-blue-300"
               >
-                <option value={formData.owner_id} disabled>
+                <option
+                  value={formData.owner_id}
+                  disabled
+                  className="text-gray-500 bg-white"
+                >
                   {formData.owner_name || "Seleccione un propietario"}
                 </option>
                 {Array.isArray(formData.owners) &&
                   formData.owners
                     .filter((owner) => owner.id !== formData.owner_id) // Excluye al propietario actual de la lista
                     .map((owner) => (
-                      <option key={owner.id} value={owner.id}>
+                      <option
+                        key={owner.id}
+                        value={owner.id}
+                        className="text-black bg-white"
+                      >
                         {owner.nombre}
                       </option>
                     ))}

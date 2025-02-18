@@ -140,3 +140,25 @@ export const putVenueEdit = async (id, venueData) => {
     );
   }
 };
+
+export const postVenueNew = async (venueData) => {
+  try {
+    const response = await axios.post(`${apiUrl}venues/`, venueData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      console.log(response);
+      return response.data;
+    } else {
+      console.log(response);
+      throw new Error("Error inesperado en la API.");
+    }
+  } catch (error) {
+    console.error("Error al crear  venue:", error);
+    throw error;
+  }
+};

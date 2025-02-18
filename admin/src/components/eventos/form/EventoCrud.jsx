@@ -1,16 +1,143 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import { MdLabelOutline } from "react-icons/md";
-import { FaArrowDown } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
-
+import { NavLink, useParams } from "react-router-dom";
+// Servicios
+import {
+  eventbyid,
+  updateEvent,
+  postEvento,
+} from "../../../services/ServiceEventos";
+import { getVenues } from "../../../services/ServiceVenues";
 const EventoCrud = () => {
+  const [data, setData] = useState({
+    name: "",
+    date: "",
+    hour: "",
+    venue_id: "",
+    purchace_limit_date: "",
+    id_event_type: "",
+    enabled_before: "",
+    enabled_after: "",
+    path: "",
+  });
+
+  const [venues, setVenues] = useState({});
   const { id } = useParams();
   const isModeEdit = id !== "new";
-  const navigate = useNavigate();
   const [showEventTime, setShowEventTime] = useState(false);
+  useEffect(() => {
+    const venues = async () => {
+      try {
+        const response = await getVenues();
 
+        if (response.status === "success") {
+          setVenues(response.data.data);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "No se puede crear el evento",
+            text: "En este momento no es posible crear un evento. Inténtalo más tarde.",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "No se puede crear el evento",
+          text: "En este momento no es posible crear un evento. Inténtalo más tarde.",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    };
+    const getEventId = async () => {
+      try {
+        const response = await eventbyid(id);
+
+        if (response.status === "success" && response.data) {
+          const eventData = response.data; //
+
+          setData({
+            name: eventData.name || "",
+            date: eventData.date || "",
+            hour: eventData.time || "",
+            venue_id: eventData.venue_id || "",
+            purchace_limit_date: eventData.purchase_deadline || "",
+            id_event_type:
+              eventData.event_types.length > 0
+                ? eventData.event_types[0]?.id
+                : "",
+            enabled_before: eventData.enabled_after || "",
+            enabled_after: eventData.enabled_before || "",
+            path: "",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "No se puede cargar el evento",
+            text: "Inténtalo más tarde.",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al cargar el evento",
+          text: `Código de error: ${error.message || error}`,
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    };
+    if (isModeEdit) getEventId();
+    venues();
+  }, []);
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    if (!isModeEdit) {
+       console.log("Nos vamos a siguiente")
+    } else {
+      try {
+        const response = await updateEvent(id, data);
+        if (response.status === "success") {
+          Swal.fire({
+            title: "¡Éxito!",
+            text: `El evento "${response.data.name}" ha sido editado correctamente.`,
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Hubo un problema al editar el evento. Por favor, intenta de nuevo.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: `Ocurrió un error: ${error.message || "Error desconocido"}`,
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+    localStorage.setItem(
+      "eventData",
+      JSON.stringify({ ...data, [name]: value })
+    );
+  };
   return (
     <div>
       <div className="mb-8 ml-2 mt-4 border-b-2  ">
@@ -19,7 +146,7 @@ const EventoCrud = () => {
           {isModeEdit ? "Editar Evento" : "Nuevo Evento"}
         </h1>
       </div>
-      <form className="max-w-7xl   bg-white p-8">
+      <form className="max-w-7xl   bg-white p-8" onSubmit={handleOnSubmit}>
         {/* Encabezado */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold">Información general</h3>
@@ -46,19 +173,40 @@ const EventoCrud = () => {
                       Nombre del evento <b className="text-[#FF1010]"> *</b>
                     </label>
                     <input
+                      onChange={handleChange}
+                      name="name"
+                      value={data.name}
                       type="text"
                       className="w-full px-3 py-2 border rounded bg-[#F0F2F6] focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                       placeholder="La Bomba de Tiempo"
                     />
                   </div>
-                  <div className="w-64 ml-5 flex items-center gap-2 mt-6">
-                    <span className="transform rotate-[240deg]">
+                  <div className="w-64 ml-5 flex items-center gap-2 mt-6 relative">
+                    {/* Icono de etiqueta rotado */}
+                    <span className="transform rotate-[240deg] text-gray-700">
                       <MdLabelOutline />
                     </span>
-                    <span>Tipo de evento</span>
-                    <span className="ml-8">
-                      <FaArrowDown />
-                    </span>
+
+                    {/* Contenedor del select estilizado */}
+                    <div className="relative w-full cursor-pointer  appearance-none  outline-none">
+                      <select
+                        name="id_event_type"
+                        onChange={handleChange}
+                        value={data.id_event_type}
+                        className="appearance-none  bg-transparent border-none outline-none text-gray-700 w-full pr-6 cursor-pointer"
+                      >
+                        <option value={1}>Tipo de evento</option>
+                        <option value={2}>Conferencia</option>
+                        <option value={3}>Taller</option>
+                        <option value={4}>Webinar</option>
+                      </select>
+
+                      {/* Flecha personalizada  
+                      <span className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-700 pointer-events-none">
+                        <FaArrowDown />
+                      </span>
+                      */}
+                    </div>
                   </div>
                 </div>
 
@@ -68,7 +216,10 @@ const EventoCrud = () => {
                       Fecha del evento <b className="text-[#FF1010]"> *</b>
                     </label>
                     <input
-                      type="text"
+                      onChange={handleChange}
+                      type="date"
+                      name="date"
+                      value={data.date}
                       className="w-full px-3 py-2 border bg-[#F0F2F6] rounded focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                       placeholder="dd/mm/aaaa"
                     />
@@ -77,10 +228,23 @@ const EventoCrud = () => {
                     <label className="block text-sm mb-2">
                       Venue <b className="text-[#FF1010]"> *</b>
                     </label>
-                    <input
-                      type="text"
+                    <select
+                      onChange={handleChange}
+                      value={data.venue_id}
+                      name="venue_id"
                       className="w-full px-3 py-2 border rounded bg-[#F0F2F6] focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                    />
+                    >
+                      <option value="" disabled>
+                        Selecciona un venue
+                      </option>
+
+                      {venues.length > 0 &&
+                        venues.map((venue) => (
+                          <option key={venue.id} value={venue.id}>
+                            {venue.name}
+                          </option>
+                        ))}
+                    </select>
                   </div>
                 </div>
 
@@ -105,7 +269,10 @@ const EventoCrud = () => {
                         Hora del evento
                       </label>
                       <input
-                        type="date"
+                        onChange={handleChange}
+                        name="hour"
+                        value={data.hour}
+                        type="time"
                         className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
                       />
                     </div>
@@ -114,7 +281,10 @@ const EventoCrud = () => {
                         Hora límite de reserva/compra
                       </label>
                       <input
-                        type="date"
+                        onChange={handleChange}
+                        name="purchace_limit_date"
+                        value={data.purchace_limit_date}
+                        type="datetime-local"
                         className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
                       />
                     </div>
@@ -131,6 +301,9 @@ const EventoCrud = () => {
                   </label>
                   <div className="flex items-center gap-2">
                     <input
+                      onChange={handleChange}
+                      name="path"
+                      value={data.path}
                       type="file"
                       className="px-4 py-2 border-none    bg-white text-sm hover:bg-gray-50"
                     />
@@ -191,7 +364,10 @@ const EventoCrud = () => {
                 Hora permitida de ingreso al parking
               </label>
               <input
-                type="date"
+                onChange={handleChange}
+                value={data.enabled_before}
+                name="enabled_before"
+                type="time"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
             </div>
@@ -200,7 +376,10 @@ const EventoCrud = () => {
                 Hora límite de salida del parking
               </label>
               <input
-                type="date"
+                onChange={handleChange}
+                value={data.enabled_after}
+                name="enabled_after"
+                type="time"
                 className="w-full px-3 py-2 border rounded focus:ring-2 bg-[#F0F2F6] focus:ring-blue-200 focus:border-blue-400"
               />
             </div>
@@ -211,13 +390,17 @@ const EventoCrud = () => {
           {isModeEdit ? (
             <div>
               <NavLink
-                to="/eventos/estacionamientos"
+                to={{
+                  pathname: `/eventos/estacionamientos/${id}`,
+                }}
                 className="px-6 py-2 bg-[#4B6FC7] text-white rounded ml-3"
               >
                 Estacionamientos
               </NavLink>
-              <NavLink className="px-6 py-2 bg-[#4B6FC7] text-white rounded  ml-3"
-                to="/eventos/plazas">
+              <NavLink
+                className="px-6 py-2 bg-[#4B6FC7] text-white rounded  ml-3"
+                to="/eventos/plazas"
+              >
                 Plazas
               </NavLink>
               <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
@@ -225,9 +408,14 @@ const EventoCrud = () => {
               </button>
             </div>
           ) : (
-            <button className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3">
-              Guardar
-            </button>
+            <NavLink
+              to={{
+                pathname: "/eventos/estacionamientos",
+              }}
+              className="px-6 py-2 bg-blue-400 text-white rounded hover:bg-blue-500  ml-3"
+            >
+              Siguiente
+            </NavLink>
           )}
         </div>
       </form>

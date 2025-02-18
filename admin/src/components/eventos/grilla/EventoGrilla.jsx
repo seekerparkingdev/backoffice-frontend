@@ -1,76 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ConfigColumns } from "./ConfigColumns";
 import DataTable from "react-data-table-component";
 import { NavLink, useNavigate } from "react-router-dom";
-const data = [
-  {
-    id: 1,
-    plazas: {
-      total: 100,
-      vendidas: 5,
-    },
-    nombre: "ROD STEWART",
-    fecha: "21:00 04/10/2023",
-    venue: "Madison Square Garden, Nueva York",
-  },
-  {
-    id: 2,
-    plazas: {
-      total: 100,
-      vendidas: 52,
-    },
-    nombre: "ULISES BUENO",
-    fecha: "20:00 26/01/2024",
-    venue: "Luna Park, Buenos Aires",
-  },
-  {
-    id: 3,
-    plazas: {
-      total: 100,
-      vendidas: 45,
-    },
-    nombre: "COLDPLAY",
-    fecha: "20:30 15/12/2024",
-    venue: "Wembley Stadium, Londres",
-  },
-  {
-    id: 4,
-    plazas: {
-      total: 100,
-      vendidas: 25,
-    },
-    nombre: "NICK WARREN",
-    fecha: "22:00 10/02/2024",
-    venue: "Red Rocks Amphitheatre, Colorado",
-  },
-  {
-    id: 5,
-    plazas: {
-      total: 100,
-      vendidas: 75,
-    },
-    nombre: "BIZARREN FESTIVAL",
-    fecha: "20:30 01/03/2024",
-    venue: "Coachella Valley, California",
-  },
-  {
-    id: 6,
-    plazas: {
-      total: 100,
-      vendidas: 95,
-    },
-    nombre: "Richie Hawtin",
-    fecha: "23:10 04/05/2024",
-    venue: "Berghain, Berlín",
-  },
-];
+import { getEventos } from "../../../services/ServiceEventos";
+import { debounce } from "lodash";
 
 const EventoGrilla = () => {
   const [nombreEvento, setNombreEvento] = useState("");
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
   const [venue, setVenue] = useState("");
+  const [data2, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filtros, setFiltros] = useState({});
+  // Función de obtención de eventos con debounce
+  const fetchEventos = useCallback(
+    debounce(async (filtros) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await getEventos(filtros);
+
+        setData(Array.isArray(response) ? response : []);
+      } catch (error) {
+        setError("Error al obtener los eventos.");
+      } finally {
+        setLoading(false);
+      }
+    }, 100),
+    []
+  );
+
+  // Ejecutar cada vez que los filtros cambian
+  useEffect(() => {
+    fetchEventos(filtros);
+  }, [filtros, fetchEventos]);
+
   const navigate = useNavigate();
+
   const handleRowClick = (row) => {
     navigate(`/eventos/${row.id}`);
   };
@@ -209,8 +177,8 @@ const EventoGrilla = () => {
 
           <div className="overflow-x-auto">
             <DataTable
-              columns={ConfigColumns}
-              data={data}
+              columns={ConfigColumns(setData)}
+              data={data2}
               pagination
               onRowClicked={handleRowClick}
               highlightOnHover
