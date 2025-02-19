@@ -32,7 +32,7 @@ const TokenIframe = () => {
         )}`;
       }
 
-      // window.location.href = "http://localhost:5174";
+      window.location.href = "http://localhost:5174";
     } else {
       console.warn("No se encontró un token en sessionStorage");
     }
