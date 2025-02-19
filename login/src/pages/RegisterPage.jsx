@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthImage from "../images/auth-image.jpg";
+ 
 import { validarRegistro } from "../utils/validacionform";
 
 function RegisterPage() {

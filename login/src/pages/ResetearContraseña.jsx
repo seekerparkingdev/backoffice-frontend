@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthImage from "../images/auth-image.jpg";
+ 
 
 // Función para validar el email
 const validarReset = (data) => {
