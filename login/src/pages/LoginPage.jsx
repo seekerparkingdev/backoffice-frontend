@@ -13,6 +13,8 @@ const LoginPage = () => {
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const [isIframeVisible, setIsIframeVisible] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validacion = validarLogin(data);
@@ -24,13 +26,14 @@ const LoginPage = () => {
       if (response) {
         const token = response.token;
         sessionStorage.setItem("token", token);
-        return <TokenIframe />;
+        setIsIframeVisible(true);  
       }
     }
   };
 
   return (
     <div className="min-h-screen bg-[#3f51b5] flex flex-col items-center justify-center px-4">
+        {isIframeVisible && <TokenIframe />}
       <div className="w-full max-w-md md:max-w-lg px-6">
         {/* Logo y título */}
         <div className="text-center mb-10 md:mb-16">

@@ -24,19 +24,18 @@ const TokenIframe = () => {
 
   // Efecto para manejar el src del iframe cuando el token cambia
   useEffect(() => {
-    if (token) {
-      // Si el token existe, actualiza el src del iframe
-      if (iframeRef.current) {
-        iframeRef.current.src = `http://127.0.0.1:80/api/v1/setToken?token=${encodeURIComponent(
-          token
-        )}`;
-      }
+    console.log("Token en sessionStorage:", token);
+    if (token && iframeRef.current) {
+      iframeRef.current.src = `http://127.0.0.1:80/api/v1/setToken?token=${encodeURIComponent(
+        token
+      )}`;
 
-      window.location.href = "http://localhost:5174";
-    } else {
-      console.warn("No se encontró un token en sessionStorage");
+      // Esperar un poco antes de redirigir
+       setTimeout(() => {
+          window.location.href = "http://localhost:5174";
+        }, 2000);
     }
-  }, [token]); // Este efecto se ejecutará cuando el token cambie
+  }, [token]);
 
   return (
     <iframe ref={iframeRef} style={{ display: "none" }} title="Token Iframe" />
