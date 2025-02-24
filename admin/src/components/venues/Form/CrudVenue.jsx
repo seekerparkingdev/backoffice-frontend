@@ -419,9 +419,12 @@ const CrudVenue = () => {
           {/* Logo */}
           <div className="flex-1">
             <span className="block text-sm font-medium text-gray-700 mb-1">
-              Logo
+              Foto de miniatura
             </span>
-            <div className="border border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center mt-6">
+            <span className="block text-xs text-gray-500 mb-2">
+              (La imagen debe tener un tamaño de 250×250) *
+            </span>
+            <div className="border border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center">
               <button
                 type="button"
                 className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800"
