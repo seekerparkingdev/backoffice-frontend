@@ -17,6 +17,7 @@ export const PostLogin = async (user) => {
         text: "Has iniciado sesión correctamente.",
         confirmButtonColor: "#3085d6",
       });
+
       return response.data;
     }
   } catch (error) {

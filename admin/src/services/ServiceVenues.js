@@ -49,9 +49,11 @@ export const deleteVenue = async (id) => {
   } catch (error) {
     throw new Error(
       error?.response
-        ? `Error en la API: ${error.response.status} - ${
-            error.response.data?.message || "Error desconocido"
-          }`
+        ? `Error en la API: ${
+            (error?.response?.status || '500', console.log(error.response.data?.message))
+          }   
+      
+         `
         : "Error desconocido"
     );
   }

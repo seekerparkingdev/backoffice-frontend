@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import { useParams, NavLink } from "react-router-dom";
+import VenueNav from "../VenueNav";
 const RedesVenues = () => {
+  const { id } = useParams();
   const [venueData, setVenueData] = useState({
     facebook: "",
     instagram: "",
@@ -18,18 +20,12 @@ const RedesVenues = () => {
   return (
     <div>
       {/* Redes Sociales */}
-      <section className="space-y-6">
-        <div className="border-b-2 mt-3 ">
+      <section className=" ">
+        <div className="border-b-2 mt-3 mb-10">
           <h1 className="font-bold text-3xl mb-5">Venues</h1>
         </div>
-        <div className="bg-white p-16 rounded-lg">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-bold text-gray-800">Redes Sociales</h3>
-            <p className="text-gray-600 mt-1">
-              Complete la información de las redes sociales y el sitio web.
-            </p>
-          </div>
-
+        <VenueNav id={id}/>
+        <div className="bg-white p-16 rounded-b-lg  mt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { id: "facebook", label: "Facebook" },

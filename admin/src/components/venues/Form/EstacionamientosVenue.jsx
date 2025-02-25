@@ -2,8 +2,10 @@ import { useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoMdAddCircle } from "react-icons/io";
 import { RiDeleteBin5Line } from "react-icons/ri";
-
+import { useParams } from "react-router-dom";
+import VenueNav from "../VenueNav";
 const EstacionamientosVenue = () => {
+  const { id } = useParams();
   const [venueData, setVenueData] = useState({
     parkings: [],
   });
@@ -125,20 +127,20 @@ const EstacionamientosVenue = () => {
     },
     cells: {
       style: {
-        backgroundColor: "white", 
+        backgroundColor: "white",
         padding: "16px",
         borderBottom: "1px solid #E0E0E0",
       },
     },
     rows: {
       style: {
-        backgroundColor: "white",  
+        backgroundColor: "white",
         "&:not(:last-of-type)": {
           borderBottom: "1px solid #E0E0E0",
         },
       },
       stripedStyle: {
-        backgroundColor: "white",  
+        backgroundColor: "white",
       },
     },
     table: {
@@ -148,24 +150,14 @@ const EstacionamientosVenue = () => {
       },
     },
   };
-  
+
   return (
     <div>
       <div className=" border-b-2 border-[#9CA3AF] p-4 mb-4">
         <h1 className="font-bold text-3xl mb-3">Venues</h1>
       </div>
-      <div className="p-6 bg-white rounded-lg mt-2 ">
-
-        <div className="border-b-2  mb-4 border-[#9CA3AF]">
-        {/* Título */}
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
-          Estacionamientos Recomendados
-        </h3>
-        <p className="text-gray-600 mb-4">
-          Ingrese los estacionamientos recomendados para el Venue.
-        </p>
-        </div>
-
+      <VenueNav id={id} />
+      <div className="p-6 bg-white rounded-b-lg   ">
         {/* Selector y botón de agregar */}
         <div className="flex gap-4 mb-4">
           <select className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg">

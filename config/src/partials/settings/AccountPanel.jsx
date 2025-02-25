@@ -6,6 +6,7 @@ import UsersTable from "../abm_usuarios/UsersTable ";
 import PaginationClassic from "../../components/PaginationClassic";
 import SearchForm from "../../partials/actions/SearchForm";
 import UserNew from "../../components/DatosUsers/UserNew";
+import TokenIframe from "../../../../admin/src/components/TokenIframe";
 
 function AccountPanel() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -16,6 +17,7 @@ function AccountPanel() {
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
+      <TokenIframe />
       {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <main className="grow">

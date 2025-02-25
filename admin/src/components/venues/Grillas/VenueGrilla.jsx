@@ -1,10 +1,10 @@
 import DataTable from "react-data-table-component";
 import { NavLink } from "react-router-dom";
-import { Titulo } from "../../Titulo";
 import { VenueConfigtable } from "./VenueConfigtable";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getVenues } from "../../../services/ServiceVenues";
+import TokenIframe from "../../TokenIframe";
 
 const VenueGrilla = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const VenueGrilla = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log(filteredData);
+
   useEffect(() => {
     const venue = async () => {
       try {
@@ -97,6 +97,7 @@ const VenueGrilla = () => {
   };
   return (
     <div className="flex justify-center items-center mt-10">
+      <TokenIframe />
       <div className="w-full">
         <div className=" mt-2  mb-4 border-b-2  border-[#9CA3AF] ">
           <h1 className="text-3xl font-bold mb-6">Venues</h1>
