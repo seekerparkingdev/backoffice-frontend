@@ -61,7 +61,7 @@ const EventVenues = () => {
   };
 
   return (
-    <div className="mt-10 max-w-7xl mx-auto">
+    <div className="mt-10 max-w-9xl mx-auto">
       <div className="border-b-2 mb-4">
         <h1 className="mb-5 font-bold text-2xl">Venues</h1>
       </div>

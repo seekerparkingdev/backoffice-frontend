@@ -137,16 +137,18 @@ const CrudVenue = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-9xl mx-auto">
       <div className="border-b-2 mb-5 p-2">
         <h1 className="text-3xl font-bold mb-3">Venues</h1>
       </div>
       <VenueNav id={id}/>
       {/* Main Form */}
       <form
-        className="space-y-12 bg-white shadow-lg max-w-7xl mx-auto p-8 rounded-b-xl "
+        
         onSubmit={handleSubmit}
       >
+        <div  className="space-y-12 bg-white shadow-lg max-w-9xl mx-auto p-8 rounded-b-xl">
+ 
         {/* Información General */}
         <section className="space-y-6">
           <div className="space-y-4">
@@ -450,14 +452,7 @@ const CrudVenue = () => {
           </div>
         </div>
 
-        <div className="flex justify-end pt-6">
-          <button
-            type="submit"
-            className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg   transition-colors duration-200"
-          >
-            {venueData.id ? "Actualizar Lugar" : "Crear Lugar"}
-          </button>
-        </div>
+         
 
         {/* Venue Setup */}
         <section className="space-y-6">
@@ -470,6 +465,16 @@ const CrudVenue = () => {
 
           <VenueSetup />
         </section>
+        
+        </div>
+        <div className="flex justify-end pt-6">
+          <button
+            type="submit"
+            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-xl  text-sm transition-colors duration-200"
+          >
+            {venueData.id ? "Actualizar Lugar" : "Crear Lugar"}
+          </button>
+        </div>
       </form>
     </div>
   );

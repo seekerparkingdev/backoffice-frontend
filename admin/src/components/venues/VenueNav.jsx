@@ -16,11 +16,7 @@ const VenueNav = ({ id }) => {
             path: `/venues/redes/${id}`,
           },
           {
-            name: (
-              <>
-                Estacionamiento <br /> recomendado
-              </>
-            ),
+            name: " Estacionamiento   recomendado",
             p: "Ingresa los estacionamientos recomendados para el Venue",
             path: `/venues/estacionamientos/${id}`,
           },
@@ -30,7 +26,7 @@ const VenueNav = ({ id }) => {
             path: `/venues/eventos/${id}`,
           },
         ].map((tab) => (
-            <NavLink
+          <NavLink
             key={tab.name}
             to={tab.path}
             className={({ isActive }) =>
@@ -42,7 +38,11 @@ const VenueNav = ({ id }) => {
             }
           >
             {({ isActive }) => (
-              <div className={`flex flex-col ${!isActive ? "items-center justify-center" : "border-b-0"}`}>
+              <div
+                className={`flex flex-col ${
+                  !isActive ? "items-center justify-center" : "border-b-0"
+                }`}
+              >
                 <h1
                   className={` items-center justify-center  ${
                     isActive ? "text-xl font-bold" : "text-sm font-bold   "
