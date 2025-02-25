@@ -10,6 +10,7 @@ import {
   postVenueNew,
   putVenueEdit,
 } from "../../../services/ServiceVenues";
+import VenueNav from "../VenueNav";
 const CrudVenue = () => {
   const [position, setPosition] = useState([-34.6037, -58.3816]);
   const [venueData, setVenue] = useState({
@@ -140,22 +141,14 @@ const CrudVenue = () => {
       <div className="border-b-2 mb-5 p-2">
         <h1 className="text-3xl font-bold mb-3">Venues</h1>
       </div>
+      <VenueNav id={id}/>
       {/* Main Form */}
       <form
-        className="space-y-12 bg-white shadow-lg max-w-7xl mx-auto p-8 rounded-xl "
+        className="space-y-12 bg-white shadow-lg max-w-7xl mx-auto p-8 rounded-b-xl "
         onSubmit={handleSubmit}
       >
         {/* Información General */}
         <section className="space-y-6">
-          <div className="border-b border-gray-200 pb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Información General
-            </h3>
-            <p className="text-gray-600 mt-1">
-              Nombre, capacidad máxima, dirección y fotos.
-            </p>
-          </div>
-
           <div className="space-y-4">
             {/* Primera fila: Nombre y Dirección */}
             <div className="flex gap-6">
@@ -457,28 +450,7 @@ const CrudVenue = () => {
           </div>
         </div>
 
-        {/* Eventos Table */}
         <div className="flex justify-end pt-6">
-          <NavLink
-            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3   transition-colors duration-200"
-            to={`/venues/estacionamientos/${id}`}
-          >
-            Estacionamientos
-          </NavLink>
-
-          <NavLink
-            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3   transition-colors duration-200"
-            to={`/venues/redes/${id}`}
-          >
-            Redes
-          </NavLink>
-          <NavLink
-            className="px-8 py-3 bg-[#61B4CE] text-white font-medium rounded-lg mr-3  transition-colors duration-200"
-            to={`/venues/eventos/${id}`}
-          >
-            Eventos
-          </NavLink>
-
           <button
             type="submit"
             className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg   transition-colors duration-200"

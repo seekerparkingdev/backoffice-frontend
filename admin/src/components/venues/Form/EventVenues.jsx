@@ -1,7 +1,9 @@
 import DataTable from "react-data-table-component";
 import { MdOutlineNoteAdd } from "react-icons/md";
-
+import { useParams } from "react-router-dom";
+import VenueNav from "../VenueNav";
 const EventVenues = () => {
+  const { id } = useParams();
   // Datos de la tabla
   const data = [
     { id: 1, estado: "Finalizado", nombre: "Carl Cox - Hybrid Set", fecha: "10/03/2024 - 18:00" },
@@ -63,11 +65,9 @@ const EventVenues = () => {
       <div className="border-b-2 mb-4">
         <h1 className="mb-5 font-bold text-2xl">Venues</h1>
       </div>
+      <VenueNav id={id}/>
       <div className="bg-white p-10">
-        <div className="border-b-2 pb-4 mb-4 ">
-          <h2 className="font-semibold text-lg">Eventos de Movistar Arena</h2>
-          <p className="text-gray-600">Vea la información de los diferentes eventos.</p>
-        </div>
+         
         <DataTable customStyles={customStyles} columns={columns} data={data} pagination highlightOnHover responsive striped />
       </div>
     </div>
