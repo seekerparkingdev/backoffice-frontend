@@ -14,7 +14,7 @@ const TokenIframe = () => {
     console.log("Mensaje recibido del iframe:", event.data);
     
     // Guardar el token en sessionStorage
-    sessionStorage.setItem("token", event.data);
+    sessionStorage.setItem("token y user", event.data);
     console.log("Token guardado en sessionStorage:", event.data);
   };
 
