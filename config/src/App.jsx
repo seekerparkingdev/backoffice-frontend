@@ -5,6 +5,8 @@ import FeedbackPage from "./pages/config/Feedback";
 import TiposPlazasPage from "./pages/config/TiposPlazas";
 import HomePage from "./pages/config/Home";
 import PlantillaEmailPage from "./pages/config/PlantillaEmail";
+import PagoPage from "./pages/config/Pago";
+import PerfilesPage from "./pages/config/Perfiles";
 import { Menu } from "./components/Menu";
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
         <Route path="/config/usuarios" element={<UsuarioPage />} />
         <Route path="/config/plazas" element={<TiposPlazasPage />} />
         <Route path="/config/email"  element={<PlantillaEmailPage/>}/> 
+        <Route path="/config/pago" element={<PagoPage />} />
+        <Route path="/config/perfiles" element={<PerfilesPage />} />
 
       </Routes>
     </Router>

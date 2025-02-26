@@ -16,12 +16,12 @@ function AccountPanel() {
   };
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
+    <div className="flex h-[100dvh] overflow-hidden w-full">
       <TokenIframe />
       {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <main className="grow">
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full   mx-auto">
             {/* Page header */}
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               {/* Left: Title */}

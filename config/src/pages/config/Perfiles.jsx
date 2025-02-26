@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import Header from "../../components/Nav/Nav";
-import TiposPlazasPanel from "../../partials/settings/TipoPlazasPanel";
-
-const TiposPlazas = () => {
+import PerfilesPanel from "../../partials/settings/PerfilesPanel";
+const Perfiles = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
-      
+    <div className="flex h-[100dvh] overflow-hidden  ">
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden md:ml-[240px]">
         {/* Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main className="grow">
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl justify-center mx-auto">
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full    mx-auto">
             {/* Page header */}
             <div className="mb-8">
               {/* Title */}
@@ -26,8 +23,7 @@ const TiposPlazas = () => {
             {/* Content */}
             <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl mb-8">
               <div className="flex flex-col md:flex-row md:-mr-px">
-             
-                <TiposPlazasPanel />
+                <PerfilesPanel />
               </div>
             </div>
           </div>
@@ -36,5 +32,4 @@ const TiposPlazas = () => {
     </div>
   );
 };
-
-export default TiposPlazas;
+export default Perfiles;
