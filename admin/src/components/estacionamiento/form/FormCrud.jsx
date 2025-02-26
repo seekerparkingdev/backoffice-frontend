@@ -53,7 +53,7 @@ const EstacionamientosForm = () => {
           recommended: response.data.recommended,
           path: response.data.path,
           special_exit: response.data.special_exit,
-          requires_key_drop: response.data.requires_key_drop,
+          requires_key_drop: response.data?.requires_key_drop ?? false,
           include_service_charge: response.data.include_service_charge,
           usarHorarioEspecial: response.data.salida_especial !== "00:00:00",
           horarioEspecial: response.data.salida_especial,
@@ -457,7 +457,7 @@ const EstacionamientosForm = () => {
               <input
                 type="checkbox"
                 name="requires_key_drop"
-                checked={formData.requires_key_drop == 1 ? true : false}
+                checked={formData.requires_key_drop}
                 onChange={handleInputChange}
                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-300"
               />
