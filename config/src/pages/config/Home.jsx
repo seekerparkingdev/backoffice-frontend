@@ -13,7 +13,7 @@ const Home = () => {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden md:ml-[240px]">
         {/* Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
+        
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Page header */}
